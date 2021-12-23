@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>com.concise</groupId>
-            <artifactId>component-core</artifactId>
+            <artifactId>component-web</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 精简 javacv-platform -->

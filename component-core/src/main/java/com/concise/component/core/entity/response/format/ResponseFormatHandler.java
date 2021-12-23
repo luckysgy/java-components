@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,22 +30,8 @@ public class ResponseFormatHandler {
     /** key = 类名  value = 类*/
     private static final Map<String, ResponseFormatAbstract> format = new ConcurrentHashMap<>();
 
-    public ResponseFormatHandler() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-//        // 扫描 ApiFormatAbstract 子类 自动加入容器中
-//        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
-//        provider.addIncludeFilter(new AssignableTypeFilter(ResponseFormatAbstract.class));
-//
-//        Set<BeanDefinition> components = provider.findCandidateComponents("com.simplifydev.component.core");
-//        for (BeanDefinition component : components) {
-//            Class cls = Class.forName(component.getBeanClassName());
-//            ResponseFormatAbstract apiFormatAbstract = (ResponseFormatAbstract) cls.newInstance();
-//            ResponseFormatAbstract isExist = format.get(apiFormatAbstract.getTag());
-//            if (isExist != null) {
-//                throw new RuntimeException("ApiFormatAbstract 子类 tag要全局唯一,tag = " + isExist.getTag() + " 已存在");
-//            }
-//            format.put(apiFormatAbstract.getTag(), apiFormatAbstract);
-//        }
-
+    @PostConstruct
+    public void init() {
         Map<String, ResponseFormatAbstract> settings = applicationContext.getBeansOfType(ResponseFormatAbstract.class);
         settings.forEach((key,apiFormatAbstract) ->{
             ResponseFormatAbstract isExist = format.get(apiFormatAbstract.getTag());
