@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.concise</groupId>
-            <artifactId>components-util-file</artifactId>
+            <artifactId>component-util-file</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -11,7 +11,7 @@
     <modules>
         <module>component-core</module>
         <module>component-web</module>
-        <module>components-util</module>
+        <module>component-util</module>
         <module>component-datasource</module>
         <module>component-idgenerator</module>
         <module>component-grpc</module>
