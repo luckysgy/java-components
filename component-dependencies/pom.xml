@@ -234,6 +234,12 @@
                 <version>${hutool.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-http</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
             <!-- MinIO文件系统 -->
             <dependency>
                 <groupId>io.minio</groupId>

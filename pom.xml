@@ -15,6 +15,13 @@
         <module>component-datasource</module>
         <module>component-idgenerator</module>
         <module>component-grpc</module>
+        <module>component-ddd</module>
+        <module>component-storage</module>
+        <module>component-mq</module>
+        <module>component-cache</module>
+        <module>component-log</module>
+        <module>component-lock</module>
+        <module>component-feign</module>
     </modules>
 
     <properties>

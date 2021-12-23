@@ -2,7 +2,7 @@ package com.concise.component.datasource.mybatisplus.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
-import com.simplifydev.component.datasource.utils.DataBaseInit;
+import com.concise.component.datasource.mybatisplus.utils.DataBaseInit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package com.concise.component.datasource.mybatisplus.entity;
 
-import com.simplifydev.component.core.utils.StringUtils;
+import com.concise.component.core.utils.StringUtils;
 
 /**
  * 分页数据
