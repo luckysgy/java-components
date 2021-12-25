@@ -7,7 +7,7 @@ import com.concise.component.mq.common.service.MqSendFailService;
 import com.concise.component.mq.rabbitmq.entity.Conversion;
 import com.concise.component.mq.rabbitmq.entity.CustomCorrelationData;
 import com.concise.component.mq.rabbitmq.entity.RabbitMqMessage;
-import com.concise.component.mq.rabbitmq.service.MqSendService;
+import com.concise.component.mq.rabbitmq.service.RabbitmqService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
  * @date 2021-10-06 21:38
  */
 @Service
-public class MqSendServiceImpl implements MqSendService {
-    private static final Logger log = LoggerFactory.getLogger(MqSendServiceImpl.class);
+public class RabbitmqServiceImpl implements RabbitmqService {
+    private static final Logger log = LoggerFactory.getLogger(RabbitmqServiceImpl.class);
 
     @Autowired(required = false)
     private RabbitTemplate rabbitTemplate;

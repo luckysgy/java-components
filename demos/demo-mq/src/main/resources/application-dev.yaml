@@ -22,11 +22,30 @@ mqtt:
 server:
   port: 8080
 spring:
+  # Redis数据库索引（默认为0）
+  redis:
+    database: 0
+    # Redis服务器地址
+    host: 192.168.190.28
+    # Redis服务器连接端口
+    port: 36379
+    # Redis服务器连接密码（默认为空）
+    password: QWER@1234
+    lettuce:
+      pool:
+        #连接池最大连接数（使用负值表示没有限制）
+        max-active: 100
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
   rabbitmq:
     host: work01.server.com
     port: 5672
     username: admin
-    password: shenguangyang@97
+    password: QWER@1234
     virtualHost: /
     publisher-returns: true  #消息发送后,如果发送失败,则会返回失败信息信息
     #connection-timeout: 15000

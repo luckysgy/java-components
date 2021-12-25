@@ -7,7 +7,7 @@ import org.springframework.amqp.core.MessagePostProcessor;
  * @author shenguangyang
  * @date 2021-10-06 21:27
  */
-public interface MqSendService {
+public interface RabbitmqService {
     /**
      * 发送消息, 发送的消息会被转成json进行传输
      * @param exchange 指定交换机
@@ -25,5 +25,20 @@ public interface MqSendService {
      */
     <T extends MqMessage> void send(String exchange, String routingKey, final T object);
 
+    /**
+     * <code>
+     *  MessagePostProcessor messagePostProcessor = message -> {
+     *       // 5s之后会过期
+     *       message.getMessageProperties().setExpiration("5000");
+     *       message.getMessageProperties().setContentEncoding("utf-8");
+     *       return message;
+     *  };
+     * </code>
+     * @param exchange
+     * @param routingKey
+     * @param object
+     * @param messagePostProcessor
+     * @param <T>
+     */
     <T extends MqMessage> void send(String exchange, String routingKey, final T object, MessagePostProcessor messagePostProcessor);
 }

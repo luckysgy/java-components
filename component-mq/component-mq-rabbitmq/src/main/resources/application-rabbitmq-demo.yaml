@@ -1,0 +1,56 @@
+rabbitmq:
+  # 交换机
+  exchanges:
+    # 通配符订阅
+    topicLog:
+      name: log.topic.exchange
+      type: TOPIC
+    # 广播
+    email:
+      name: email.fanout.exchange
+      type: FANOUT
+    # 消息头
+    headers:
+      name: headers.exchange
+      type: HEADERS
+    # 死信交换机
+    orderExpired:
+      name: order.dead.direct.exchange
+      type: DIRECT
+    order:
+      name: order.direct.exchange
+      type: DIRECT
+  # 队列
+  queues:
+    # 定义死信队列
+    orderExpired:
+      exchange-name: order.dead.direct.exchange
+      name: order.dead.direct.queue
+    order:
+      name: order.direct.queue
+      args:
+        # 设置队列中消息的过期时间, 60s之后会被转移到死信队列中
+        x-message-ttl: 60000
+        # 当消息过期时候, 需要通过指定的交换机打入到死信队列中
+        x-dead-letter-exchange: order.dead.direct.exchange
+      exchange-name: order.direct.exchange
+
+    # 直连队列
+    headers:
+      name: headers.queue
+      headers:
+        test: 123
+      exchange-name: headers.exchange
+    email:
+      name: email.fanout.queue
+      exchange-name: email.fanout.exchange
+    # 队列2
+    logError:
+      name: log.error.queue
+      routing-key: queue.info.error.*
+      exchange-name: log.topic.exchange
+    # 队列2
+    logInfo:
+      name: log.info.queue
+      routing-key: queue.log.info.*
+      exchange-name: log.topic.exchange

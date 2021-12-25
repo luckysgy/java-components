@@ -28,6 +28,7 @@ import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author shenguangyang
@@ -137,12 +138,16 @@ public class MqListenerScanRegister implements ImportBeanDefinitionRegistrar, Re
                 removeRegisterMqListenerSub(registry, mqListenerSub);
             }
         }
+        Map<String, Class<? extends MqListener>> mqListenerAllSubMap = new HashMap<>();
+        for (Class<? extends MqListener> aClass : mqListenerAllSub) {
+            mqListenerAllSubMap.put(aClass.getName(), aClass);
+        }
         for (Class<? extends MqListener> enableMqListenerSub : listener) {
-            for (Class<? extends MqListener> mqListenerSub : mqListenerAllSub) {
-                if (!mqListenerSub.getName().equals(enableMqListenerSub.getName())) {
-                    removeRegisterMqListenerSub(registry, mqListenerSub);
-                }
-            }
+            mqListenerAllSubMap.remove(enableMqListenerSub.getName());
+        }
+        Map<String, Class<? extends MqListener>> removeMqListenerSubMap = new HashMap<>(mqListenerAllSubMap);
+        for (Map.Entry<String, Class<? extends MqListener>> entry : removeMqListenerSubMap.entrySet()) {
+            removeRegisterMqListenerSub(registry, entry.getValue());
         }
     }
 
