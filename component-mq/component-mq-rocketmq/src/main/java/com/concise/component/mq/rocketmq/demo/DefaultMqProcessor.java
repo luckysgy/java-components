@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @author shenguangyang
  * @date 2021-10-04 14:57
  */
-@Component
+//@Component
 public class DefaultMqProcessor implements MqProducer<DefaultMqMessage> {
     private static final Logger log = LoggerFactory.getLogger(DefaultMqProcessor.class);
 
@@ -31,7 +31,7 @@ public class DefaultMqProcessor implements MqProducer<DefaultMqMessage> {
      * @author shenguangyang
      * @date 2021/7/24 9:43
      */
-    @Component
+//    @Component
     @RocketMQMessageListener(
             nameServer = "${rocketmq.name-server}",
             topic = DefaultMqBaseInfo.TOPIC,

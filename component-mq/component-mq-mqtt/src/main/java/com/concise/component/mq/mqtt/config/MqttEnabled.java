@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-19 11:22
  */
 @Component
-@ConditionalOnProperty(value = "mqtt.enabled", havingValue = "true")
 public class MqttEnabled {
 
     public static boolean enabled = false;

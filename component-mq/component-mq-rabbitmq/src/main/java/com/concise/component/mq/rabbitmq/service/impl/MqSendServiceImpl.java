@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class MqSendServiceImpl implements MqSendService {
     private static final Logger log = LoggerFactory.getLogger(MqSendServiceImpl.class);
 
-    @Autowired
+    @Autowired(required = false)
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
@@ -36,6 +36,9 @@ public class MqSendServiceImpl implements MqSendService {
 
     @Override
     public <T extends MqMessage> void send(String exchange, String routingKey, T object, MessagePostProcessor messagePostProcessor) {
+        if (rabbitTemplate == null) {
+            log.warn("rabbitmq not enable");
+        }
         // 该参数可以传,可以不传,不传时,correlationData的id值默认是null,消息发送成功后,在RabbitMqConfig类的rabbitTemplate类的confirm方法会接收到该值
         String msgId = UUIDUtil.uuid();
         CustomCorrelationData correlationData = new CustomCorrelationData();

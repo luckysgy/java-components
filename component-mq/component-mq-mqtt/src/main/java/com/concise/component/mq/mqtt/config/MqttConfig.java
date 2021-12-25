@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
  */
 @Component
 @Configuration
-@ConditionalOnProperty(value = "mqtt.enabled", havingValue = "true")
 public class MqttConfig {
     private static final Logger log = LoggerFactory.getLogger(MqttConfig.class);
     private static MqttProperties mqttProperties;
@@ -34,6 +33,7 @@ public class MqttConfig {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired(required = false)
     public MqttConfig(MqttProperties mqttProperties) {
         MqttConfig.mqttProperties = mqttProperties;
     }

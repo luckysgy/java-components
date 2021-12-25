@@ -10,6 +10,7 @@
     <version>1.0.0</version>
     <modules>
         <module>demo-opencv</module>
+        <module>demo-mq</module>
     </modules>
 
     <properties>
@@ -17,4 +18,15 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.concise</groupId>
+                <artifactId>component-dependencies</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

@@ -24,11 +24,15 @@ import java.util.UUID;
 public class RocketMqSendServiceImpl implements RocketMqSendService {
     private static final Logger log = LoggerFactory.getLogger(RocketMqSendServiceImpl.class);
 
-    @Autowired
+    @Autowired(required = false)
     private RocketMQTemplate rocketMQTemplate;
 
     @Override
     public <T> SendResult send(T message, String topic, String group, String tag)  {
+        if (rocketMQTemplate == null || rocketMQTemplate.getProducer() == null) {
+            log.warn("rocketmq not initiated");
+            return null;
+        }
         if (StringUtils.isBlank(topic) || StringUtils.isBlank(group)) {
             throw  new BizException("发送方topic或者group不能为空");
         }

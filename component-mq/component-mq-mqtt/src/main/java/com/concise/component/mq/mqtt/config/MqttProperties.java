@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(
         prefix = "mqtt"
 )
-@ConditionalOnProperty(value = "mqtt.enabled", havingValue = "true")
 public class MqttProperties {
     /**
      * tcp://10.135.50.154:1883

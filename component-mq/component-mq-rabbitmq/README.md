@@ -240,6 +240,15 @@ public class OrderExpiredMqConsumer implements IOrderExpiredMqConsumer {
 }
 ```
 
+# 启动类配置
+
+```java
+// 在启动类上添加如下注解
+@EnableRabbit
+```
+
+
+
 
 
 # 应用层中的application.yaml

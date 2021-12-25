@@ -2,12 +2,10 @@
 
 ```yaml
 mqtt:
-  enabled: true
-  serverUri: tcp://ip:1883
+  serverUri: tcp://127.0.0.1:1883
   clientId: demo
   username: admin
-  password: xxxxx
-
+  password: xxxx
 server:
   port: 8080
 ```

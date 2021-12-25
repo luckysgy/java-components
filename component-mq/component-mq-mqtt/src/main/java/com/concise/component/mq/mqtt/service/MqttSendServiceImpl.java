@@ -24,7 +24,7 @@ public class MqttSendServiceImpl implements MqttSendService {
     @Override
     public void send(String topic, QosEnum qosEnum, String message) throws MqttException {
         if (!MqttEnabled.enabled) {
-            log.warn("config --- mqtt.enabled: false");
+            log.warn("mqtt not enable");
             return;
         }
         MqttTopic mqttTopic = MqttConfig.getPublishMqttTopic(topic);
