@@ -1,4 +1,4 @@
-package com.concise.component.storage.minio;
+package com.concise.component.storage.minio.client;
 
 import com.google.common.collect.Multimap;
 import io.minio.CreateMultipartUploadResponse;
@@ -27,7 +27,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class CustomMinioClient extends MinioClient {
 
-    protected CustomMinioClient(MinioClient client) {
+    public CustomMinioClient(MinioClient client) {
         super(client);
     }
 

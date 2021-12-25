@@ -11,6 +11,7 @@
     <modules>
         <module>demo-opencv</module>
         <module>demo-mq</module>
+        <module>demo-storage</module>
     </modules>
 
     <properties>

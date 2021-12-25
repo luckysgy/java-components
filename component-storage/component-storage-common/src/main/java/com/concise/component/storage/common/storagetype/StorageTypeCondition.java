@@ -1,9 +1,6 @@
-package com.concise.component.storage.common.conditions;
+package com.concise.component.storage.common.storagetype;
 
 import com.concise.component.core.utils.StringUtils;
-import com.concise.component.storage.common.annotation.ConditionalOnStorageType;
-import com.concise.component.storage.common.config.StorageProperties;
-import com.concise.component.storage.common.enums.StorageTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Condition;
@@ -28,16 +25,15 @@ public class StorageTypeCondition implements Condition {
             log.warn("ConditionalOnStorageType 属性为空");
             return false;
         }
-        StorageTypes storageTypes = (StorageTypes) attributes.get("type");
         //从配置文件中获取属性
         String storageType = conditionContext.getEnvironment().getProperty("storageServer.type");
+        StorageType.create(storageType);
+
+        StorageTypesEnum storageTypesEnum = (StorageTypesEnum) attributes.get("type");
         String storageEnable = conditionContext.getEnvironment().getProperty("storageServer.enable");
-        StorageProperties.init(storageType);
         if (StringUtils.isNotNull(storageEnable) && "true".equals(storageEnable)) {
-            Map<String,Boolean> supportStorageTypes = StorageProperties.supportStorageTypes;
-            Boolean enable = supportStorageTypes.get(storageTypes.getType());
-            if (!isRegistStorageService && enable != null && enable) {
-                log.info("成功注入 {} 服务" , storageTypes.getType());
+            if (StorageType.isUsed(storageTypesEnum) && !isRegistStorageService) {
+                log.info("成功注入 {} 服务" , storageTypesEnum.getType());
                 isRegistStorageService = true;
                 return true;
             }

@@ -1,8 +1,8 @@
 package com.concise.component.storage.common.service;
 
-import com.concise.component.storage.common.config.StorageProperties;
-import com.concise.component.storage.common.enums.UrlTypes;
-import com.concise.component.storage.common.expand.StorageBucketName;
+import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.url.UrlTypesEnum;
+import com.concise.component.storage.common.registerbucket.StorageBucketName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,6 @@ import java.io.InputStream;
 public abstract class StorageService {
     private static final Logger log = LoggerFactory.getLogger(StorageService.class);
     protected StorageProperties storageProperties;
-
     public StorageService(StorageProperties storageProperties) {
         this.storageProperties = storageProperties;
     }
@@ -49,7 +48,7 @@ public abstract class StorageService {
      *     }
      * </code>
      *
-     * 如果关掉了nginx代理, 则{@link UrlTypes} 不生效,获取到的持久链接格式如下
+     * 如果关掉了nginx代理, 则{@link UrlTypesEnum} 不生效,获取到的持久链接格式如下
      * eg: https://bucketName.oss-cn-beijing.aliyuncs.com/objectName
      *
      * 2. minio
@@ -57,10 +56,10 @@ public abstract class StorageService {
      *
      * @apiNote 需要设置对象存储服务器上的桶为公共读，否则生成的链接是不可读额
      * @param objectName 对象名
-     * @param urlTypes url类型,内网访问还是外网访问
+     * @param urlTypesEnum url类型,内网访问还是外网访问
      * @return 对象的url
      */
-    public abstract <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypes urlTypes);
+    public abstract <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypesEnum urlTypesEnum);
 
     /**
      * 获取文件

@@ -1,7 +1,8 @@
-package com.concise.component.storage.minio;
+package com.concise.component.storage.minio.autoconfig;
 
-import com.concise.component.storage.common.config.StorageProperties;
-import com.concise.component.storage.common.expand.StorageBucketName;
+import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.registerbucket.StorageBucketHandler;
+import com.concise.component.storage.minio.client.CustomMinioClient;
 import com.concise.component.storage.minio.utils.MinioUtils;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
@@ -50,7 +51,7 @@ public class MinioConfig {
                         .credentials(minio.getAccessKey(), minio.getSecretKey())
                         .build();
         // 判断Bucket是否存在
-        List<String> allBucketName = StorageBucketName.getAllBucketName();
+        List<String> allBucketName = StorageBucketHandler.getAllBucketName();
         for (String bucketName : allBucketName) {
             boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if(isExist) {

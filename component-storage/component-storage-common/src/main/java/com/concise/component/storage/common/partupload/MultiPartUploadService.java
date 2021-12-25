@@ -1,7 +1,6 @@
-package com.concise.component.storage.common.service;
+package com.concise.component.storage.common.partupload;
 
-import com.concise.component.storage.common.entity.MultiPartUploadInit;
-import com.concise.component.storage.common.expand.StorageBucketName;
+import com.concise.component.storage.common.registerbucket.StorageBucketName;
 
 import java.io.File;
 

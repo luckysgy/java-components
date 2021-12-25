@@ -1,11 +1,10 @@
-package com.concise.component.storage.common.config;
+package com.concise.component.storage.common.autoconfig;
 
-import com.concise.component.core.utils.StringUtils;
 import com.concise.component.core.utils.UrlUtils;
-import com.concise.component.storage.common.enums.StorageTypes;
+import com.concise.component.storage.common.storagetype.StorageType;
+import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Description: 存储配置
@@ -38,11 +34,6 @@ public class StorageProperties {
 
     /** 是否被初始化标志位 */
     private static Boolean isInit = false;
-
-    /**
-     * 支持的存储类型
-     */
-    public static Map<String,Boolean> supportStorageTypes = new ConcurrentHashMap<>();
 
     /**
      * 是否启用文件存储,默认不启动
@@ -68,57 +59,8 @@ public class StorageProperties {
      */
     private Oss oss = new Oss();
 
-    /**
-     * 初始化方法,具有幂等性，只会被执行一次
-     * @param storageType 存储类型
-     */
-    public static void init(String storageType) {
-        if (isInit) {
-            return;
-        }
-        log.info("init::storageType = [{}]",storageType);
-        // 指定扫描的包名
-        Reflections reflections = new Reflections("com.simplifydev.component.storage");
-        //component是个接口，获取在指定包扫描的目录所有的实现类
-        Set<Class<? extends ComponentConfig>> classes = reflections.getSubTypesOf(ComponentConfig.class);
-        for (Class<? extends ComponentConfig> aClass : classes) {
-            //遍历执行
-            try {
-                ComponentConfig component = aClass.newInstance();
-                supportStorageTypes.put(component.getStorageType().getType(), false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // 获取以存在的类型集合中是否含有用户传进来的类型
-        String existType = "";
-        Set<Map.Entry<String, Boolean>> entries = supportStorageTypes.entrySet();
-        for (Map.Entry<String, Boolean> entry : entries) {
-            if (entry.getKey().equals(storageType)) {
-                existType = entry.getKey();
-                break;
-            }
-        }
-
-        // 校验类型是否存在
-        if (StringUtils.isEmpty(existType)) {
-            throw new RuntimeException("storage.type=" + storageType + " 不存在,支持的类型有 " +  supportStorageTypes.toString());
-        }
-        log.info("使用 {} 存储服务",existType);
-
-        // 使能类型对应的存储服务
-        supportStorageTypes.put(existType, true);
-        isInit = true;
-    }
-
     @PostConstruct
     public void init() {
-//        Map<String, component> settings = applicationContext.getBeansOfType(component.class);
-//        settings.forEach((key,value) ->{
-//            //遍历执行
-//            supportStorageTypes.put(value.getStorageType().getType(), false);
-//        });
         url.setLan(UrlUtils.removeLastSlash(url.getLan()));
         url.setWan(UrlUtils.removeLastSlash(url.getWan()));
     }
@@ -187,14 +129,14 @@ public class StorageProperties {
          * 获取存储类型
          * @return 存储类型
          */
-        public abstract StorageTypes getStorageType();
+        public abstract StorageTypesEnum getStorageType();
 
         /**
          * 判断是否使能
          * @return
          */
         public Boolean getEnable() {
-            return supportStorageTypes.get(getStorageType().getType());
+            return StorageType.isUsed(getStorageType());
         }
     }
 
@@ -209,8 +151,8 @@ public class StorageProperties {
         private String secretKey;
 
         @Override
-        public StorageTypes getStorageType() {
-            return StorageTypes.MINIO;
+        public StorageTypesEnum getStorageType() {
+            return StorageTypesEnum.MINIO;
         }
     }
 
@@ -238,8 +180,8 @@ public class StorageProperties {
         }
 
         @Override
-        public StorageTypes getStorageType() {
-            return StorageTypes.OSS;
+        public StorageTypesEnum getStorageType() {
+            return StorageTypesEnum.OSS;
         }
     }
 }

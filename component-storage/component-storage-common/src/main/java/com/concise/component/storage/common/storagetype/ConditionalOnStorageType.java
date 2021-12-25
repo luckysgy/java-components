@@ -1,7 +1,7 @@
-package com.concise.component.storage.common.annotation;
+package com.concise.component.storage.common.storagetype;
 
-import com.concise.component.storage.common.conditions.StorageTypeCondition;
-import com.concise.component.storage.common.enums.StorageTypes;
+import com.concise.component.storage.common.storagetype.StorageTypeCondition;
+import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import org.springframework.context.annotation.Conditional;
 
 import java.lang.annotation.*;
@@ -20,5 +20,5 @@ public @interface ConditionalOnStorageType {
     /**
      * 存储类型
      */
-    StorageTypes type();
+    StorageTypesEnum type();
 }

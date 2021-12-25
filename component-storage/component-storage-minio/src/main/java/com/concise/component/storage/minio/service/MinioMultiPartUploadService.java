@@ -1,9 +1,10 @@
 package com.concise.component.storage.minio.service;
 
 import cn.hutool.http.HttpRequest;
-import com.concise.component.storage.common.entity.MultiPartUploadInit;
-import com.concise.component.storage.common.expand.StorageBucketName;
-import com.concise.component.storage.common.service.MultiPartUploadService;
+import com.concise.component.storage.common.partupload.MultiPartUploadInit;
+import com.concise.component.storage.common.registerbucket.StorageBucketHandler;
+import com.concise.component.storage.common.registerbucket.StorageBucketName;
+import com.concise.component.storage.common.partupload.MultiPartUploadService;
 import com.concise.component.storage.minio.utils.MinioUtils;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,7 @@ import java.io.File;
 public class MinioMultiPartUploadService implements MultiPartUploadService {
     @Override
     public <T extends StorageBucketName> MultiPartUploadInit init(Class<T> bucketNameClass, String objectName, int totalPart) {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
-        return MinioUtils.MultiPartUpload.init(storageBucketName.getBucketName(), objectName, totalPart);
+        return MinioUtils.MultiPartUpload.init(StorageBucketHandler.getBucketName(bucketNameClass), objectName, totalPart);
     }
 
 
@@ -32,7 +32,6 @@ public class MinioMultiPartUploadService implements MultiPartUploadService {
 
     @Override
     public <T extends StorageBucketName> void merge(Class<T> bucketNameClass, String objectName, String uploadId) {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
-        MinioUtils.MultiPartUpload.merge(storageBucketName.getBucketName(),objectName,uploadId);
+        MinioUtils.MultiPartUpload.merge(StorageBucketHandler.getBucketName(bucketNameClass),objectName,uploadId);
     }
 }

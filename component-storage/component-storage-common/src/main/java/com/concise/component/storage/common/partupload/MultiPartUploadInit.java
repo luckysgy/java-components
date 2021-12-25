@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.entity;
+package com.concise.component.storage.common.partupload;
 
 import lombok.Data;
 

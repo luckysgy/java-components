@@ -1,13 +1,13 @@
 package com.concise.component.storage.minio.service;
 
 import cn.hutool.core.util.RandomUtil;
-
 import com.concise.component.core.utils.StringUtils;
-import com.concise.component.storage.common.annotation.ConditionalOnStorageType;
-import com.concise.component.storage.common.config.StorageProperties;
-import com.concise.component.storage.common.enums.StorageTypes;
-import com.concise.component.storage.common.enums.UrlTypes;
-import com.concise.component.storage.common.expand.StorageBucketName;
+import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
+import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.registerbucket.StorageBucketHandler;
+import com.concise.component.storage.common.storagetype.StorageTypesEnum;
+import com.concise.component.storage.common.url.UrlTypesEnum;
+import com.concise.component.storage.common.registerbucket.StorageBucketName;
 import com.concise.component.storage.common.service.StorageService;
 import com.concise.component.storage.minio.utils.MinioUtils;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
  * @date 2021/7/17 13:41
  */
 @Component
-@ConditionalOnStorageType(type = StorageTypes.MINIO)
+@ConditionalOnStorageType(type = StorageTypesEnum.MINIO)
 public class MinioService extends StorageService {
     private static final Logger log = LoggerFactory.getLogger(MinioService.class);
 
@@ -34,22 +34,19 @@ public class MinioService extends StorageService {
 
     @Override
     public <T extends StorageBucketName> void uploadText(Class<T> bucketNameClass, String text, String objectName) throws Exception {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
         InputStream inputStream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-        MinioUtils.uploadFile(storageBucketName.getBucketName(), inputStream, "text/plain", objectName);
+        MinioUtils.uploadFile(StorageBucketHandler.getBucketName(bucketNameClass), inputStream, "text/plain", objectName);
     }
 
     @Override
     public <T extends StorageBucketName> void uploadFile(Class<T> bucketNameClass, InputStream inputStream, String contentType, String objectName) throws Exception {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
-        MinioUtils.uploadFile(storageBucketName.getBucketName(), inputStream, contentType, objectName);
+        MinioUtils.uploadFile(StorageBucketHandler.getBucketName(bucketNameClass), inputStream, contentType, objectName);
     }
 
     @Override
-    public <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypes urlTypes) {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
-        String bucketName = storageBucketName.getBucketName();
-        if (UrlTypes.LAN.equals(urlTypes)) {
+    public <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypesEnum urlTypes) {
+        String bucketName = StorageBucketHandler.getBucketName(bucketNameClass);
+        if (UrlTypesEnum.LAN.equals(urlTypes)) {
             String lan = storageProperties.getUrl().getLan();
             return StringUtils.join(lan, "/", bucketName, "/", objectName);
         } else {
@@ -60,14 +57,12 @@ public class MinioService extends StorageService {
 
     @Override
     public <T extends StorageBucketName> InputStream getFile(Class<T> bucketNameClass, String objectName) {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
-        return MinioUtils.getFile(storageBucketName.getBucketName(), objectName);
+        return MinioUtils.getFile(StorageBucketHandler.getBucketName(bucketNameClass), objectName);
     }
 
     @Override
     public <T extends StorageBucketName> Boolean createBucket(Class<T> bucketNameClass, Boolean randomSuffix) {
-        StorageBucketName storageBucketName = StorageBucketName.getInstance(bucketNameClass);
-        String bucketName = storageBucketName.getBucketName();
+        String bucketName = StorageBucketHandler.getBucketName(bucketNameClass);
         try {
             if (randomSuffix != null && randomSuffix) {
                 MinioUtils.createBucket( bucketName + "-" + RandomUtil.randomString(8));

@@ -1,8 +1,8 @@
 package com.concise.component.storage.minio.utils;
 
-import com.concise.component.storage.common.config.StorageProperties;
-import com.concise.component.storage.common.entity.MultiPartUploadInit;
-import com.concise.component.storage.minio.CustomMinioClient;
+import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.partupload.MultiPartUploadInit;
+import com.concise.component.storage.minio.client.CustomMinioClient;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Item;
