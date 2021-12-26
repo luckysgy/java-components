@@ -14,24 +14,24 @@
    %n:输出一个换行符号
 -->
 <configuration>
-	<springProperty name="LOG_PATH" source="logging.file.path" defaultValue="/home/app/logs/" />
+	<springProperty name="LOG_PATH" source="logging.file.path" defaultValue="/mnt/logs/" />
 	<property name="maxHistory" value="15"/>
 	<property name="maxFileSize" value="100MB"/>
 	<springProperty scope="context" name="appName" source="spring.application.name" defaultValue=""/>
 
 	<!--格式化输出：%d表示日期，%-5level：日志级别从左显示5个字符宽度(%5p),%thread表示线程名(%t),
     %logger:%L 类的全路径及行号(%c:%L),%msg：日志消息，%n是换行符-->
-<!--	<property name="STDOUT_CONSOLE_LOG_PATTERN"-->
-<!--			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [${appName:-},%yellow(%-16.16X{traceId:-}),%green(%-16.16X{spanId:-})] [%yellow(%14.14t)] %green(%-40.40logger{39} %L:) %msg%n"/>-->
-<!--	&lt;!&ndash; 往文件中输出, 不能带有颜色标志, 否则会出现乱码 &ndash;&gt;-->
-<!--	<property name="CONSOLE_LOG_PATTERN"-->
-<!--			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [${appName:-},%-16.16X{traceId:-},%-16.16X{spanId:-}] [%14.14t] %-40.40logger{39}:%L :%msg%n"/>-->
-
 	<property name="STDOUT_CONSOLE_LOG_PATTERN"
-			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %green(%-40.40logger{39} %L:) %msg%n"/>
+			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) [${appName:-},%yellow(%-16.16X{traceId:-}),%green(%-16.16X{spanId:-})] [%yellow(%14.14t)] %green(%-40.40logger{39} %L:) %msg%n"/>
 	<!-- 往文件中输出, 不能带有颜色标志, 否则会出现乱码 -->
 	<property name="CONSOLE_LOG_PATTERN"
-			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-40.40logger{39}:%L :%msg%n"/>
+			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [${appName:-},%-16.16X{traceId:-},%-16.16X{spanId:-}] [%14.14t] %-40.40logger{39}:%L :%msg%n"/>
+
+<!--	<property name="STDOUT_CONSOLE_LOG_PATTERN"-->
+<!--			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %green(%-40.40logger{39} %L:) %msg%n"/>-->
+<!--	&lt;!&ndash; 往文件中输出, 不能带有颜色标志, 否则会出现乱码 &ndash;&gt;-->
+<!--	<property name="CONSOLE_LOG_PATTERN"-->
+<!--			  value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-40.40logger{39}:%L :%msg%n"/>-->
 
 	<!-- DEBUG日志 输入到文件，按日期,RollingFileAppender代表滚动记录文件 -->
 	<appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
