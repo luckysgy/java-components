@@ -9,18 +9,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
  * 反射工具类. 提供调用getter/setter方法, 访问私有变量, 调用私有方法, 获取泛型类型Class, 被AOP过的真实类等工具函数.
  * 
- * @author ruoyi
+ * @author shenguangyang
  */
 @SuppressWarnings("rawtypes")
 public class ReflectUtils {
+    public final static Pattern GROUP_VAR = Pattern.compile("\\$(\\d+)");
+
+    /**
+     * 正则中需要被转义的关键字
+     */
+    public final static Set<Character> RE_KEYS = new HashSet<>(
+            Arrays.asList('$', '(', ')', '*', '+', '.', '[', ']', '?', '\\', '^', '{', '}', '|'));;
+
     private static final String SETTER_PREFIX = "set";
 
     private static final String GETTER_PREFIX = "get";
@@ -355,5 +363,177 @@ public class ReflectUtils {
             return new RuntimeException(msg, ((InvocationTargetException) e).getTargetException());
         }
         return new RuntimeException(msg, e);
+    }
+
+    /**
+     * 正则替换指定值<br>
+     * 通过正则查找到字符串，然后把匹配到的字符串加入到replacementTemplate中，$1表示分组1的字符串
+     *
+     * <p>
+     * 例如：原字符串是：中文1234，我想把1234换成(1234)，则可以：
+     *
+     * <pre>
+     * ReUtil.replaceAll("中文1234", "(\\d+)", "($1)"))
+     *
+     * 结果：中文(1234)
+     * </pre>
+     *
+     * @param content 文本
+     * @param regex 正则
+     * @param replacementTemplate 替换的文本模板，可以使用$1类似的变量提取正则匹配出的内容
+     * @return 处理后的文本
+     */
+    public static String replaceAll(CharSequence content, String regex, String replacementTemplate) {
+        final Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+        return replaceAll(content, pattern, replacementTemplate);
+    }
+
+    /**
+     * 正则替换指定值<br>
+     * 通过正则查找到字符串，然后把匹配到的字符串加入到replacementTemplate中，$1表示分组1的字符串
+     *
+     * @param content 文本
+     * @param pattern {@link Pattern}
+     * @param replacementTemplate 替换的文本模板，可以使用$1类似的变量提取正则匹配出的内容
+     * @return 处理后的文本
+     * @since 3.0.4
+     */
+    public static String replaceAll(CharSequence content, Pattern pattern, String replacementTemplate) {
+        if (StringUtils.isEmpty(content)) {
+            return StringUtils.EMPTY;
+        }
+
+        final Matcher matcher = pattern.matcher(content);
+        boolean result = matcher.find();
+        if (result) {
+            final Set<String> varNums = findAll(GROUP_VAR, replacementTemplate, 1, new HashSet<>());
+            final StringBuffer sb = new StringBuffer();
+            do {
+                String replacement = replacementTemplate;
+                for (String var : varNums) {
+                    int group = Integer.parseInt(var);
+                    replacement = replacement.replace("$" + var, matcher.group(group));
+                }
+                matcher.appendReplacement(sb, escape(replacement));
+                result = matcher.find();
+            }
+            while (result);
+            matcher.appendTail(sb);
+            return sb.toString();
+        }
+        return Convert.toStr(content);
+    }
+
+    /**
+     * 取得内容中匹配的所有结果
+     *
+     * @param <T> 集合类型
+     * @param pattern 编译后的正则模式
+     * @param content 被查找的内容
+     * @param group 正则的分组
+     * @param collection 返回的集合类型
+     * @return 结果集
+     */
+    public static <T extends Collection<String>> T findAll(Pattern pattern, CharSequence content, int group,
+                                                           T collection) {
+        if (null == pattern || null == content) {
+            return null;
+        }
+
+        if (null == collection) {
+            throw new NullPointerException("Null collection param provided!");
+        }
+
+        final Matcher matcher = pattern.matcher(content);
+        while (matcher.find()) {
+            collection.add(matcher.group(group));
+        }
+        return collection;
+    }
+
+    /**
+     * 转义字符，将正则的关键字转义
+     *
+     * @param c 字符
+     * @return 转义后的文本
+     */
+    public static String escape(char c) {
+        final StringBuilder builder = new StringBuilder();
+        if (RE_KEYS.contains(c)) {
+            builder.append('\\');
+        }
+        builder.append(c);
+        return builder.toString();
+    }
+
+    /**
+     * 转义字符串，将正则的关键字转义
+     *
+     * @param content 文本
+     * @return 转义后的文本
+     */
+    public static String escape(CharSequence content) {
+        if (StringUtils.isBlank(content)) {
+            return StringUtils.EMPTY;
+        }
+
+        final StringBuilder builder = new StringBuilder();
+        int len = content.length();
+        char current;
+        for (int i = 0; i < len; i++) {
+            current = content.charAt(i);
+            if (RE_KEYS.contains(current)) {
+                builder.append('\\');
+            }
+            builder.append(current);
+        }
+        return builder.toString();
+    }
+
+
+    /**
+     * * 表示匹配0或多个不是/的字符
+     * ** 表示匹配0或多个任意字符
+     * ? 表示匹配1个任意字符
+     * 将通配符表达式转化为正则表达式
+     * @param path 路径
+     * @return
+     */
+    public static String getRegPath(String path) {
+        char[] chars = path.toCharArray();
+        int len = chars.length;
+        StringBuilder sb = new StringBuilder();
+        boolean preX = false;
+        for(int i=0;i<len;i++){
+            // 遇到*字符
+            if (chars[i] == '*') {
+                //如果是第二次遇到*，则将**替换成.*
+                if (preX) {
+                    sb.append(".*");
+                    preX = false;
+                    // 如果是遇到单星，且单星是最后一个字符，则直接将*转成[^/]*
+                } else if (i+1 == len) {
+                    sb.append("[^/]*");
+                    // 否则单星后面还有字符，则不做任何动作，下一把再做动作
+                } else {
+                    preX = true;
+                }
+                //遇到非*字符
+            } else {
+                // 如果上一把是*，则先把上一把的*对应的[^/]*添进来
+                if (preX) {
+                    sb.append("[^/]*");
+                    preX = false;
+                }
+                //接着判断当前字符是不是?，是的话替换成.
+                if (chars[i] == '?'){
+                    sb.append('.');
+                    //不是?的话，则就是普通字符，直接添进来
+                } else {
+                    sb.append(chars[i]);
+                }
+            }
+        }
+        return sb.toString();
     }
 }

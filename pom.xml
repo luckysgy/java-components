@@ -23,6 +23,7 @@
         <module>component-lock</module>
         <module>component-feign</module>
         <module>component-lib</module>
+        <module>create-porject</module>
     </modules>
 
     <properties>
