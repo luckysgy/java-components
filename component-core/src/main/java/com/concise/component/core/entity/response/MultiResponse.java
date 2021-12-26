@@ -19,7 +19,7 @@ public class MultiResponse<T> extends BaseResponse {
         return (Collection<T>) get(apiFormat.getDataAttributeName());
     }
 
-    public static <T> MultiResponse<T> buildSuccess(Number code, String message, Collection<T> data) {
+    public static <T> MultiResponse<T> buildSuccess(Integer code, String message, Collection<T> data) {
         MultiResponse<T> response = new MultiResponse<>();
         return buildSuccessResponse(response, code, data, message);
     }
@@ -37,7 +37,7 @@ public class MultiResponse<T> extends BaseResponse {
     }
 
 
-    public static <T> MultiResponse<T> buildFailure(Number errCode, String errMessage) {
+    public static <T> MultiResponse<T> buildFailure(Integer errCode, String errMessage) {
         MultiResponse<T> response = new MultiResponse<>();
         return buildFailureResponse(response, errCode, errMessage);
     }

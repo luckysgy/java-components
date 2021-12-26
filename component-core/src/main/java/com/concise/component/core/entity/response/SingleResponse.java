@@ -21,7 +21,7 @@ public class SingleResponse<T> extends BaseResponse {
         return (T) get(apiFormat.getDataAttributeName());
     }
 
-    public static <T> SingleResponse<T> buildSuccess(Number code, String message, T data) {
+    public static <T> SingleResponse<T> buildSuccess(Integer code, String message, T data) {
         SingleResponse<T> response = new SingleResponse<>();
         return buildSuccessResponse(response, code, data, message);
     }
@@ -51,7 +51,7 @@ public class SingleResponse<T> extends BaseResponse {
     }
 
 
-    public static <T> SingleResponse<T> buildFailure(Number errCode, String errMessage) {
+    public static <T> SingleResponse<T> buildFailure(Integer errCode, String errMessage) {
         SingleResponse<T> response = new SingleResponse<>();
         return buildFailureResponse(response, errCode, errMessage);
     }

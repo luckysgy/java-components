@@ -35,7 +35,7 @@ public class PageResponse<T> extends BaseResponse {
     private PageResponse() {
     }
 
-    public static <T> PageResponse<T> buildFailure(Number errCode, String errMessage) {
+    public static <T> PageResponse<T> buildFailure(Integer errCode, String errMessage) {
         PageResponse<T> response = new PageResponse<>();
         response.put(totalAttributeName, 0);
         return buildFailureResponse(response, errCode, errMessage);
@@ -45,7 +45,7 @@ public class PageResponse<T> extends BaseResponse {
         return buildFailure(errorResponseI.getCode(), errorResponseI.getMessage());
     }
 
-    public static <T> PageResponse<T> buildSuccess(Number code, String message, Collection<T> data, long total) {
+    public static <T> PageResponse<T> buildSuccess(Integer code, String message, Collection<T> data, long total) {
         PageResponse<T> response = new PageResponse<>();
         response.put(totalAttributeName, total);
         ResponseFormatAbstract apiFormat = getApiFormat();

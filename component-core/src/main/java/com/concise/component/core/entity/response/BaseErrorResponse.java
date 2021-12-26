@@ -84,19 +84,19 @@ public enum BaseErrorResponse implements ErrorResponseI {
     /**
      * 商品模块
      */
-    private Number code;
+    private Integer code;
     private String message;
 
-    BaseErrorResponse(long code, String message) {
+    BaseErrorResponse(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public Number getCode() {
+    public Integer getCode() {
         return this.code;
     }
 
-    public void setCode(Number code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

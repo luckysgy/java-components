@@ -29,13 +29,13 @@ public class ResponseFormatSystem extends ResponseFormatAbstract {
     }
 
     @Override
-    Long defaultSuccessCodeAttributeValue() {
-        return 200L;
+    Integer defaultSuccessCodeAttributeValue() {
+        return 200;
     }
 
     @Override
-    Long defaultErrorCodeAttributeValue() {
-        return 500L;
+    Integer defaultErrorCodeAttributeValue() {
+        return 500;
     }
 
     @Override

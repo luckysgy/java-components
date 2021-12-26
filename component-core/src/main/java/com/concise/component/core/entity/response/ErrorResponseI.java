@@ -7,7 +7,7 @@ package com.concise.component.core.entity.response;
  */
 public interface ErrorResponseI {
 
-    Number getCode();
+    Integer getCode();
 
     String getMessage();
 }

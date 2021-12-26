@@ -31,9 +31,9 @@ public abstract class BaseResponse extends HashMap<String, Object> {
     protected String dataAttributeName;
     protected String pageDataAttributeName;
     /** 默认成功码 */
-    private Number defaultSuccessCodeAttributeValue;
+    private Integer defaultSuccessCodeAttributeValue;
     /** 默认错误码 */
-    private Number defaultErrorCodeAttributeValue;
+    private Integer defaultErrorCodeAttributeValue;
 
     /**
      * 获取api响应格式
@@ -59,7 +59,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
     /**
      * 构建成功的响应
      */
-    protected static <T extends BaseResponse> T buildSuccessResponse(T response, Number code, Object data, String message) {
+    protected static <T extends BaseResponse> T buildSuccessResponse(T response, Integer code, Object data, String message) {
         ResponseFormatAbstract apiFormat = getApiFormat();
         if (ObjectUtils.isNotEmpty(data)) {
             response.put(apiFormat.getDataAttributeName(), data);
@@ -68,7 +68,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
         return response;
     }
 
-    protected static <T extends BaseResponse> void setBuildSuccessCommonField(ResponseFormatAbstract apiFormat, T response, Number code, String message) {
+    protected static <T extends BaseResponse> void setBuildSuccessCommonField(ResponseFormatAbstract apiFormat, T response, Integer code, String message) {
         response.put(apiFormat.getCodeAttributeName(), code == null ? apiFormat.getDefaultSuccessCodeAttributeValue() : code);
         if (StringUtils.isNotEmpty(message)) {
             response.put(apiFormat.getMessageAttributeName(), message);
@@ -81,7 +81,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
     /**
      * 构建失败的响应
      */
-    protected static <T extends BaseResponse> T buildFailureResponse(T response, Number errCode, String errMessage) {
+    protected static <T extends BaseResponse> T buildFailureResponse(T response, Integer errCode, String errMessage) {
         ResponseFormatAbstract apiFormat = getApiFormat();
         response.put(apiFormat.getCodeAttributeName(), errCode == null ? apiFormat.getDefaultErrorCodeAttributeValue() : errCode);
         response.put(apiFormat.getMessageAttributeName(), errMessage);
@@ -107,12 +107,12 @@ public abstract class BaseResponse extends HashMap<String, Object> {
         return (String) get(apiFormat.getMessageAttributeName());
     }
 
-    public Number getCode() {
+    public Integer getCode() {
         if (StringUtils.isNotEmpty(codeAttributeName)) {
-            return (Number) get(codeAttributeName);
+            return (Integer) get(codeAttributeName);
         }
         ResponseFormatAbstract apiFormat = getApiFormat();
-        return (Number) get(apiFormat.getCodeAttributeName());
+        return (Integer) get(apiFormat.getCodeAttributeName());
     }
 
     public Boolean isSuccess() {
@@ -152,19 +152,19 @@ public abstract class BaseResponse extends HashMap<String, Object> {
     }
 
 
-    public Number getDefaultSuccessCodeAttributeValue() {
+    public Integer getDefaultSuccessCodeAttributeValue() {
         return defaultSuccessCodeAttributeValue;
     }
 
-    public void setDefaultSuccessCodeAttributeValue(Number defaultSuccessCodeAttributeValue) {
+    public void setDefaultSuccessCodeAttributeValue(Integer defaultSuccessCodeAttributeValue) {
         this.defaultSuccessCodeAttributeValue = defaultSuccessCodeAttributeValue;
     }
 
-    public Number getDefaultErrorCodeAttributeValue() {
+    public Integer getDefaultErrorCodeAttributeValue() {
         return defaultErrorCodeAttributeValue;
     }
 
-    public void setDefaultErrorCodeAttributeValue(Number defaultErrorCodeAttributeValue) {
+    public void setDefaultErrorCodeAttributeValue(Integer defaultErrorCodeAttributeValue) {
         this.defaultErrorCodeAttributeValue = defaultErrorCodeAttributeValue;
     }
 }

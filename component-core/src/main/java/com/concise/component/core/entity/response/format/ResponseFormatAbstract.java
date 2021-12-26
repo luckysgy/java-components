@@ -23,9 +23,9 @@ public abstract class ResponseFormatAbstract {
     /** 分页数据对应的数据属性名 */
     abstract String pageDataAttributeName();
     /** 成功状态码 */
-    abstract Long defaultSuccessCodeAttributeValue();
+    abstract Integer defaultSuccessCodeAttributeValue();
     /** 失败状态码 */
-    abstract Long defaultErrorCodeAttributeValue();
+    abstract Integer defaultErrorCodeAttributeValue();
 
     /** 标签 全局唯一 */
     abstract String tag();
@@ -46,11 +46,11 @@ public abstract class ResponseFormatAbstract {
         return this.pageDataAttributeName();
     }
 
-    public Long getDefaultSuccessCodeAttributeValue() {
+    public Integer getDefaultSuccessCodeAttributeValue() {
         return this.defaultSuccessCodeAttributeValue();
     }
 
-    public Long getDefaultErrorCodeAttributeValue() {
+    public Integer getDefaultErrorCodeAttributeValue() {
         return this.defaultErrorCodeAttributeValue();
     }
 
