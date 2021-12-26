@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 作用: 将components 作为子模块添加到project-start工程中
+ * 然后，执行当前类可以生成 {@link CreateProjectConfig} 中配置的目标工程
  * @author shenguangyang
  * @date 2021/7/8 20:27
  */
