@@ -43,7 +43,7 @@ public class LogAspect {
     private AsyncLogCallback asyncLogCallback;
 
     // 配置织入点
-    @Pointcut("@annotation(com.simplifydev.component.log.annotation.Log)")
+    @Pointcut("@annotation(com.concise.component.log.annotation.Log)")
     public void logPointCut() {
     }
 
