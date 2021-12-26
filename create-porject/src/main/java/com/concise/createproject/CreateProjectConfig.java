@@ -11,4 +11,8 @@ public class CreateProjectConfig {
     public static final String projectNameShort = "td";
     /** 包名 */
     public static final String packageName = "com.my.td";
+    /**
+     * 是否更改组件包名为 {@link #packageName}
+     */
+    public static final Boolean isUpdateComponentPackageName = false;
 }

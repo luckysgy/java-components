@@ -75,11 +75,19 @@ public class CreateProject {
                     filePath.substring(filePath.lastIndexOf(projectStartName + "\\") + projectStartName.length() + 1);
             File sourceFile = new File(filePath);
 
-            String newPath = (newProjectPath + File.separator + projectFilePath)
-                    .replace(projectStartName, CreateProjectConfig.projectName)
-                    .replace(componentPackagePath,newPackagePath)
-                    .replace(projectStartPackagePath,newPackagePath)
-                    .replace(projectStartNameShort, CreateProjectConfig.projectNameShort);
+            String newPath = "";
+            if (CreateProjectConfig.isUpdateComponentPackageName) {
+                newPath = (newProjectPath + File.separator + projectFilePath)
+                        .replace(projectStartName, CreateProjectConfig.projectName)
+                        .replace(componentPackagePath,newPackagePath)
+                        .replace(projectStartPackagePath,newPackagePath)
+                        .replace(projectStartNameShort, CreateProjectConfig.projectNameShort);
+            } else {
+                newPath = (newProjectPath + File.separator + projectFilePath)
+                        .replace(projectStartName, CreateProjectConfig.projectName)
+                        .replace(projectStartPackagePath,newPackagePath)
+                        .replace(projectStartNameShort, CreateProjectConfig.projectNameShort);
+            }
 
             File targetFile = new File(newPath);
             if (sourceFile.isDirectory()) {
@@ -106,7 +114,9 @@ public class CreateProject {
                 }
             }
             FileUtils.replaceContent(newProjectFile, projectStartName, CreateProjectConfig.projectName);
-            FileUtils.replaceContent(newProjectFile, componentPackageName, CreateProjectConfig.packageName);
+            if (CreateProjectConfig.isUpdateComponentPackageName) {
+                FileUtils.replaceContent(newProjectFile, componentPackageName, CreateProjectConfig.packageName);
+            }
             FileUtils.replaceContent(newProjectFile, projectStartPackageName, CreateProjectConfig.packageName);
             FileUtils.replaceContent(newProjectFile, projectStartNameShort, CreateProjectConfig.projectNameShort);
         }
