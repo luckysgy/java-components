@@ -191,6 +191,22 @@
                 <artifactId>component-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.concise</groupId>
+                <artifactId>component-lib-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.concise</groupId>
+                <artifactId>component-lib-hik-linux64</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.concise</groupId>
+                <artifactId>component-lib-hik-win64</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--============================================================== 以下是第三方依赖===========================================================================-->
 
 
             <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->

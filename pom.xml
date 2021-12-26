@@ -22,6 +22,7 @@
         <module>component-log</module>
         <module>component-lock</module>
         <module>component-feign</module>
+        <module>component-lib</module>
     </modules>
 
     <properties>

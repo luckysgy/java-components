@@ -13,6 +13,7 @@
         <module>demo-mq</module>
         <module>demo-storage</module>
         <module>demo-lock</module>
+        <module>demo-hik</module>
     </modules>
 
     <properties>
