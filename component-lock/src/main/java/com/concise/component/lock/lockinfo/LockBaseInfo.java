@@ -1,4 +1,4 @@
-package com.concise.component.lock.expand;
+package com.concise.component.lock.lockinfo;
 
 /**
  * 锁的基本信息

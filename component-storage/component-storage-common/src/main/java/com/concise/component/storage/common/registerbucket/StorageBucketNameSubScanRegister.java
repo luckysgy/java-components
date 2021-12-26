@@ -1,7 +1,5 @@
 package com.concise.component.storage.common.registerbucket;
 
-import com.concise.component.core.utils.StringUtils;
-import com.concise.component.storage.common.storagetype.StorageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -62,7 +60,7 @@ public class StorageBucketNameSubScanRegister implements ImportBeanDefinitionReg
             // 获取全部子类
             Set<StorageBucketName> storageBucketNameAllSub = getStorageBucketNameSub(registry);
             for (StorageBucketName storageBucketName : storageBucketNameAllSub) {
-                StorageBucketHandler.addStorageBucketSub(storageBucketName);
+                StorageBucketNameHandler.addStorageBucketSub(storageBucketName);
                 log.info("register storageBucketName: {}", storageBucketName.getClass().getName());
             }
 

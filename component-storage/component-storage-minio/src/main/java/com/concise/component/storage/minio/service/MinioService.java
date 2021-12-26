@@ -4,7 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
 import com.concise.component.storage.common.autoconfig.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketHandler;
+import com.concise.component.storage.common.registerbucket.StorageBucketNameHandler;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import com.concise.component.storage.common.registerbucket.StorageBucketName;
@@ -35,17 +35,17 @@ public class MinioService extends StorageService {
     @Override
     public <T extends StorageBucketName> void uploadText(Class<T> bucketNameClass, String text, String objectName) throws Exception {
         InputStream inputStream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-        MinioUtils.uploadFile(StorageBucketHandler.getBucketName(bucketNameClass), inputStream, "text/plain", objectName);
+        MinioUtils.uploadFile(StorageBucketNameHandler.getBucketName(bucketNameClass), inputStream, "text/plain", objectName);
     }
 
     @Override
     public <T extends StorageBucketName> void uploadFile(Class<T> bucketNameClass, InputStream inputStream, String contentType, String objectName) throws Exception {
-        MinioUtils.uploadFile(StorageBucketHandler.getBucketName(bucketNameClass), inputStream, contentType, objectName);
+        MinioUtils.uploadFile(StorageBucketNameHandler.getBucketName(bucketNameClass), inputStream, contentType, objectName);
     }
 
     @Override
     public <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypesEnum urlTypes) {
-        String bucketName = StorageBucketHandler.getBucketName(bucketNameClass);
+        String bucketName = StorageBucketNameHandler.getBucketName(bucketNameClass);
         if (UrlTypesEnum.LAN.equals(urlTypes)) {
             String lan = storageProperties.getUrl().getLan();
             return StringUtils.join(lan, "/", bucketName, "/", objectName);
@@ -57,12 +57,12 @@ public class MinioService extends StorageService {
 
     @Override
     public <T extends StorageBucketName> InputStream getFile(Class<T> bucketNameClass, String objectName) {
-        return MinioUtils.getFile(StorageBucketHandler.getBucketName(bucketNameClass), objectName);
+        return MinioUtils.getFile(StorageBucketNameHandler.getBucketName(bucketNameClass), objectName);
     }
 
     @Override
     public <T extends StorageBucketName> Boolean createBucket(Class<T> bucketNameClass, Boolean randomSuffix) {
-        String bucketName = StorageBucketHandler.getBucketName(bucketNameClass);
+        String bucketName = StorageBucketNameHandler.getBucketName(bucketNameClass);
         try {
             if (randomSuffix != null && randomSuffix) {
                 MinioUtils.createBucket( bucketName + "-" + RandomUtil.randomString(8));

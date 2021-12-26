@@ -1,7 +1,6 @@
-package com.concise.component.lock.aspect;
+package com.concise.component.lock.annotationlock;
 
 import com.concise.component.core.entity.response.Response;
-import com.concise.component.lock.annotation.DistributedLock;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

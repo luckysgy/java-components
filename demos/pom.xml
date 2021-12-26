@@ -12,6 +12,7 @@
         <module>demo-opencv</module>
         <module>demo-mq</module>
         <module>demo-storage</module>
+        <module>demo-lock</module>
     </modules>
 
     <properties>

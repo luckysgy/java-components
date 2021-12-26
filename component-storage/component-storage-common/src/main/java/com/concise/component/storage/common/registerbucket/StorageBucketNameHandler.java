@@ -12,13 +12,16 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author shenguangyang
  * @date 2021-12-25 21:17
  */
-public class StorageBucketHandler {
+public class StorageBucketNameHandler {
     /**
      * key 子类全路径, value 桶的类
      */
     private static final Map<String, StorageBucketName> storageBucketNameSub = new ConcurrentHashMap<>();
 
     public static <T extends StorageBucketName> String getBucketName(Class<T> storageBucketClass) {
+        if (storageBucketClass == null) {
+            throw new BizException("storageBucketClass == null");
+        }
         StorageBucketName storageBucketName = storageBucketNameSub.get(storageBucketClass.getName());
         if (storageBucketName == null) {
             throw new BizException("桶名不存在, storageBucketClass: " + storageBucketClass.getName());

@@ -1,4 +1,4 @@
-package com.concise.component.lock.annotation;
+package com.concise.component.lock.annotationlock;
 
 import java.lang.annotation.*;
 

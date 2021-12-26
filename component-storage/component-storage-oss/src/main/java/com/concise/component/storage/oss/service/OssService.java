@@ -5,7 +5,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
 import com.concise.component.storage.common.autoconfig.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketHandler;
+import com.concise.component.storage.common.registerbucket.StorageBucketNameHandler;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import com.concise.component.storage.common.registerbucket.StorageBucketName;
@@ -35,7 +35,7 @@ public class OssService extends StorageService {
     @Override
     public <T extends StorageBucketName> void uploadText(Class<T> bucketNameClass, String text, String objectName) {
         InputStream inputStream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
-        OssUtils.upload(inputStream, StorageBucketHandler.getBucketName(bucketNameClass), objectName, "text/plain");
+        OssUtils.upload(inputStream, StorageBucketNameHandler.getBucketName(bucketNameClass), objectName, "text/plain");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class OssService extends StorageService {
 
     @Override
     public <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypesEnum urlTypesEnum) {
-        String bucketName = StorageBucketHandler.getBucketName(bucketNameClass);
+        String bucketName = StorageBucketNameHandler.getBucketName(bucketNameClass);
         StorageProperties.Oss oss = storageProperties.getOss();
         Boolean enableProxy = oss.getProxy().getEnable();
         // 使能oss代理
@@ -72,7 +72,7 @@ public class OssService extends StorageService {
 
     @Override
     public <T extends StorageBucketName> Boolean createBucket(Class<T> bucketNameClass, Boolean randomSuffix) {
-        String bucketName = StorageBucketHandler.getBucketName(bucketNameClass);
+        String bucketName = StorageBucketNameHandler.getBucketName(bucketNameClass);
         try {
             if (randomSuffix != null && randomSuffix) {
                 return OssUtils.createBucket(bucketName + "-" + RandomUtil.randomString(8));
