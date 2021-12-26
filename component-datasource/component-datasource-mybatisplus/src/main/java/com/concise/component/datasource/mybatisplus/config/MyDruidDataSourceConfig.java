@@ -38,7 +38,7 @@ public class MyDruidDataSourceConfig extends DruidDataSourceAutoConfigure {
     public MyDruidDataSourceConfig() {
     }
 
-    @Bean
+//    @Bean
     public DataSource dataSource() {
         // 初始化数据库
         logger.info("初始化数据库 initDb [{}] driverClassName [{}] jdbcUrl [{}] username [{}] password [{}]",
