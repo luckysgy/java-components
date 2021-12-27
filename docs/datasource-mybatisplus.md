@@ -1,35 +1,46 @@
-# 文件存储配置
-storageServer:
-  enable: true
-  # 如果没有type所对应的依赖(oss/minio), 是不会生效的
-  type: minio
-  url:
-    # url过期时间单位是s,用于具有时效性的链接
-    expiryTime: 60
-    # 内网url(局域网  Local Area Network) http://127.0.0.1
-    lan: http://127.0.0.1
-    # 外网(广域网 Wide Area Network) url http://47.78.12.56
-    # 这里以 192.168.5.248 当做外网测试
-    wan: http://192.168.5.248:9090/files
-  minio:
-    accessKey: minioadmin
-    secretKey: minioadmin
-    endpoint: http://192.168.190.70:39000
-  oss:
-    secretAccessKey: xxx
-    accessKeyId: xxx
-    endpoint: xxx
-    # 是否使能代理，如果使能nginx代理，则获取持久链接的前缀
-    # 就是url中的lan或者wan作为前缀
-    proxy:
-      enable: false
+# 功能
 
+- 整合mybatis plus
+- 整合分页插件
+- 整合druid
+- 可以控制是否使能mybatisplus/druid
+
+# 开启mybatisplus
+
+默认情况下, 即使引入`component-datasource-mybatisplus` 组件，也不会使能mybatiplus
+
+需要在启动类上添加如下注解
+
+```java
+// value = false, 关闭mybatisplus, 默认value = true
+// 不会使能mybatisplus情况有两种: 启动类没有添加 @EnableMybatisPlus 注解 或者 @EnableMybatisPlus(value = false)
+@EnableMybatisPlus
+@SpringBootApplication
+public class DemoStorageApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(DemoStorageApplication.class, args);
+    }
+}
+```
+
+
+
+# yaml配置文件
+
+由于内部重写了数据源类, 需要在配置文件中添加如下配置强制覆盖已有的DataSource
+
+```yaml
 spring:
-  application:
-    # 应用名称
-    name: order
   main:
     allow-bean-definition-overriding: true
+```
+
+
+
+数据库配置如下:
+
+```xml
+spring:
   flyway:
     # 启用或禁用 flyway
     enabled: false
@@ -59,7 +70,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     init-db: project
-    url: jdbc:mysql://192.168.190.35:33336/project?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://190.168.120.35:33336/project?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&&serverTimezone=Asia/Shanghai
     userName: root
     password: QWER@!@#$
     # 使用我们自己的druid数据源
@@ -127,3 +138,5 @@ spring:
         login-password: 123
         allow: work01.server.com           # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
         deny:
+```
+
