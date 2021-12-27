@@ -1,9 +1,11 @@
 package com.concise.component.datasource.mybatisplus.utils;
-
+//
+//import com.mysql.cj.jdbc.MysqlDataSource;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+//import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * 
@@ -45,6 +47,5 @@ public class DataBaseInit {
             jdbcTemplate.execute(String.format("CREATE DATABASE IF NOT EXISTS `%s` DEFAULT CHARACTER SET utf8", initDb));
         }
         logger.info("数据库 [{}] 已被创建",initDb);
-
     }
 }

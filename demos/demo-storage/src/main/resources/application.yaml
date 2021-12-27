@@ -28,8 +28,8 @@ spring:
   application:
     # 应用名称
     name: order
-  #  main:
-  #    allow-bean-definition-overriding: true
+  main:
+    allow-bean-definition-overriding: true
   flyway:
     # 启用或禁用 flyway
     enabled: false
@@ -58,8 +58,8 @@ spring:
     validate-on-migrate: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    init-db: app
-    url: jdbc:mysql://192.168.190.36:33336/project?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&&serverTimezone=Asia/Shanghai
+    init-db: project
+    url: jdbc:mysql://192.168.190.35:33336/project?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&&serverTimezone=Asia/Shanghai
     userName: root
     password: dev_alibaba@1688
     # 使用我们自己的druid数据源

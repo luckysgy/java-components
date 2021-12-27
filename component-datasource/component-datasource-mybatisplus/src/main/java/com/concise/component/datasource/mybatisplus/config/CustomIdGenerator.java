@@ -1,5 +1,6 @@
 package com.concise.component.datasource.mybatisplus.config;
 
+
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.github.yitter.idgen.YitIdHelper;
 import org.springframework.stereotype.Component;
