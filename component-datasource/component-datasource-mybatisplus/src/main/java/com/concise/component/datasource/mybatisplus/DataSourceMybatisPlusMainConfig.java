@@ -1,5 +1,6 @@
 package com.concise.component.datasource.mybatisplus;
 
+import com.concise.component.datasource.mybatisplus.register.EnableMybatisPlus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,9 +13,10 @@ import javax.annotation.PostConstruct;
  * @author shenguangyang
  * @date 2021/6/19 8:19
  */
+@EnableMybatisPlus
 @ComponentScan(basePackages = "com.concise.component.datasource.mybatisplus")
-public class ComponentDataSourceMybatisPlusMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(ComponentDataSourceMybatisPlusMainConfig.class);
+public class DataSourceMybatisPlusMainConfig {
+    private static final Logger log = LoggerFactory.getLogger(DataSourceMybatisPlusMainConfig.class);
     @PostConstruct
     public void init() {
         log.info("init com.concise.component.datasource.mybatisplus");
