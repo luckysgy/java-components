@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
  * @author shenguangyang
  * @date 2021/6/19 8:19
  */
-@EnableMybatisPlus
 @ComponentScan(basePackages = "com.concise.component.datasource.mybatisplus")
 public class DataSourceMybatisPlusMainConfig {
     private static final Logger log = LoggerFactory.getLogger(DataSourceMybatisPlusMainConfig.class);
