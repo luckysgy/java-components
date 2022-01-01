@@ -6,9 +6,9 @@ package com.concise.component.lib.common.lib;
  */
 public enum LibEnums {
     HIK(
-            "component-lib-hik-win64.jar",
+            "component-lib-hik-win64-1.0.0.jar",
             "com.concise.component.lib.hik.win64.HikWin64PackageMark",
-            "component-lib-hik-linux64.jar",
+            "component-lib-hik-linux64-1.0.0.jar",
             "com.concise.component.lib.hik.linux64.HikLinux64PackageMark"
     );
 
