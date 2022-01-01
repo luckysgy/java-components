@@ -20,17 +20,4 @@ public class RocketMqMessage<T> implements Serializable {
      * 消息的key
      */
     private String msgKey;
-
-    /**
-     * topic
-     */
-    private String producerTopic;
-    /**
-     * group
-     */
-    private String producerGroup;
-    /**
-     * tag
-     */
-    private String producerTag;
 }

@@ -1,6 +1,6 @@
 package com.concise.component.mq.rabbitmq.entity;
 
-import com.concise.component.mq.common.MqMessage;
+import com.concise.component.mq.common.BaseMqMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RabbitMqMessage extends MqMessage {
+public class RabbitBaseMqMessage extends BaseMqMessage {
     private static final int MAX_TRY_COUNT = 10;
 
     // 消息体

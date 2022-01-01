@@ -2,12 +2,10 @@ package com.concise.component.mq.rocketmq.demo;
 
 import com.concise.component.mq.common.listener.MqListener;
 import com.concise.component.mq.rocketmq.domain.RocketMqMessage;
-import com.concise.component.mq.rocketmq.service.RocketMqSendService;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,14 +16,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RocketMQMessageListener(
         nameServer = "${rocketmq.name-server}",
-        topic = DefaultMqBaseInfo.TOPIC,
-        consumerGroup = DefaultMqBaseInfo.CONSUMER_GROUP,
-        selectorExpression = DefaultMqBaseInfo.SELECTOR_EXPRESSION)
+        topic = "test",
+        consumerGroup = "test",
+        selectorExpression = "test")
 public class DefaultMqListener implements MqListener, RocketMQListener<RocketMqMessage<DefaultMqMessage>> {
     private static final Logger log = LoggerFactory.getLogger(DefaultMqListener.class);
 
     @Override
     public void onMessage(RocketMqMessage<DefaultMqMessage> message) {
-        // mqProcessor.consume(message.getContent());
+
     }
 }

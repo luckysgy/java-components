@@ -2,11 +2,11 @@ package com.concise.component.mq.rabbitmq.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.concise.component.core.utils.UUIDUtil;
-import com.concise.component.mq.common.MqMessage;
+import com.concise.component.mq.common.BaseMqMessage;
 import com.concise.component.mq.common.service.MqSendFailService;
 import com.concise.component.mq.rabbitmq.entity.Conversion;
 import com.concise.component.mq.rabbitmq.entity.CustomCorrelationData;
-import com.concise.component.mq.rabbitmq.entity.RabbitMqMessage;
+import com.concise.component.mq.rabbitmq.entity.RabbitBaseMqMessage;
 import com.concise.component.mq.rabbitmq.service.RabbitmqService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,15 +27,15 @@ public class RabbitmqServiceImpl implements RabbitmqService {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private MqSendFailService<RabbitMqMessage> sendFailService;
+    private MqSendFailService<RabbitBaseMqMessage> sendFailService;
 
     @Override
-    public <T extends MqMessage> void send(String exchange, String routingKey, T object) {
+    public <T extends BaseMqMessage> void send(String exchange, String routingKey, T object) {
         send(exchange, routingKey, object, null);
     }
 
     @Override
-    public <T extends MqMessage> void send(String exchange, String routingKey, T object, MessagePostProcessor messagePostProcessor) {
+    public <T extends BaseMqMessage> void send(String exchange, String routingKey, T object, MessagePostProcessor messagePostProcessor) {
         if (rabbitTemplate == null) {
             log.warn("rabbitmq not enable");
         }
@@ -60,7 +60,7 @@ public class RabbitmqServiceImpl implements RabbitmqService {
             }
         } catch (Exception e) {
             log.error("amqp send exception: {}, correlationData: {}", e.getMessage(), correlationData);
-            RabbitMqMessage rabbitMqMessage = Conversion.to(correlationData);
+            RabbitBaseMqMessage rabbitMqMessage = Conversion.to(correlationData);
             sendFailService.save(rabbitMqMessage);
         }
     }

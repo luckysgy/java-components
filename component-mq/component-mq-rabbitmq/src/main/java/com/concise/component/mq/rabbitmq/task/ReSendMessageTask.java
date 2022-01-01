@@ -2,7 +2,7 @@ package com.concise.component.mq.rabbitmq.task;
 
 import com.alibaba.fastjson.JSON;
 import com.concise.component.mq.common.service.MqSendFailService;
-import com.concise.component.mq.rabbitmq.entity.RabbitMqMessage;
+import com.concise.component.mq.rabbitmq.entity.RabbitBaseMqMessage;
 import com.concise.component.mq.rabbitmq.expand.MqSendFailHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class ReSendMessageTask {
     private static final Logger log = LoggerFactory.getLogger(ReSendMessageTask.class);
 
     @Autowired
-    private MqSendFailService<RabbitMqMessage> sendFailService;
+    private MqSendFailService<RabbitBaseMqMessage> sendFailService;
 
     @Autowired(required = false)
     private MqSendFailHandle mqSendFailHandle;
@@ -36,8 +36,8 @@ public class ReSendMessageTask {
     @Scheduled(cron = "0/30 * * * * ?")
     public void reSend() {
         log.debug("task --- start resending failed messages");
-        List<RabbitMqMessage> rabbitMqMessages = sendFailService.get();
-        for (RabbitMqMessage rabbitMqMessage : rabbitMqMessages) {
+        List<RabbitBaseMqMessage> rabbitMqMessages = sendFailService.get();
+        for (RabbitBaseMqMessage rabbitMqMessage : rabbitMqMessages) {
             if (rabbitMqMessage.isMaxRetryCount()) {
                 log.error("the message reaches the maximum number of reposts: {}", rabbitMqMessage.getMsgId());
                 // 需要人工干预处理

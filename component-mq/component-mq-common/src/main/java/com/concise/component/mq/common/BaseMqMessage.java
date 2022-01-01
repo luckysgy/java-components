@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author shenguangyang
  * @date 2021-10-07 14:46
  */
-public class MqMessage implements Serializable {
+public class BaseMqMessage implements Serializable {
     /**
      * 消息id
      */

@@ -1,6 +1,6 @@
 package com.concise.component.mq.rabbitmq.service;
 
-import com.concise.component.mq.common.MqMessage;
+import com.concise.component.mq.common.BaseMqMessage;
 import org.springframework.amqp.core.MessagePostProcessor;
 
 /**
@@ -23,7 +23,7 @@ public interface RabbitmqService {
      * @param routingKey 路由key, 同样推荐定义成常量, 直接定义即可不需要通过@Value注入值
      * @param object 发送的对象
      */
-    <T extends MqMessage> void send(String exchange, String routingKey, final T object);
+    <T extends BaseMqMessage> void send(String exchange, String routingKey, final T object);
 
     /**
      * <code>
@@ -40,5 +40,5 @@ public interface RabbitmqService {
      * @param messagePostProcessor
      * @param <T>
      */
-    <T extends MqMessage> void send(String exchange, String routingKey, final T object, MessagePostProcessor messagePostProcessor);
+    <T extends BaseMqMessage> void send(String exchange, String routingKey, final T object, MessagePostProcessor messagePostProcessor);
 }

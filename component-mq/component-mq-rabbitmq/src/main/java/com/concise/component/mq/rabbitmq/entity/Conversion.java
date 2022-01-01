@@ -6,8 +6,8 @@ package com.concise.component.mq.rabbitmq.entity;
  * @date 2021-10-07 12:55
  */
 public class Conversion {
-    public static RabbitMqMessage to(CustomCorrelationData customCorrelationData) {
-        RabbitMqMessage rabbitMqMessage = new RabbitMqMessage();
+    public static RabbitBaseMqMessage to(CustomCorrelationData customCorrelationData) {
+        RabbitBaseMqMessage rabbitMqMessage = new RabbitBaseMqMessage();
         rabbitMqMessage.setMessage(customCorrelationData.getMessage());
         rabbitMqMessage.setMsgId(customCorrelationData.getId());
         rabbitMqMessage.setExchange(customCorrelationData.getExchange());
@@ -15,7 +15,7 @@ public class Conversion {
         rabbitMqMessage.setRoutingKey(customCorrelationData.getRoutingKey());
         return rabbitMqMessage;
     }
-    public CustomCorrelationData to(RabbitMqMessage rabbitMqMessage) {
+    public CustomCorrelationData to(RabbitBaseMqMessage rabbitMqMessage) {
         CustomCorrelationData data = new CustomCorrelationData();
         data.setRetryCount(rabbitMqMessage.getRetryCount());
         data.setMessage(rabbitMqMessage.getMessage());

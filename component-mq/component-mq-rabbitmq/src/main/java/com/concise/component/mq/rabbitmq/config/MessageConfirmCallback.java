@@ -3,7 +3,7 @@ package com.concise.component.mq.rabbitmq.config;
 import com.concise.component.mq.common.service.MqSendFailService;
 import com.concise.component.mq.rabbitmq.entity.Conversion;
 import com.concise.component.mq.rabbitmq.entity.CustomCorrelationData;
-import com.concise.component.mq.rabbitmq.entity.RabbitMqMessage;
+import com.concise.component.mq.rabbitmq.entity.RabbitBaseMqMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class MessageConfirmCallback implements RabbitTemplate.ConfirmCallback {
     private static final Logger log = LoggerFactory.getLogger(MessageConfirmCallback.class);
     @Autowired
-    private MqSendFailService<RabbitMqMessage> sendFailService;
+    private MqSendFailService<RabbitBaseMqMessage> sendFailService;
 
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
@@ -45,7 +45,7 @@ public class MessageConfirmCallback implements RabbitTemplate.ConfirmCallback {
             log.error("message send fail, id: {}", correlationData.getId());
             if (correlationData instanceof CustomCorrelationData) {
                 CustomCorrelationData custom = (CustomCorrelationData) correlationData;
-                RabbitMqMessage rabbitMqMessage = Conversion.to(custom);
+                RabbitBaseMqMessage rabbitMqMessage = Conversion.to(custom);
                 sendFailService.save(rabbitMqMessage);
             }
         }
