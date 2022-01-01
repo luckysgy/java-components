@@ -1,14 +1,17 @@
 package com.concise.component.lib.common.lib;
 
+import com.concise.component.lib.common.VersionEnvironmentPostProcessor;
+import sun.tools.jar.resources.jar;
+
 /**
  * @author shenguangyang
  * @date 2021-12-05 8:31
  */
 public enum LibEnums {
     HIK(
-            "component-lib-hik-win64-1.0.0.jar",
+            "component-lib-hik-win64-" + VersionEnvironmentPostProcessor.projectVersion + ".jar",
             "com.concise.component.lib.hik.win64.HikWin64PackageMark",
-            "component-lib-hik-linux64-1.0.0.jar",
+            "component-lib-hik-linux64-" + VersionEnvironmentPostProcessor.projectVersion + ".jar",
             "com.concise.component.lib.hik.linux64.HikLinux64PackageMark"
     );
 
