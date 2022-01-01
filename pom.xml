@@ -33,7 +33,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <templating-maven-plugin.version>1.0.0</templating-maven-plugin.version>
-
+        <!-- grpc 通信 -->
+        <grpc.version>1.6.1</grpc.version>
+        <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
+        <protobuf-java.version>3.17.3</protobuf-java.version>
     </properties>
 
     <description>
