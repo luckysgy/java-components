@@ -5,7 +5,13 @@
 storageServer:
   enable: true
   # 如果没有type所对应的依赖(oss/minio), 是不会生效的
-  type: minio
+  type: oss
+  # 是否使用一个桶
+  # 如果为true, 则使用minio / oss 配置下面的bucketName
+  # 如果为false, 则使用实现 {@link StorageBucketManage#getBucketName()}  中的桶名
+  isOneBucket: true
+  # 是否初始化桶
+  isInitBucket: true
   url:
     # url过期时间单位是s,用于具有时效性的链接
     expiryTime: 60
@@ -17,11 +23,13 @@ storageServer:
   minio:
     accessKey: minioadmin
     secretKey: minioadmin
-    endpoint: http://192.168.5.248:9090
+    bucketName: my-test
+    endpoint: http://192.168.190.70:39000
   oss:
-    secretAccessKey: xxx
+    secretAccessKey: xxxx
     accessKeyId: xxx
-    endpoint: xxx
+    endpoint: http://oss-cn-beijing.aliyuncs.com
+    bucketName: my-test11111
     # 是否使能代理，如果使能nginx代理，则获取持久链接的前缀
     # 就是url中的lan或者wan作为前缀
     proxy:
