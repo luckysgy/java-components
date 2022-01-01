@@ -1,7 +1,5 @@
 package com.concise.component.lib.common;
 
-import cn.hutool.core.io.FileUtil;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -31,8 +29,6 @@ public class LibConstant {
             tempDir = tempDir + File.separator;
         }
         File generatedDir = new File(tempDir + LibConstant.LIB_CACHE_PATH_PRE);
-//        File upperLevelDir = new File(tempDir + ".lib");
-//        FileUtil.del(upperLevelDir);
         if (generatedDir.exists()) {
             return generatedDir;
         }
