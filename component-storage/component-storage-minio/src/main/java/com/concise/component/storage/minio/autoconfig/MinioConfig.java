@@ -1,7 +1,7 @@
 package com.concise.component.storage.minio.autoconfig;
 
 import com.concise.component.storage.common.autoconfig.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketNameHandler;
+import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
 import com.concise.component.storage.minio.client.CustomMinioClient;
 import com.concise.component.storage.minio.utils.MinioUtils;
 import io.minio.BucketExistsArgs;
@@ -50,16 +50,18 @@ public class MinioConfig {
                         .endpoint(minio.getEndpoint())
                         .credentials(minio.getAccessKey(), minio.getSecretKey())
                         .build();
-        // 判断Bucket是否存在
-        List<String> allBucketName = StorageBucketNameHandler.getAllBucketName();
-        for (String bucketName : allBucketName) {
-            boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
-            if(isExist) {
-                log.info("Minio文件系统Bucket: {} 已存在", bucketName);
-            } else {
-                // 不存在创建一个新的Bucket
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
-                log.info("Minio已创建Bucket: {}", bucketName);
+        if (storageProperties.getIsInitBucket()) {
+            // 判断Bucket是否存在
+            List<String> allBucketName = StorageBucketManageHandler.getAllBucketName();
+            for (String bucketName : allBucketName) {
+                boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+                if(isExist) {
+                    log.info("Minio文件系统Bucket: {} 已存在", bucketName);
+                } else {
+                    // 不存在创建一个新的Bucket
+                    minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+                    log.info("Minio已创建Bucket: {}", bucketName);
+                }
             }
         }
 

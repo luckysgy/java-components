@@ -1,12 +1,13 @@
 package com.concise.component.storage.common.service;
 
 import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.registerbucket.StorageBucketManage;
 import com.concise.component.storage.common.url.UrlTypesEnum;
-import com.concise.component.storage.common.registerbucket.StorageBucketName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * 存储服务公共接口
@@ -25,12 +26,12 @@ public abstract class StorageService {
      * @param text 文本内容
      * @param objectName 对象名 xx/yy/zz/fileName.text
      */
-    public abstract <T extends StorageBucketName> void uploadText(Class<T> bucketNameClass, String text, String objectName) throws Exception;
+    public abstract <T extends StorageBucketManage> void uploadText(Class<T> storageBucket, String text, String objectName) throws Exception;
 
     /**
      * 上传文件
      */
-    public abstract <T extends StorageBucketName> void uploadFile(Class<T> bucketNameClass, InputStream inputStream, String contentType, String objectName) throws Exception;
+    public abstract <T extends StorageBucketManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception;
 
     /**
      * 通过对象名获取永久url
@@ -59,19 +60,37 @@ public abstract class StorageService {
      * @param urlTypesEnum url类型,内网访问还是外网访问
      * @return 对象的url
      */
-    public abstract <T extends StorageBucketName> String getFilePermanentUrl(Class<T> bucketNameClass, String objectName, UrlTypesEnum urlTypesEnum);
+    public abstract <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum);
 
     /**
      * 获取文件
      * @param objectName 对象名
      * @return
      */
-    public abstract <T extends StorageBucketName> InputStream getFile(Class<T> bucketNameClass, String objectName);
+    public abstract <T extends StorageBucketManage> InputStream getFile(Class<T> storageBucket, String objectName);
 
     /**
      * 创建桶
-     * @param bucketNameClass 桶的名字
+     * @param storageBucket 桶的名字
      * @param randomSuffix 是否使能随机后缀,防止桶名存在
      */
-    public abstract <T extends StorageBucketName> Boolean createBucket(Class<T> bucketNameClass, Boolean randomSuffix);
+    public abstract <T extends StorageBucketManage> Boolean createBucket(Class<T> storageBucket, Boolean randomSuffix);
+
+    /**
+     * 批量删除文件
+     * @param storageBucket 桶
+     * @param objectNameList 对象名集合
+     * @param <T>
+     * @return
+     */
+    public abstract <T extends StorageBucketManage> void deleteObjects(Class<T> storageBucket, List<String> objectNameList) throws Exception;
+
+    /**
+     * 删除文件
+     * @param storageBucket 桶
+     * @param objectName 对象名集合
+     * @param <T>
+     * @return
+     */
+    public abstract <T extends StorageBucketManage> void deleteObject(Class<T> storageBucket, String objectName) throws Exception;
 }

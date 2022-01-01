@@ -1,10 +1,10 @@
 package com.concise.component.storage.oss.utils;
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.model.Bucket;
-import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.ObjectMetadata;
+import com.aliyun.oss.internal.OSSConstants;
+import com.aliyun.oss.model.*;
 
+import com.concise.component.core.exception.BizException;
 import com.concise.component.storage.common.autoconfig.StorageProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Description: oss辅助类
@@ -174,5 +175,24 @@ public class OssUtils {
         Date expiration = new Date(System.currentTimeMillis() + 60 * 1000 * url.getExpiryTime());
         URL url = ossClient.generatePresignedUrl(bucketName,objectName,expiration);
         return url.toString();
+    }
+
+    public static InputStream getFile(String bucketName, String objectName) {
+        OSSObject object = ossClient.getObject(bucketName, objectName);
+        if (object == null) {
+            throw new BizException("桶 " + bucketName + " 中不存在 " + objectName + "文件");
+        }
+        return object.getObjectContent();
+    }
+
+    public static int deleteObjects(String bucketName, List<String> groupObjectNames) {
+        DeleteObjectsResult deleteObjectsResult = ossClient.deleteObjects(
+                new DeleteObjectsRequest(bucketName).withKeys(groupObjectNames).withEncodingType(OSSConstants.URL_ENCODING)
+        );
+        return deleteObjectsResult.getDeletedObjects().size();
+    }
+
+    public static void deleteObject(String bucketName, String objectNames) {
+        ossClient.deleteObject(bucketName, objectNames);
     }
 }

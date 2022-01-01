@@ -1,6 +1,6 @@
 package com.concise.component.storage.common.partupload;
 
-import com.concise.component.storage.common.registerbucket.StorageBucketName;
+import com.concise.component.storage.common.registerbucket.StorageBucketManage;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ public interface MultiPartUploadService {
      * @param objectName 对象名
      * @param totalPart 一共多少片
      */
-    <T extends StorageBucketName> MultiPartUploadInit init(Class<T> bucketNameClass, String objectName, int totalPart);
+    <T extends StorageBucketManage> MultiPartUploadInit init(Class<T> bucketNameClass, String objectName, int totalPart);
 
     /**
      * 上次分片
@@ -26,5 +26,5 @@ public interface MultiPartUploadService {
      */
     void uploadPart(String uploadUrl, String contentType, File file);
 
-    <T extends StorageBucketName> void merge(Class<T> bucketNameClass, String objectName, String uploadId);
+    <T extends StorageBucketManage> void merge(Class<T> bucketNameClass, String objectName, String uploadId);
 }

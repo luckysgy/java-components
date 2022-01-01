@@ -1,10 +1,13 @@
 package com.concise.component.storage.minio.utils;
 
+import com.concise.component.core.exception.UtilException;
 import com.concise.component.storage.common.autoconfig.StorageProperties;
 import com.concise.component.storage.common.partupload.MultiPartUploadInit;
 import com.concise.component.storage.minio.client.CustomMinioClient;
 import io.minio.*;
 import io.minio.http.Method;
+import io.minio.messages.DeleteError;
+import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
 import io.minio.messages.Part;
 import org.slf4j.Logger;
@@ -15,9 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.MalformedURLException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -64,6 +65,31 @@ public class MinioUtils {
             return;
         }
         minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+    }
+
+    /**
+     * 批量删除对象
+     * @param bucketName
+     * @param objectNames
+     * @return
+     */
+    public static void deleteObjects(String bucketName, List<String> objectNames) throws Exception {
+        List<DeleteObject> deletedObjects = new ArrayList<>(objectNames.size());
+        for (String objectName : objectNames) {
+            deletedObjects.add(new DeleteObject(objectName));
+        }
+        RemoveObjectsArgs removeObjectArgs = RemoveObjectsArgs.builder()
+                .bucket(bucketName).objects(deletedObjects).build();
+        for (Result<DeleteError> errorResult : minioClient.removeObjects(removeObjectArgs)) {
+            DeleteError deleteError = errorResult.get();
+            throw new UtilException("delete fail, objectName: " + deleteError.objectName() + ", bucketName: " + bucketName);
+        }
+    }
+
+    public static void deleteObject(String bucketName, String objectName) throws Exception {
+        RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
+                .bucket(bucketName).object(objectName).build();
+        minioClient.removeObject(removeObjectArgs);
     }
 
     /**

@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-@Import({StorageBucketNameSubScanRegister .class})
-public @interface StorageBucketNameSubScan {
+@Import({StorageBucketManageSubScanRegister.class})
+public @interface StorageBucketManageSubScan {
 
 }

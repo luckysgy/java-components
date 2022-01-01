@@ -1,6 +1,8 @@
 package com.concise.component.storage.common.autoconfig;
 
 import com.concise.component.core.utils.UrlUtils;
+import com.concise.component.storage.common.registerbucket.StorageBucketManage;
+import com.concise.component.storage.common.service.StorageService;
 import com.concise.component.storage.common.storagetype.StorageType;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import lombok.Data;
@@ -39,6 +41,16 @@ public class StorageProperties {
      * 是否启用文件存储,默认不启动
      */
     private Boolean enable = false;
+    /**
+     * 是否使用一个桶
+     * 如果为true, 则使用minio / oss下面的bucketName
+     * 如果为false, 则使用实现 {@link StorageBucketManage#getBucketName()}  中的桶名
+     */
+    private Boolean isOneBucket = true;
+    /**
+     * 是否初始化桶
+     */
+    private Boolean isInitBucket = true;
     /**
      * 存储类型
      */
@@ -115,11 +127,13 @@ public class StorageProperties {
      * 公共配置
      */
     @Data
-    private abstract static class ComponentConfig {
+    public abstract static class ComponentConfig {
         /**
          * 存储服务器的地址
          */
         private String endpoint;
+
+        private String bucketName;
 
         public void setEndpoint(String endpoint) {
             this.endpoint = endpoint;
