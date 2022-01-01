@@ -1,5 +1,7 @@
 package com.concise.component.core.exception;
 
+import com.concise.component.core.utils.StringUtils;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -96,6 +98,12 @@ public abstract class Assert {
     public static void notEmpty(Collection<?> collection, Long errorCode, String errMessage) {
         if (collection == null || collection.isEmpty()) {
             throw new BizException(errorCode, errMessage);
+        }
+    }
+
+    public static void notEmpty(String str, String errMessage) {
+        if (str == null || StringUtils.isEmpty(str)) {
+            throw new BizException(errMessage);
         }
     }
 
