@@ -1,6 +1,6 @@
 package com.concise.mq;
 
-import com.concise.component.mq.rabbitmq.service.RabbitmqService;
+import com.concise.component.mq.rabbitmq.send.RabbitmqService;
 import com.concise.mq.p1.RabbitEmailMessage;
 import com.concise.mq.p1.RabbitOrderMessage;
 import org.slf4j.Logger;

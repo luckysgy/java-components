@@ -1,8 +1,6 @@
-package com.concise.component.mq.rabbitmq.service.impl;
+package com.concise.component.mq.rabbitmq.repeatconsume;
 
 import com.concise.component.cache.common.service.CacheService;
-import com.concise.component.mq.common.service.MqRepeatConsumeService;
-import com.concise.component.mq.rabbitmq.entity.RepeatConsumeKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

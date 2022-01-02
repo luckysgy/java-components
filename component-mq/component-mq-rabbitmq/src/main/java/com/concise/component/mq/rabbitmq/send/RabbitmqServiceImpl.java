@@ -1,13 +1,12 @@
-package com.concise.component.mq.rabbitmq.service.impl;
+package com.concise.component.mq.rabbitmq.send;
 
 import com.alibaba.fastjson.JSON;
 import com.concise.component.core.utils.UUIDUtil;
 import com.concise.component.mq.common.BaseMqMessage;
-import com.concise.component.mq.common.service.MqSendFailService;
+import com.concise.component.mq.rabbitmq.sendfail.MqSendFailService;
 import com.concise.component.mq.rabbitmq.entity.Conversion;
 import com.concise.component.mq.rabbitmq.entity.CustomCorrelationData;
-import com.concise.component.mq.rabbitmq.entity.RabbitBaseMqMessage;
-import com.concise.component.mq.rabbitmq.service.RabbitmqService;
+import com.concise.component.mq.rabbitmq.sendfail.RabbitSendFailMqMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -27,7 +26,7 @@ public class RabbitmqServiceImpl implements RabbitmqService {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private MqSendFailService<RabbitBaseMqMessage> sendFailService;
+    private MqSendFailService<RabbitSendFailMqMessage> sendFailService;
 
     @Override
     public <T extends BaseMqMessage> void send(String exchange, String routingKey, T object) {
@@ -60,7 +59,7 @@ public class RabbitmqServiceImpl implements RabbitmqService {
             }
         } catch (Exception e) {
             log.error("amqp send exception: {}, correlationData: {}", e.getMessage(), correlationData);
-            RabbitBaseMqMessage rabbitMqMessage = Conversion.to(correlationData);
+            RabbitSendFailMqMessage rabbitMqMessage = Conversion.to(correlationData);
             sendFailService.save(rabbitMqMessage);
         }
     }

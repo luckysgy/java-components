@@ -3,6 +3,7 @@ package com.concise.component.mq.rabbitmq.config;
 import com.concise.component.core.utils.CollectionUtils;
 import com.concise.component.core.utils.SpringUtils;
 import com.concise.component.core.utils.StringPool;
+import com.concise.component.mq.rabbitmq.sendfail.MessageReturnsCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;

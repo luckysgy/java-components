@@ -1,8 +1,6 @@
-package com.concise.component.mq.rabbitmq.config;
+package com.concise.component.mq.rabbitmq.sendfail;
 
 import com.alibaba.fastjson.JSON;
-import com.concise.component.mq.common.service.MqSendFailService;
-import com.concise.component.mq.rabbitmq.entity.RabbitBaseMqMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.ReturnedMessage;
@@ -22,7 +20,7 @@ public class MessageReturnsCallback implements RabbitTemplate.ReturnsCallback {
     private static final Logger log = LoggerFactory.getLogger(MessageReturnsCallback.class);
 
     @Autowired
-    private MqSendFailService<RabbitBaseMqMessage> sendFailService;
+    private MqSendFailService<RabbitSendFailMqMessage> sendFailService;
 
     @Override
     public void returnedMessage(ReturnedMessage returned) {
@@ -30,11 +28,11 @@ public class MessageReturnsCallback implements RabbitTemplate.ReturnsCallback {
                 returned.getExchange(), returned.getRoutingKey(), returned.getReplyCode(), returned.getReplyText(), returned.getMessage());
         byte[] body = returned.getMessage().getBody();
         String msg = new String(body);
-        RabbitBaseMqMessage message = JSON.parseObject(msg, RabbitBaseMqMessage.class);
+        RabbitSendFailMqMessage message = JSON.parseObject(msg, RabbitSendFailMqMessage.class);
 
-        RabbitBaseMqMessage cacheSendFailMqMessage = sendFailService.get(message.getMsgId());
+        RabbitSendFailMqMessage cacheSendFailMqMessage = sendFailService.get(message.getMsgId());
         if (cacheSendFailMqMessage == null) {
-            cacheSendFailMqMessage = new RabbitBaseMqMessage();
+            cacheSendFailMqMessage = new RabbitSendFailMqMessage();
         }
         cacheSendFailMqMessage.setMessage(message);
         cacheSendFailMqMessage.setMsgId(message.getMsgId());

@@ -1,4 +1,4 @@
-package com.concise.component.mq.rabbitmq.service;
+package com.concise.component.mq.rabbitmq.send;
 
 import com.concise.component.mq.common.BaseMqMessage;
 import org.springframework.amqp.core.MessagePostProcessor;

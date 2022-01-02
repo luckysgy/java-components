@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>create-porject</artifactId>
+    <artifactId>create-project</artifactId>
     <description>创建工程</description>
 
     <properties>

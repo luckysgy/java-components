@@ -1,4 +1,4 @@
-package com.concise.component.mq.rabbitmq.entity;
+package com.concise.component.mq.rabbitmq.sendfail;
 
 import com.concise.component.cache.common.key.BaseKeyManager;
 

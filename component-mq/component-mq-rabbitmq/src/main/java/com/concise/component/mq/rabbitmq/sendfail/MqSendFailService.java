@@ -1,4 +1,4 @@
-package com.concise.component.mq.common.service;
+package com.concise.component.mq.rabbitmq.sendfail;
 
 import java.util.List;
 

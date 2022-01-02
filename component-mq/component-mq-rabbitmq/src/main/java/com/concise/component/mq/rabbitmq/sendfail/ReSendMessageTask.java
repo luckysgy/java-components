@@ -1,9 +1,6 @@
-package com.concise.component.mq.rabbitmq.task;
+package com.concise.component.mq.rabbitmq.sendfail;
 
 import com.alibaba.fastjson.JSON;
-import com.concise.component.mq.common.service.MqSendFailService;
-import com.concise.component.mq.rabbitmq.entity.RabbitBaseMqMessage;
-import com.concise.component.mq.rabbitmq.expand.MqSendFailHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
@@ -25,7 +22,7 @@ public class ReSendMessageTask {
     private static final Logger log = LoggerFactory.getLogger(ReSendMessageTask.class);
 
     @Autowired
-    private MqSendFailService<RabbitBaseMqMessage> sendFailService;
+    private MqSendFailService<RabbitSendFailMqMessage> sendFailService;
 
     @Autowired(required = false)
     private MqSendFailHandle mqSendFailHandle;
@@ -36,8 +33,8 @@ public class ReSendMessageTask {
     @Scheduled(cron = "0/30 * * * * ?")
     public void reSend() {
         log.debug("task --- start resending failed messages");
-        List<RabbitBaseMqMessage> rabbitMqMessages = sendFailService.get();
-        for (RabbitBaseMqMessage rabbitMqMessage : rabbitMqMessages) {
+        List<RabbitSendFailMqMessage> rabbitMqMessages = sendFailService.get();
+        for (RabbitSendFailMqMessage rabbitMqMessage : rabbitMqMessages) {
             if (rabbitMqMessage.isMaxRetryCount()) {
                 log.error("the message reaches the maximum number of reposts: {}", rabbitMqMessage.getMsgId());
                 // 需要人工干预处理

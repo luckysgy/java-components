@@ -1,4 +1,4 @@
-package com.concise.component.mq.common.service;
+package com.concise.component.mq.rabbitmq.repeatconsume;
 
 /**
  * 用于解决重复消费服务
