@@ -1,5 +1,7 @@
 package com.concise.component.mq.mqtt.service;
 
+import com.alibaba.fastjson.JSON;
+import com.concise.component.mq.common.BaseMqMessage;
 import com.concise.component.mq.mqtt.config.MqttConfig;
 import com.concise.component.mq.mqtt.config.MqttEnabled;
 import com.concise.component.mq.mqtt.enums.QosEnum;
@@ -22,14 +24,14 @@ public class MqttSendServiceImpl implements MqttSendService {
     private static final Logger log = LoggerFactory.getLogger(MqttSendServiceImpl.class);
 
     @Override
-    public void send(String topic, QosEnum qosEnum, String message) throws MqttException {
+    public <T extends BaseMqMessage> void send(String topic, QosEnum qosEnum, T message) throws MqttException {
         if (!MqttEnabled.enabled) {
             log.warn("mqtt not enable");
             return;
         }
         MqttTopic mqttTopic = MqttConfig.getPublishMqttTopic(topic);
         MqttMessage mqttMessage = new MqttMessage();
-        mqttMessage.setPayload(message.getBytes(StandardCharsets.UTF_8));
+        mqttMessage.setPayload(JSON.toJSONString(message).getBytes(StandardCharsets.UTF_8));
         mqttMessage.setQos(qosEnum.getValue());
         mqttMessage.setRetained(true);
         MqttDeliveryToken token = mqttTopic.publish(mqttMessage);
