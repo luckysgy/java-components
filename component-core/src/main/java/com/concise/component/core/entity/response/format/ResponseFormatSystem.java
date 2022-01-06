@@ -25,7 +25,7 @@ public class ResponseFormatSystem extends ResponseFormatAbstract {
 
     @Override
     String pageDataAttributeName() {
-        return "rows";
+        return "data";
     }
 
     @Override
