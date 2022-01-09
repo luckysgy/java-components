@@ -40,7 +40,7 @@ public enum MqType {
                 return;
             }
         }
-        throw new BizException("mqType not supported, support mqType [ " +
+        throw new BizException("mqType [ " + type + " ] not supported, support mqType [ " +
                 ROCKETMQ.getType() + " , " + MQTT.getType() + " , " + KAFKA.getType() + " , " + RABBITMQ.getType() + " ]"
                 );
     }

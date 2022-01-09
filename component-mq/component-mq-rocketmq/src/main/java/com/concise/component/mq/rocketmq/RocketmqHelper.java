@@ -3,6 +3,7 @@ package com.concise.component.mq.rocketmq;
 import cn.hutool.core.util.ObjectUtil;
 import com.concise.component.core.exception.BizException;
 import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 
 /**
  * @author shenguangyang
@@ -16,5 +17,14 @@ public class RocketmqHelper {
             }
         }
         throw new BizException("toSendResult fail");
+    }
+
+    public static RocketMQTemplate toRocketMQTemplate(Object template) {
+        if (ObjectUtil.isNotNull(template)) {
+            if (template instanceof RocketMQTemplate) {
+                return (RocketMQTemplate) template;
+            }
+        }
+        throw new BizException("toRocketMQTemplate fail");
     }
 }

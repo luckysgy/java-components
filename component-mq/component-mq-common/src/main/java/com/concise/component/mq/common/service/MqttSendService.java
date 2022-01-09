@@ -8,4 +8,10 @@ import com.concise.component.mq.common.BaseMqMessage;
  */
 public interface MqttSendService {
     <T extends BaseMqMessage> Object send(String topic, int qos, T message) throws Exception;
+
+    /**
+     * 获取模板
+     * @return RocketMQTemplate
+     */
+    Object getTemplate();
 }

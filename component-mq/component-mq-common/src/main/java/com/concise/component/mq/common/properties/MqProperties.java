@@ -1,11 +1,15 @@
 package com.concise.component.mq.common.properties;
 
+import cn.hutool.core.util.ObjectUtil;
+import com.concise.component.core.exception.BizException;
+import com.concise.component.mq.common.enable.MqEnable;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
@@ -25,4 +29,20 @@ public class MqProperties {
      * key: 消息名称
      */
     private Map<String, MqData> data;
+
+    @PostConstruct
+    public void init() {
+        if (ObjectUtil.isNull(data)) {
+            return;
+        }
+        for (Map.Entry<String, MqData> entry : data.entrySet()) {
+            String enableMq = entry.getValue().getEnableMq();
+            MqType.isSupported(enableMq);
+            MqType mqType = MqType.getByType(enableMq);
+            if (!MqEnable.isEnabled(mqType)) {
+                throw new BizException("The enableMq [ " + enableMq + " ] specified in [ " + entry.getKey() + " ] is not enabled!");
+            }
+            entry.getValue().setEnableMqType(mqType);
+        }
+    }
 }

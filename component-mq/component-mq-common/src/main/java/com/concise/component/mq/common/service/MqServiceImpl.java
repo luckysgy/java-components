@@ -6,6 +6,7 @@ import com.concise.component.core.utils.StringUtils;
 import com.concise.component.mq.common.BaseMqMessage;
 import com.concise.component.mq.common.properties.MqData;
 import com.concise.component.mq.common.properties.MqProperties;
+import com.concise.component.mq.common.properties.MqType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,45 +52,43 @@ public class MqServiceImpl implements MqService {
     public <T extends BaseMqMessage> Object send(T message) throws Exception {
         MqData mqData = mqDataMap.get(StringUtils.uncapitalize(message.getClass().getSimpleName()));
         if (ObjectUtil.isNotNull(mqData)) {
-            MqData.Kafka kafka = mqData.getKafka();
-            // kafka
-            if (ObjectUtil.isNotNull(kafka) && ObjectUtil.isNotNull(kafka.getEnable()) && kafka.getEnable() &&
-                    ObjectUtil.isNotNull(kafkaService)) {
-                if (ObjectUtil.isNotNull(kafka.getPartition()) && ObjectUtil.isNotNull(kafka.getKey())) {
-                    return kafkaService.send(kafka.getTopic(), kafka.getPartition(), kafka.getKey(), JSON.toJSONString(message));
-                } else if (ObjectUtil.isNotNull(kafka.getPartition())) {
-                    return kafkaService.send(kafka.getTopic(), kafka.getPartition(), JSON.toJSONString(message));
-                } else if (ObjectUtil.isNotNull(kafka.getKey())) {
-                    return kafkaService.send(kafka.getTopic(), kafka.getKey(), JSON.toJSONString(message));
-                } else {
-                    return kafkaService.send(kafka.getTopic(), JSON.toJSONString(message));
+            if (MqType.KAFKA.equals(mqData.getEnableMqType())) {
+                MqData.Kafka kafka = mqData.getKafka();
+                // kafka
+                if (ObjectUtil.isNotNull(kafka) && ObjectUtil.isNotNull(kafkaService)) {
+                    if (ObjectUtil.isNotNull(kafka.getPartition()) && ObjectUtil.isNotNull(kafka.getKey())) {
+                        return kafkaService.send(kafka.getTopic(), kafka.getPartition(), kafka.getKey(), JSON.toJSONString(message));
+                    } else if (ObjectUtil.isNotNull(kafka.getPartition())) {
+                        return kafkaService.send(kafka.getTopic(), kafka.getPartition(), JSON.toJSONString(message));
+                    } else if (ObjectUtil.isNotNull(kafka.getKey())) {
+                        return kafkaService.send(kafka.getTopic(), kafka.getKey(), JSON.toJSONString(message));
+                    } else {
+                        return kafkaService.send(kafka.getTopic(), JSON.toJSONString(message));
+                    }
                 }
-            }
-
-            // rocketmq
-            MqData.Rocketmq rocketmq = mqData.getRocketmq();
-            if (ObjectUtil.isNotNull(rocketmq) && ObjectUtil.isNotNull(rocketmq.getEnable()) && rocketmq.getEnable()
-                    && ObjectUtil.isNotNull(rocketMqService)) {
-                return ObjectUtil.isNotNull(rocketmq.getIsEnableTag()) && rocketmq.getIsEnableTag() ?
-                        rocketMqService.send(message, rocketmq.getTopic(), rocketmq.getTag()) :
-                        rocketMqService.send(message, rocketmq.getTopic());
-            }
-
-            // mqtt
-            MqData.Mqtt mqtt = mqData.getMqtt();
-            if (ObjectUtil.isNotNull(mqtt) && ObjectUtil.isNotNull(mqtt.getEnable()) && mqtt.getEnable()
-                    && ObjectUtil.isNotNull(mqttSendService)) {
-                return mqttSendService.send(mqtt.getTopic(), mqtt.getQos(), message);
-            }
-
-            // rabbitmq
-            MqData.Rabbitmq rabbitmq = mqData.getRabbitmq();
-            if (ObjectUtil.isNotNull(rabbitmq) && ObjectUtil.isNotNull(rabbitmqService)) {
-                if (ObjectUtil.isNotNull(rabbitmq.getEnable()) && rabbitmq.getEnable()) {
+            } else if (MqType.ROCKETMQ.equals(mqData.getEnableMqType())) {
+                // rocketmq
+                MqData.Rocketmq rocketmq = mqData.getRocketmq();
+                if (ObjectUtil.isNotNull(rocketmq) && ObjectUtil.isNotNull(rocketMqService)) {
+                    return ObjectUtil.isNotNull(rocketmq.getIsEnableTag()) && rocketmq.getIsEnableTag() ?
+                            rocketMqService.send(message, rocketmq.getTopic(), rocketmq.getTag()) :
+                            rocketMqService.send(message, rocketmq.getTopic());
+                }
+            } else if (MqType.MQTT.equals(mqData.getEnableMqType())) {
+                // mqtt
+                MqData.Mqtt mqtt = mqData.getMqtt();
+                if (ObjectUtil.isNotNull(mqtt) && ObjectUtil.isNotNull(mqttSendService)) {
+                    return mqttSendService.send(mqtt.getTopic(), mqtt.getQos(), message);
+                }
+            } else if (MqType.RABBITMQ.equals(mqData.getEnableMqType())){
+                // rabbitmq
+                MqData.Rabbitmq rabbitmq = mqData.getRabbitmq();
+                if (ObjectUtil.isNotNull(rabbitmq) && ObjectUtil.isNotNull(rabbitmqService)) {
                     rabbitmqService.send(rabbitmq.getExchange(), rabbitmq.getRoutingKey(), message);
                     return null;
                 }
             }
+            log.warn("not enable any mq, send invalid message");
         }
         log.warn("{} mqData == null", message.getClass().getSimpleName());
         return null;
@@ -104,6 +103,10 @@ public class MqServiceImpl implements MqService {
 
         if (ObjectUtil.isNotNull(mqData) && ObjectUtil.isNotNull(mqData.getRocketmq())) {
             return rocketMqService.getTemplate();
+        }
+
+        if (ObjectUtil.isNotNull(mqData) && ObjectUtil.isNotNull(mqData.getMqtt())) {
+            return mqttSendService.getTemplate();
         }
         return null;
     }

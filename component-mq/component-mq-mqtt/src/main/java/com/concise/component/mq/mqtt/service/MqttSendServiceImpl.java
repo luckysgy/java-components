@@ -44,4 +44,9 @@ public class MqttSendServiceImpl implements MqttSendExpandService {
         QosEnum qosEnum = QosEnum.getQos(qos);
         return send(topic, qosEnum, message);
     }
+
+    @Override
+    public Object getTemplate() {
+       throw new UnsupportedOperationException("use MqttConfig.getPublishMqttTopic(topic)");
+    }
 }

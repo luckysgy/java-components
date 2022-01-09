@@ -8,6 +8,14 @@ import lombok.Data;
  */
 @Data
 public class MqData {
+    /**
+     * 使用枚举表示使能的mq
+     */
+    private MqType enableMqType;
+    /**
+     * 使能的mq
+     */
+    private String enableMq;
     private Kafka kafka;
     private Rocketmq rocketmq;
     private Mqtt mqtt;
@@ -15,7 +23,6 @@ public class MqData {
 
     @Data
     public static class Kafka {
-        private Boolean enable = false;
         private String topic;
         /**
          * 话题分区策略设置:
@@ -30,7 +37,6 @@ public class MqData {
 
     @Data
     public static class Rocketmq {
-        private Boolean enable = false;
         private Boolean isEnableTag = false;
         private String tag;
         private String topic;
@@ -39,14 +45,12 @@ public class MqData {
 
     @Data
     public static class Mqtt {
-        private Boolean enable = false;
         private String topic;
         private Integer qos;
     }
 
     @Data
     public static class Rabbitmq {
-        private Boolean enable = false;
         private String exchange;
         private String routingKey;
     }
