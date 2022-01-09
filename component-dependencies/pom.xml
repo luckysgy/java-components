@@ -179,6 +179,11 @@
             </dependency>
             <dependency>
                 <groupId>com.concise</groupId>
+                <artifactId>component-mq-kafka</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.concise</groupId>
                 <artifactId>component-storage-common</artifactId>
                 <version>${project.version}</version>
             </dependency>

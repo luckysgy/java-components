@@ -3,9 +3,9 @@ package com.concise.component.mq.rabbitmq.send;
 import com.alibaba.fastjson.JSON;
 import com.concise.component.core.utils.UUIDUtil;
 import com.concise.component.mq.common.BaseMqMessage;
-import com.concise.component.mq.rabbitmq.sendfail.MqSendFailService;
 import com.concise.component.mq.rabbitmq.entity.Conversion;
 import com.concise.component.mq.rabbitmq.entity.CustomCorrelationData;
+import com.concise.component.mq.rabbitmq.sendfail.MqSendFailService;
 import com.concise.component.mq.rabbitmq.sendfail.RabbitSendFailMqMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @date 2021-10-06 21:38
  */
 @Service
-public class RabbitmqServiceImpl implements RabbitmqService {
+public class RabbitmqServiceImpl implements RabbitmqExpandService {
     private static final Logger log = LoggerFactory.getLogger(RabbitmqServiceImpl.class);
 
     @Autowired(required = false)

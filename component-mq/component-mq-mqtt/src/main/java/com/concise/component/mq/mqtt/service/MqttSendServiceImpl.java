@@ -2,9 +2,9 @@ package com.concise.component.mq.mqtt.service;
 
 import com.alibaba.fastjson.JSON;
 import com.concise.component.mq.common.BaseMqMessage;
+import com.concise.component.mq.common.enums.QosEnum;
 import com.concise.component.mq.mqtt.config.MqttConfig;
 import com.concise.component.mq.mqtt.config.MqttEnabled;
-import com.concise.component.mq.mqtt.enums.QosEnum;
 import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -20,14 +20,14 @@ import java.nio.charset.StandardCharsets;
  * @date 2021-12-19 9:42
  */
 @Service
-public class MqttSendServiceImpl implements MqttSendService {
+public class MqttSendServiceImpl implements MqttSendExpandService {
     private static final Logger log = LoggerFactory.getLogger(MqttSendServiceImpl.class);
 
     @Override
-    public <T extends BaseMqMessage> void send(String topic, QosEnum qosEnum, T message) throws MqttException {
+    public <T extends BaseMqMessage> MqttDeliveryToken send(String topic, QosEnum qosEnum, T message) throws MqttException {
         if (!MqttEnabled.enabled) {
             log.warn("mqtt not enable");
-            return;
+            return null;
         }
         MqttTopic mqttTopic = MqttConfig.getPublishMqttTopic(topic);
         MqttMessage mqttMessage = new MqttMessage();
@@ -36,6 +36,12 @@ public class MqttSendServiceImpl implements MqttSendService {
         mqttMessage.setRetained(true);
         MqttDeliveryToken token = mqttTopic.publish(mqttMessage);
         token.waitForCompletion();
-        log.info("message is published completely! " + token.isComplete());
+        return token;
+    }
+
+    @Override
+    public <T extends BaseMqMessage> MqttDeliveryToken send(String topic, int qos, T message) throws MqttException {
+        QosEnum qosEnum = QosEnum.getQos(qos);
+        return send(topic, qosEnum, message);
     }
 }

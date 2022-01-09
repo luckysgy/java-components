@@ -25,6 +25,8 @@ public class MqApplication {
 rocketmq:
   name-server: work01.server.com:9876
   producer:
+    # 如果不写组名, rocketmqTemplate不会初始化
+    group: PRODUCE_APPNAME
     # 是否开启自动配置
     isOnOff: true
     # 消息最大长度 默认 1024 * 4 (4M)

@@ -1,4 +1,4 @@
-package com.concise.component.mq.rocketmq.enable;
+package com.concise.component.mq.kafka.enable;
 
 import com.concise.component.mq.common.enable.MqEnable;
 import com.concise.component.mq.common.properties.MqType;
@@ -13,13 +13,13 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
  * @author shenguangyang
  * @date 2021-12-25 13:26
  */
-public class EnableRocketmqBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class EnableKafkaBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
     private volatile static Boolean isEnable = true;
 
     public static void setEnable(Boolean enable) {
         isEnable = enable;
     }
-    public EnableRocketmqBeanDefinitionRegistryPostProcessor() {
+    public EnableKafkaBeanDefinitionRegistryPostProcessor() {
     }
 
     @Override
@@ -27,10 +27,14 @@ public class EnableRocketmqBeanDefinitionRegistryPostProcessor implements BeanDe
         if (isEnable) {
             return;
         }
-        if (MqEnable.isEnabled(MqType.ROCKETMQ)) {
+        if (MqEnable.isEnabled(MqType.KAFKA)) {
             return;
         }
-        beanDefinitionRegistry.removeBeanDefinition("org.apache.rocketmq.spring.autoconfigure.ListenerContainerConfiguration");
+        for (String beanDefinitionName : beanDefinitionRegistry.getBeanDefinitionNames()) {
+            if (beanDefinitionName.toLowerCase().contains("kafka")) {
+                beanDefinitionRegistry.removeBeanDefinition(beanDefinitionName);
+            }
+        }
     }
 
     @Override

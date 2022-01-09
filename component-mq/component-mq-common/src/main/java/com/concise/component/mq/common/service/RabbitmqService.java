@@ -1,7 +1,6 @@
-package com.concise.component.mq.rabbitmq.send;
+package com.concise.component.mq.common.service;
 
 import com.concise.component.mq.common.BaseMqMessage;
-import org.springframework.amqp.core.MessagePostProcessor;
 
 /**
  * @author shenguangyang
@@ -24,21 +23,4 @@ public interface RabbitmqService {
      * @param object 发送的对象
      */
     <T extends BaseMqMessage> void send(String exchange, String routingKey, final T object);
-
-    /**
-     * <code>
-     *  MessagePostProcessor messagePostProcessor = message -> {
-     *       // 5s之后会过期
-     *       message.getMessageProperties().setExpiration("5000");
-     *       message.getMessageProperties().setContentEncoding("utf-8");
-     *       return message;
-     *  };
-     * </code>
-     * @param exchange
-     * @param routingKey
-     * @param object
-     * @param messagePostProcessor
-     * @param <T>
-     */
-    <T extends BaseMqMessage> void send(String exchange, String routingKey, final T object, MessagePostProcessor messagePostProcessor);
 }

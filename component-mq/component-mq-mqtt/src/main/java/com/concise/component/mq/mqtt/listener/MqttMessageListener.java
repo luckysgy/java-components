@@ -1,6 +1,6 @@
 package com.concise.component.mq.mqtt.listener;
 
-import com.concise.component.mq.mqtt.enums.QosEnum;
+import com.concise.component.mq.common.enums.QosEnum;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 
 import java.lang.annotation.*;

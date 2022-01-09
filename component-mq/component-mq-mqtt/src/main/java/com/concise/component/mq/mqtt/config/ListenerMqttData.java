@@ -1,6 +1,6 @@
 package com.concise.component.mq.mqtt.config;
 
-import com.concise.component.mq.mqtt.enums.QosEnum;
+import com.concise.component.mq.common.enums.QosEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

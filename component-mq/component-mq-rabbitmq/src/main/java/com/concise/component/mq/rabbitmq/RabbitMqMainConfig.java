@@ -1,8 +1,8 @@
 package com.concise.component.mq.rabbitmq;
 
+import com.concise.component.mq.rabbitmq.sendfail.MqSendFailHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 

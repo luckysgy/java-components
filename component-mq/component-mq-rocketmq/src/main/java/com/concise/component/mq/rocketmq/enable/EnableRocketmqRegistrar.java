@@ -2,25 +2,23 @@ package com.concise.component.mq.rocketmq.enable;
 
 import com.concise.component.core.utils.BeanRegistrationUtil;
 import com.concise.component.core.utils.StringUtils;
+import com.concise.component.mq.common.enable.MqEnable;
 import com.concise.component.mq.common.listener.MqListenerScanRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 
-import java.util.*;
+import java.util.Map;
 
 /**
  * @author shenguangyang
  * @date 2021-12-25 12:57
  */
-public class EnableRocketmqRegistrar implements ImportBeanDefinitionRegistrar {
+public class EnableRocketmqRegistrar implements ImportBeanDefinitionRegistrar, EnvironmentAware {
     private static final Logger log = LoggerFactory.getLogger(MqListenerScanRegister.class);
 
 
@@ -33,8 +31,16 @@ public class EnableRocketmqRegistrar implements ImportBeanDefinitionRegistrar {
      */
     private static Boolean isExecuted = false;
 
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         try {
+            MqEnable.addEnableMq(environment.getProperty(MqEnable.ENABLE_MQ_KEY));
             if (isExecuted) {
                 return;
             }

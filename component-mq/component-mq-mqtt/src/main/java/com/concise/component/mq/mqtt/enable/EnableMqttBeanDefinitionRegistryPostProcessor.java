@@ -1,6 +1,8 @@
 package com.concise.component.mq.mqtt.enable;
 
 import com.concise.component.core.utils.StringUtils;
+import com.concise.component.mq.common.enable.MqEnable;
+import com.concise.component.mq.common.properties.MqType;
 import com.concise.component.mq.mqtt.config.MqttConfig;
 import com.concise.component.mq.mqtt.config.MqttEnabled;
 import org.springframework.beans.BeansException;
@@ -26,6 +28,9 @@ public class EnableMqttBeanDefinitionRegistryPostProcessor implements BeanDefini
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
         if (isEnable) {
+            return;
+        }
+        if (MqEnable.isEnabled(MqType.ROCKETMQ)) {
             return;
         }
         beanDefinitionRegistry.removeBeanDefinition(StringUtils.uncapitalize(MqttEnabled.class.getSimpleName()));

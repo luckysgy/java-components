@@ -47,10 +47,21 @@
             <artifactId>transmittable-thread-local</artifactId>
         </dependency>
 
-        <!-- 类型转换 -->
+        <!-- mapStruct 核心注解 -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
+        </dependency>
+        <!-- mapStruct 根据接口生成实现类 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
         </dependency>
 
         <!-- Hibernate Validator -->

@@ -1,5 +1,6 @@
-package com.concise.component.mq.mqtt.enums;
+package com.concise.component.mq.common.enums;
 
+import com.concise.component.core.exception.BizException;
 import lombok.Getter;
 
 /**
@@ -29,5 +30,15 @@ public enum QosEnum {
 
     QosEnum(Integer value) {
         this.value = value;
+    }
+
+    public static QosEnum getQos(int qos) {
+        QosEnum[] values = QosEnum.values();
+        for (QosEnum value : values) {
+            if (value.getValue() == qos) {
+                return value;
+            }
+        }
+        throw new BizException("qos not exit, qos: " + qos);
     }
 }

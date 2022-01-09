@@ -3,8 +3,7 @@ package com.concise.component.mq.rocketmq.service.impl;
 import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.mq.common.BaseMqMessage;
-import com.concise.component.mq.rocketmq.domain.RocketMqMessage;
-import com.concise.component.mq.rocketmq.service.RocketMqSendService;
+import com.concise.component.mq.common.service.RocketMqService;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
@@ -21,8 +20,8 @@ import java.util.UUID;
  * @date 2021/7/24 9:39
  */
 @Service
-public class RocketMqSendServiceImpl implements RocketMqSendService {
-    private static final Logger log = LoggerFactory.getLogger(RocketMqSendServiceImpl.class);
+public class RocketMqServiceImpl implements RocketMqService {
+    private static final Logger log = LoggerFactory.getLogger(RocketMqServiceImpl.class);
 
     @Autowired(required = false)
     private RocketMQTemplate rocketMQTemplate;
@@ -44,13 +43,17 @@ public class RocketMqSendServiceImpl implements RocketMqSendService {
         if (StringUtils.isNotBlank(tag)) {
             destination = topic + ":" + tag;
         }
-        SendResult result = rocketMQTemplate.syncSend(destination, messageFinal);
-        log.info("成功发送消息,消息内容为:{},返回值为:{}", message, result);
-        return result;
+        // log.info("成功发送消息,消息内容为:{},返回值为:{}", message, result);
+        return rocketMQTemplate.syncSend(destination, messageFinal);
     }
 
     @Override
     public <T extends BaseMqMessage> SendResult send(T message, String topic) {
         return this.send(message, topic, null);
+    }
+
+    @Override
+    public Object getTemplate() {
+        return rocketMQTemplate;
     }
 }
