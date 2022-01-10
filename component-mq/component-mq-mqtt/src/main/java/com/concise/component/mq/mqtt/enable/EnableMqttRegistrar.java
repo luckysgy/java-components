@@ -4,7 +4,7 @@ import com.concise.component.core.utils.BeanRegistrationUtil;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.mq.common.enable.MqEnable;
 import com.concise.component.mq.common.listener.MqListenerScanRegister;
-import com.concise.component.mq.mqtt.MqttMainConfig;
+import com.concise.component.mq.mqtt.ComponentMqttAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -25,7 +25,7 @@ public class EnableMqttRegistrar implements ImportBeanDefinitionRegistrar, Envir
 
     /**
      * 是否被执行过
-     * 如果调用层启动类没有指定 {@link EnableMqtt} 则会先执行且只执行一遍 {@link MqttMainConfig} 上的{@link EnableMqtt}注解，然后执行本类
+     * 如果调用层启动类没有指定 {@link EnableMqtt} 则会先执行且只执行一遍 {@link ComponentMqttAutoConfiguration} 上的{@link EnableMqtt}注解，然后执行本类
      * 如果调用层启动类指定 {@link EnableMqtt},则会先执行且只执行一遍, 然后执行本类
      * 使用 {@link #isExecuted} 作为标记
      */

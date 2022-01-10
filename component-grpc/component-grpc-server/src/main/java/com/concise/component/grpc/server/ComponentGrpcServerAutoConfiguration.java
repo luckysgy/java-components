@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
  * @date 2022-01-01 20:21
  */
 @ComponentScan(basePackages = "com.concise.component.grpc.server")
-public class GrpcServerMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(GrpcServerMainConfig.class);
+public class ComponentGrpcServerAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentGrpcServerAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

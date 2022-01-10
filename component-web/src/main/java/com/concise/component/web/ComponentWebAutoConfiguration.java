@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-22 21:57
  */
 @ComponentScan(basePackages = "com.concise.component.web")
-public class ComponentWebMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(ComponentWebMainConfig.class);
+public class ComponentWebAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentWebAutoConfiguration.class);
     @PostConstruct
     public void init() {
         log.info("init com.concise.component.web");

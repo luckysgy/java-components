@@ -17,8 +17,8 @@ import javax.annotation.PostConstruct;
 @EnableConfigurationProperties(StorageProperties.class)
 @StorageBucketManageSubScan
 @ComponentScan(basePackages = "com.concise.component.storage.common")
-public class StorageCommonAutoConfiguration {
-    private static final Logger log = LoggerFactory.getLogger(StorageCommonAutoConfiguration.class);
+public class ComponentStorageCommonAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentStorageCommonAutoConfiguration.class);
     
     @PostConstruct
     public void init() {

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.concise.component.mq.mqtt.MqttMainConfig
+  com.concise.component.mq.mqtt.ComponentMqttAutoConfiguration

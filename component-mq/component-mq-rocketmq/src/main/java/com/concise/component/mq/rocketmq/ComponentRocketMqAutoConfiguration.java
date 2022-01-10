@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
  */
 @EnableRocketmq(value = false)
 @ComponentScan(basePackages = "com.concise.component.mq.rocketmq")
-public class RocketMqMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(RocketMqMainConfig.class);
+public class ComponentRocketMqAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentRocketMqAutoConfiguration.class);
     @PostConstruct
     public void init() {
         log.info("init com.concise.component.mq.rocketmq");

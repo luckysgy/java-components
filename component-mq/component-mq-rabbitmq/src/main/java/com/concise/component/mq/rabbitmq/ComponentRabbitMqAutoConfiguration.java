@@ -39,8 +39,8 @@ import javax.annotation.PostConstruct;
  */
 @EnableScheduling
 @ComponentScan(basePackages = "com.concise.component.mq.rabbitmq")
-public class RabbitMqMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(RabbitMqMainConfig.class);
+public class ComponentRabbitMqAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentRabbitMqAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

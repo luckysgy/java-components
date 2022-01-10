@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
  * @date 2021-10-02 上午6:04
  */
 @ComponentScan(basePackages = "com.concise.component.cache.common")
-public class CacheCommonMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(CacheCommonMainConfig.class);
+public class ComponentCacheCommonAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentCacheCommonAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

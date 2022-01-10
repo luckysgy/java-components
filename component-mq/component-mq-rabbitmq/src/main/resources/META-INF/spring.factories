@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.concise.component.mq.rabbitmq.RabbitMqMainConfig
+  com.concise.component.mq.rabbitmq.ComponentRabbitMqAutoConfiguration

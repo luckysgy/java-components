@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.concise.component.grpc.server.GrpcServerMainConfig
+  com.concise.component.grpc.server.ComponentGrpcServerAutoConfiguration

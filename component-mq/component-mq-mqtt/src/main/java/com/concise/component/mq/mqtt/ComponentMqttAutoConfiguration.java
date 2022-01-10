@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
  */
 @EnableMqtt(value = false)
 @ComponentScan(basePackages = "com.concise.component.mq.mqtt")
-public class MqttMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(MqttMainConfig.class);
+public class ComponentMqttAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentMqttAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

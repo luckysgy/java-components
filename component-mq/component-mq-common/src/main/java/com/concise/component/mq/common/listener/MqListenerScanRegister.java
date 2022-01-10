@@ -1,16 +1,13 @@
 package com.concise.component.mq.common.listener;
 
 import com.concise.component.core.utils.StringUtils;
-import com.concise.component.mq.common.MqCommonMainConfig;
-import org.reflections.Reflections;
+import com.concise.component.mq.common.ComponentMqCommonAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -19,16 +16,12 @@ import org.springframework.context.annotation.ScannedGenericBeanDefinition;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.AssignableTypeFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
-import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /**
  * @author shenguangyang
@@ -45,7 +38,7 @@ public class MqListenerScanRegister implements ImportBeanDefinitionRegistrar, Re
 
     /**
      * 是否被执行过, 如果调用层启动类没有指定 {@link MqListenerScan} 则会先执行且只执行一遍
-     * {@link MqCommonMainConfig} 上的{@link MqListenerScan}注解，执行本类
+     * {@link ComponentMqCommonAutoConfiguration} 上的{@link MqListenerScan}注解，执行本类
      *
      * 如果调用层启动类指定 {@link MqListenerScan},则会先执行且只执行一遍, 执行本类
      * 使用 {@link #isExecuted} 作为标记

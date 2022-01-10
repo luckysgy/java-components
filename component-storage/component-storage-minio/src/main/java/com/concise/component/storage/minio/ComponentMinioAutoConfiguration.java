@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-23 21:17
  */
 @ComponentScan(basePackages = "com.concise.component.storage.minio")
-public class MinioMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(MinioMainConfig.class);
+public class ComponentMinioAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentMinioAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.concise.component.storage.minio.MinioMainConfig
+  com.concise.component.storage.minio.ComponentMinioAutoConfiguration

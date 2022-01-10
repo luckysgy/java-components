@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.concise.component.lock.LockMainConfig
+com.concise.component.lock.ComponentLockAutoConfiguration

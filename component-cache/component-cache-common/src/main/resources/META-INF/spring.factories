@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.concise.component.cache.common.CacheCommonMainConfig
+com.concise.component.cache.common.ComponentCacheCommonAutoConfiguration

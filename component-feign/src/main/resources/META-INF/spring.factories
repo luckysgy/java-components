@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.concise.component.feign.FeignMainConfig
+com.concise.component.feign.ComponentFeignAutoConfiguration

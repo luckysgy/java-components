@@ -15,8 +15,8 @@ import javax.annotation.PostConstruct;
 @ComponentScan(basePackages = "com.concise.component.core",excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = DataSourceAutoConfiguration.class)
 })
-public class ComponentCoreMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(ComponentCoreMainConfig.class);
+public class ComponentCoreAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentCoreAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

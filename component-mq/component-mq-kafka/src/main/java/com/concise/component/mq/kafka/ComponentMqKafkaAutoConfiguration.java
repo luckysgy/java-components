@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
  */
 @EnableKafka(value = false)
 @ComponentScan(basePackages = "com.concise.component.mq.kafka")
-public class MqKafkaMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(MqKafkaMainConfig.class);
+public class ComponentMqKafkaAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentMqKafkaAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

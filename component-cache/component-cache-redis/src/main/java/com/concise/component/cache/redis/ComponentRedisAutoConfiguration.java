@@ -24,8 +24,8 @@ import javax.annotation.PostConstruct;
  * @date 2021-10-02 上午6:12
  */
 @ComponentScan(basePackages = "com.concise.component.cache.redis")
-public class RedisMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(RedisMainConfig.class);
+public class ComponentRedisAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentRedisAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

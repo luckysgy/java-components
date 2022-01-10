@@ -14,8 +14,8 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-23 22:06
  */
 @ComponentScan(basePackages = "com.concise.component.log")
-public class LogMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(LogMainConfig.class);
+public class ComponentLogAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentLogAutoConfiguration.class);
     @PostConstruct
     public void init() {
         Response.setTraceIdKey(MDCTraceUtils.KEY_TRACE_ID);

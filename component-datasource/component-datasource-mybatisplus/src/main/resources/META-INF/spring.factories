@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.concise.component.datasource.mybatisplus.DataSourceMybatisPlusMainConfig
+com.concise.component.datasource.mybatisplus.ComponentDataSourceMybatisPlusAutoConfiguration

@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
  * @date 2021/7/25 17:46
  */
 @ComponentScan(basePackages = "com.concise.component.feign")
-public class FeignMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(FeignMainConfig.class);
+public class ComponentFeignAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentFeignAutoConfiguration.class);
     @PostConstruct
     public void init() {
         log.info("init com.concise.component.feign");

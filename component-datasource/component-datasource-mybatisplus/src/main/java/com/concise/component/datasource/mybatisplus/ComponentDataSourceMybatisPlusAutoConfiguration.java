@@ -15,8 +15,8 @@ import javax.annotation.PostConstruct;
  */
 @EnableMybatisPlus(value = false)
 @ComponentScan(basePackages = "com.concise.component.datasource.mybatisplus")
-public class DataSourceMybatisPlusMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(DataSourceMybatisPlusMainConfig.class);
+public class ComponentDataSourceMybatisPlusAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentDataSourceMybatisPlusAutoConfiguration.class);
     @PostConstruct
     public void init() {
         log.info("init com.concise.component.datasource.mybatisplus");

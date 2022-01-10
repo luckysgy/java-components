@@ -11,8 +11,8 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-23 22:15
  */
 @ComponentScan(basePackages = "com.concise.component.lock")
-public class LockMainConfig {
-    private static final Logger log = LoggerFactory.getLogger(LockMainConfig.class);
+public class ComponentLockAutoConfiguration {
+    private static final Logger log = LoggerFactory.getLogger(ComponentLockAutoConfiguration.class);
 
     @PostConstruct
     public void init() {

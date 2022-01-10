@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.concise.component.mq.kafka.MqKafkaMainConfig
+  com.concise.component.mq.kafka.ComponentMqKafkaAutoConfiguration

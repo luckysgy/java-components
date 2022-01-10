@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.concise.component.web.ComponentWebMainConfig
+com.concise.component.web.ComponentWebAutoConfiguration
