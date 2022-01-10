@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.autoconfig;
+package com.concise.component.storage.common;
 
 
 /**

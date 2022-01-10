@@ -5,7 +5,7 @@ import com.aliyun.oss.internal.OSSConstants;
 import com.aliyun.oss.model.*;
 
 import com.concise.component.core.exception.BizException;
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

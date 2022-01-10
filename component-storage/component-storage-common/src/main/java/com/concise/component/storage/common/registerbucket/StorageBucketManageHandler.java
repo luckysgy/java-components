@@ -2,7 +2,7 @@ package com.concise.component.storage.common.registerbucket;
 
 import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.StringUtils;
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import org.springframework.stereotype.Component;
 

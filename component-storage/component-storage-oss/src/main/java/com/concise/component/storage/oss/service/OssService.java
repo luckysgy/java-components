@@ -3,7 +3,7 @@ package com.concise.component.storage.oss.service;
 import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.StringUtils;
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucket.StorageBucketManage;
 import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
 import com.concise.component.storage.common.service.StorageService;

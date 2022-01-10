@@ -1,7 +1,7 @@
 package com.concise.component.storage.minio.utils;
 
 import com.concise.component.core.exception.UtilException;
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.partupload.MultiPartUploadInit;
 import com.concise.component.storage.minio.client.CustomMinioClient;
 import io.minio.*;

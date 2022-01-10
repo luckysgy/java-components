@@ -2,7 +2,7 @@ package com.concise.component.storage.oss.config;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
 import com.concise.component.storage.oss.utils.OssUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.autoconfig;
+package com.concise.component.storage.common;
 
 import com.concise.component.core.utils.UrlUtils;
 import com.concise.component.storage.common.registerbucket.StorageBucketManage;
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,8 +23,6 @@ import javax.annotation.PostConstruct;
  * @date 2021/03/22
  */
 @Data
-@Component
-@Configuration
 @ConfigurationProperties(prefix = "storage-server")
 public class StorageProperties {
     private static final Logger log = LoggerFactory.getLogger(StorageProperties.class);

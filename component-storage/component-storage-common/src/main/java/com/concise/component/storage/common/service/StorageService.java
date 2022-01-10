@@ -1,6 +1,6 @@
 package com.concise.component.storage.common.service;
 
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucket.StorageBucketManage;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import org.slf4j.Logger;

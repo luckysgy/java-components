@@ -3,7 +3,7 @@ package com.concise.component.storage.minio.service;
 import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
-import com.concise.component.storage.common.autoconfig.StorageProperties;
+import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;

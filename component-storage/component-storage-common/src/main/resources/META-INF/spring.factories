@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.concise.component.storage.common.StorageCommonMainConfig
+  com.concise.component.storage.common.StorageCommonAutoConfiguration
