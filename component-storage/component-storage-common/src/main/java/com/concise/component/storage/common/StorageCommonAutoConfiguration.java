@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 @ComponentScan(basePackages = "com.concise.component.storage.common")
 public class StorageCommonAutoConfiguration {
     private static final Logger log = LoggerFactory.getLogger(StorageCommonAutoConfiguration.class);
+    
     @PostConstruct
     public void init() {
         log.info("init com.concise.component.storage.common");
