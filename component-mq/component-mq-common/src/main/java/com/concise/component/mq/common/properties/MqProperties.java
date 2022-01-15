@@ -7,8 +7,6 @@ import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -18,7 +16,6 @@ import java.util.Map;
  * @date 2022-01-09 7:24
  */
 @Data
-@Configuration
 @ConfigurationProperties(prefix = "mq")
 public class MqProperties {
     private static final Logger log = LoggerFactory.getLogger(MqProperties.class);
@@ -29,7 +26,6 @@ public class MqProperties {
     /**
      * key: 消息名称
      */
-    @NestedConfigurationProperty
     private Map<String, MqData> data;
 
     @PostConstruct

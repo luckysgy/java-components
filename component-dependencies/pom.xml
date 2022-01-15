@@ -68,6 +68,14 @@
 
         <!-- 视频处理 -->
         <javacv-platform.version>1.5.6</javacv-platform.version>
+        <javacv.version>1.5.6</javacv.version>
+        <ffmpeg.version>4.4-1.5.6</ffmpeg.version>
+        <openblas-platform.version>0.3.17-1.5.6</openblas-platform.version>
+        <opencv.version>4.5.3-1.5.6</opencv.version>
+
+        <!-- 图片处理: 压缩 -->
+        <thumbnailator.version>0.4.16</thumbnailator.version>
+
         <!-- grpc 通信 -->
         <grpc.version>1.6.1</grpc.version>
         <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
@@ -222,10 +230,12 @@
                 <artifactId>component-lib-hik-win64</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!--============================================================== 以下是第三方依赖===========================================================================-->
-
-
-            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+            <dependency>
+                <groupId>com.concise</groupId>
+                <artifactId>component-javacv</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--================================================ 以下是第三方依赖 -->
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
@@ -264,7 +274,7 @@
                 <version>${transmittable-thread-local.version}</version>
             </dependency>
 
-            <!-- grpc通信 -->
+            <!-- ===================================== grpc通信 -->
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
@@ -301,20 +311,64 @@
                 <version>${grpc-client-spring-boot-starter.version}</version>
             </dependency>
 
-            <!-- 视频处理 -->
+            <!-- ======================================== 图片处理 -->
+            <dependency>
+                <groupId>net.coobird</groupId>
+                <artifactId>thumbnailator</artifactId>
+                <version>${thumbnailator.version}</version>
+            </dependency>
+
+            <!-- ===================================== 视频处理 -->
             <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>javacv-platform</artifactId>
                 <version>${javacv-platform.version}</version>
             </dependency>
+            <!-- 精简 javacv-platform -->
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv</artifactId>
+                <version>${javacv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>ffmpeg</artifactId>
+                <version>${ffmpeg.version}</version>
+                <classifier>windows-x86_64</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>ffmpeg</artifactId>
+                <version>${ffmpeg.version}</version>
+                <classifier>linux-x86_64</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>openblas-platform</artifactId>
+                <version>${openblas-platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>opencv</artifactId>
+                <version>${opencv.version}</version>
+                <classifier>windows-x86_64</classifier>
+            </dependency>
 
-            <!-- 引入 lombok 依赖 -->
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>opencv</artifactId>
+                <version>${opencv.version}</version>
+                <classifier>linux-x86_64</classifier>
+            </dependency>
+
+            <!-- ======================================== 引入 lombok 依赖 -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
 
+            <!-- ======================================== mapstruct -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
@@ -332,7 +386,7 @@
                 <version>${lombok-mapstruct-binding.version}</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.redisson/redisson-spring-boot-starter -->
+            <!-- ======================================== redisson -->
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
@@ -351,7 +405,7 @@
                 <version>${rocketmq.version}</version>
             </dependency>
 
-            <!-- oss -->
+            <!-- ======================================== oss -->
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
@@ -365,7 +419,7 @@
                 <version>${reflections.version}</version>
             </dependency>
 
-            <!-- hutool 工具类 -->
+            <!-- ======================================== hutool工具包 -->
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
@@ -384,14 +438,14 @@
                 <version>${hutool.version}</version>
             </dependency>
 
-            <!-- MinIO文件系统 -->
+            <!-- ======================================== minio -->
             <dependency>
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
 
-            <!-- 解析客户端操作系统、浏览器等 -->
+            <!-- ======================================== 解析客户端操作系统、浏览器等 -->
             <dependency>
                 <groupId>eu.bitwalker</groupId>
                 <artifactId>UserAgentUtils</artifactId>

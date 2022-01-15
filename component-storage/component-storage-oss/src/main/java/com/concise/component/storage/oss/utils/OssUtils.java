@@ -93,7 +93,7 @@ public class OssUtils {
      * @param objectName 对象名字 xxx/zzzz/yyyy/fileName.jpg或者fileName.jpg
      */
     public static void upload(InputStream inputStream, String bucketName, String objectName, String contentType) {
-        /**
+        /*
          * 下面两行代码是重点坑：
          * 现在阿里云OSS 默认图片上传ContentType是image/jpeg
          * 也就是说，获取图片链接后，图片是下载链接，而并非在线浏览链接，
@@ -101,8 +101,6 @@ public class OssUtils {
          */
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentType(contentType);
-
-        //文件上传至阿里云OSS
         ossClient.putObject(bucketName, objectName, inputStream, meta);
     }
 
@@ -130,7 +128,7 @@ public class OssUtils {
         String prefix = fileBase64.substring(0,fileBase64.indexOf(",") + 1);
         fileBase64 = fileBase64.replace(prefix,"");
         byte[] decode = Base64.getDecoder().decode(fileBase64.replaceAll("\r\n", ""));
-        /**
+        /*
          * 下面两行代码是重点坑：
          * 现在阿里云OSS 默认图片上传ContentType是image/jpeg
          * 也就是说，获取图片链接后，图片是下载链接，而并非在线浏览链接，
