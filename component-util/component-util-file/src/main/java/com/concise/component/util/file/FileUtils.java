@@ -77,6 +77,7 @@ public class FileUtils {
         try (FileOutputStream fos = new FileOutputStream(file);
              BufferedOutputStream bos = new BufferedOutputStream(fos);) {
             bos.write(bytes);
+            bos.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }

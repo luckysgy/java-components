@@ -2,6 +2,8 @@ package com.concise.component.javacv.opencv;
 
 import cn.hutool.core.util.ObjectUtil;
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.global.opencv_core;
 import org.bytedeco.opencv.global.opencv_imgcodecs;
@@ -9,6 +11,8 @@ import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.*;
 import org.opencv.core.CvType;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +23,19 @@ import static org.bytedeco.opencv.helper.opencv_core.CV_RGB;
 
 /**
  * 需要说明的opencv中的默认读取的颜色是bgr不是rgb
+ *
+ * matAndBytesConvert: 推荐的mat和bytes互转的组合方式为{@link #bytesToMatByDecode(byte[])} + {@link #matToBytes(Mat)}
+ * 如果 mat 转 bytes, 使用 {@link #matToBytesByEncode} 图片会变大很多
+ *
  * @apiNote mat 必须需要手动释放, 否则内存会一直增长
  * opencv工具类 for javacv
  * @author shenguangyang
  * @date 2021-11-03 6:07
  */
 public class OpenCvHelper implements AutoCloseable {
-    public static OpenCVFrameConverter.ToIplImage converterToIplImage = new OpenCVFrameConverter.ToIplImage();
-    public static OpenCVFrameConverter.ToMat converterToMat = new OpenCVFrameConverter.ToMat();
+    private final OpenCVFrameConverter.ToIplImage converterToIplImage = new OpenCVFrameConverter.ToIplImage();
+    private final OpenCVFrameConverter.ToMat converterToMat = new OpenCVFrameConverter.ToMat();
+    private final Java2DFrameConverter java2DConverter = new Java2DFrameConverter();;
 
     // 定义一个颜色
     public static CvScalar cvScalar = opencv_core.CV_RGB(255, 0, 0);
@@ -35,52 +44,68 @@ public class OpenCvHelper implements AutoCloseable {
 
     private final List<Mat> matList = new ArrayList<>();
     private final List<IplImage> iplImageList = new ArrayList<>();
+    private final List<Frame> frameList = new ArrayList<>();
 
     @Override
     public void close() throws Exception {
+        converterToMat.close();
+        converterToIplImage.close();
+        java2DConverter.close();
+
         for (Mat mat : matList) {
             if (ObjectUtil.isNotNull(mat)) {
                 mat.release();
-                mat.clone();
+                mat.close();
             }
         }
 
         for (IplImage iplImage : iplImageList) {
             if (ObjectUtil.isNotNull(iplImage)) {
                 iplImage.release();
-                iplImage.clone();
+                iplImage.close();
+            }
+        }
+
+        for (Frame frame : frameList) {
+            if (ObjectUtil.isNotNull(frame)) {
+                frame.close();
             }
         }
     }
 
     /**
-     * 将Mat 转成 bytes
+     * 这个方法性能比较低，推荐的mat和bytes互转的组合方式为
+     * {@link #bytesToMatByDecode(byte[])} + {@link #matToBytes(Mat)}
+     * 如果 mat 转 bytes, 使用 {@link #matToBytesByEncode} 图片会变大很多
+     *
+     * @param imgBytes
+     * @return
+     * @throws IOException
      */
-    public byte[] matToBytes(Mat mat){
+    public Mat bytesToMat(byte[] imgBytes) throws IOException {
+        BufferedImage bufferedImage = bytesToBufferedImage(imgBytes);
+        return bufferedImageToMat(bufferedImage);
+    }
+
+    /**
+     * byte[]转BufferImage
+     * @param imgBytes
+     * @return
+     */
+    public BufferedImage bytesToBufferedImage(byte[] imgBytes) throws IOException {
+        BufferedImage tagImg = null;
         try {
-            byte[] b = new byte[mat.channels() * mat.cols() * mat.rows()];
-            mat.data().get(b);
-            // ((DataBufferByte) Java2DFrameUtils.toBufferedImage(mat).getRaster().getDataBuffer()).getData()
-            return b;
+            tagImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
+            return tagImg;
         } catch (Exception e) {
             throw e;
-        } finally {
-            if (ObjectUtil.isNotNull(mat)) {
-                matList.add(mat);
-            }
         }
     }
 
-    /**
-     * 将字节转换成Mat
-     * @param bytes 字节
-     * @param width 目标图片的宽
-     * @param height 目标图片的高
-     */
-    public Mat bytesToMat(byte[] bytes, int width, int height) {
+    public Mat bufferedImageToMat(BufferedImage original) {
         Mat mat = null;
         try {
-            mat = new Mat(height, width, opencv_core.CV_8UC3, new BytePointer(bytes));
+            mat = converterToMat.convert(java2DConverter.convert(original));
             return mat;
         } catch (Exception e) {
             throw e;
@@ -90,6 +115,47 @@ public class OpenCvHelper implements AutoCloseable {
             }
         }
     }
+
+    /**
+     * 将Mat 转成 bytes
+     * 遇到的问题: 在win10下运行时候代码经常异常退出, 后来部署到linux上运行,
+     * 一直很稳定的运行
+     * @param sourceMat
+     * @return
+     */
+    public byte[] matToBytes(Mat sourceMat) {
+        BufferedImage bufferedImage = matToBufferedImage(sourceMat);
+        return bufferedImageToBytes(bufferedImage);
+    }
+
+    public BufferedImage matToBufferedImage(Mat sourceMat) {
+        Frame convert = null;
+        try {
+            convert = converterToIplImage.convert(sourceMat);
+            return java2DConverter.convert(convert);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (ObjectUtil.isNotNull(sourceMat)) {
+                matList.add(sourceMat);
+            }
+
+            if (ObjectUtil.isNotNull(convert)) {
+                frameList.add(convert);
+            }
+        }
+    }
+
+    public byte[] bufferedImageToBytes(BufferedImage original){
+        ByteArrayOutputStream bStream = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(original, "jpg", bStream);
+        } catch (IOException e) {
+            throw new RuntimeException("bugImg读取失败:"+e.getMessage(),e);
+        }
+        return bStream.toByteArray();
+    }
+
 
     /**
      * 将Mat 转成 InputStream
@@ -177,19 +243,23 @@ public class OpenCvHelper implements AutoCloseable {
         Mat srcMat = null;
         Mat imgDesc = null;
         Mat imgROI = null;
+        Rect rect = null;
         try {
             srcMat = inputStreamToMat(srcInputStream);
             // 目标Mat
             imgDesc = new Mat(width, height, CvType.CV_8UC3);
             // 设置ROI
-            imgROI = new Mat(srcMat, new Rect(startX, startY, width, height));
-
+            rect = new Rect(startX, startY, width, height);
+            imgROI = new Mat(srcMat, rect);
             // 从ROI中剪切图片
             imgROI.copyTo(imgDesc);
             return imgDesc;
         } catch (Exception e) {
             throw e;
         } finally {
+            if (ObjectUtil.isNotNull(rect)) {
+                rect.close();
+            }
             if (ObjectUtil.isNotNull(srcMat)) {
                 matList.add(srcMat);
             }
@@ -211,7 +281,7 @@ public class OpenCvHelper implements AutoCloseable {
      * @param height 高
      * @return 返回Mat, 可以通过 {@link #matToInputStream(Mat)} 转成 InputStream
      */
-    public Mat cutImage(Mat srcMat, int startX, int startY, int width, int height) throws IOException {
+    public Mat cutImage(Mat srcMat, int startX, int startY, int width, int height) {
         Mat imgDesc = null;
         Mat imgROI = null;
         try {
