@@ -20,7 +20,7 @@ public class OpencvImgcodecsHelper implements AutoCloseable {
         for (Mat mat : matList) {
             if (ObjectUtil.isNotNull(mat)) {
                 mat.release();
-                mat.clone();
+                mat.close();
             }
         }
     }
