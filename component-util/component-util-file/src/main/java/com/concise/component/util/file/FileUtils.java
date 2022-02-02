@@ -1,7 +1,9 @@
 package com.concise.component.util.file;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.concise.component.core.exception.UtilException;
 import com.concise.component.core.utils.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -398,5 +402,139 @@ public class FileUtils {
     public static String percentEncode(String s) throws UnsupportedEncodingException {
         String encode = URLEncoder.encode(s, StandardCharsets.UTF_8.toString());
         return encode.replaceAll("\\+", "%20");
+    }
+
+    /**
+     * 下载文本
+     */
+    public static String downloadOfText(String url, String method) throws Exception {
+        byte[] bytes = downloadOfBytes(url, method);
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 通过url下载文件
+     */
+    public static byte[] downloadOfBytes(String url, String method) throws Exception {
+        InputStream inputStream = null;
+        HttpURLConnection conn = null;
+        try {
+            // 建立链接
+            URL httpUrl=new URL(url);
+            conn=(HttpURLConnection) httpUrl.openConnection();
+            //以Post方式提交表单，默认get方式
+            conn.setRequestMethod(method);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            // post方式不能使用缓存
+            conn.setUseCaches(false);
+            // 连接指定的资源
+            conn.connect();
+            // 获取网络输入流
+            inputStream = conn.getInputStream();
+            return IOUtils.toByteArray(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("抛出异常！！");
+        } finally {
+            if (ObjectUtil.isNotNull(inputStream)) {
+                inputStream.close();
+            }
+            if (ObjectUtil.isNotNull(conn)) {
+                conn.disconnect();
+            }
+        }
+        return null;
+
+    }
+
+    /**
+     * 下载文件
+     * @apiNote 注意文件保存路径的后面一定要加上文件的名称
+     * @param url
+     * @param filePath
+     * @param method
+     * @return
+     * @throws IOException
+     */
+    public static File downloadOfFile(String url, String filePath, String fileName, String method) throws IOException {
+        //创建不同的文件夹目录
+        File folder = new File(filePath);
+        //判断文件夹是否存在
+        if (!folder.exists()) {
+            //如果文件夹不存在，则创建新的的文件夹
+            mkdirs(folder);
+        }
+
+        //判断文件的保存路径后面是否以/结尾
+        if (!filePath.endsWith("/")) {
+            filePath += "/";
+        }
+        File file = new File(filePath + fileName);
+        if (!file.exists()) {
+            if (!file.createNewFile()) {
+                log.error("file [{}] create fail", filePath + fileName);
+            }
+        }
+
+        FileOutputStream fileOut = null;
+        HttpURLConnection conn = null;
+        InputStream inputStream = null;
+        BufferedOutputStream bos = null;
+        BufferedInputStream bis = null;
+        try {
+            // 建立链接
+            URL httpUrl=new URL(url);
+            conn=(HttpURLConnection) httpUrl.openConnection();
+            //以Post方式提交表单，默认get方式
+            conn.setRequestMethod(method);
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            // post方式不能使用缓存
+            conn.setUseCaches(false);
+            //连接指定的资源
+            conn.connect();
+            //获取网络输入流
+            inputStream = conn.getInputStream();
+            bis = new BufferedInputStream(inputStream);
+
+            fileOut = new FileOutputStream(filePath + fileName);
+            bos = new BufferedOutputStream(fileOut);
+
+            byte[] buf = new byte[4096];
+            int length = bis.read(buf);
+            //保存文件
+            while(length != -1) {
+                bos.write(buf, 0, length);
+
+                length = bis.read(buf);
+            }
+
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (ObjectUtil.isNotNull(bos)) {
+                bos.close();
+            }
+
+            if (ObjectUtil.isNotNull(bis)) {
+                bis.close();
+            }
+
+            if (ObjectUtil.isNotNull(conn)) {
+                conn.disconnect();
+            }
+
+            if (ObjectUtil.isNotNull(fileOut)) {
+                fileOut.close();
+            }
+
+            if (ObjectUtil.isNotNull(inputStream)) {
+                inputStream.close();
+            }
+        }
+
+        return file;
+
     }
 }
