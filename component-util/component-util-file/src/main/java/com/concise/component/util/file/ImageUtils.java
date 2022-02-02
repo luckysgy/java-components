@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
@@ -96,6 +97,39 @@ public class ImageUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * 网络图片下载
+     * @param imageUrl 图片url
+     * @param formatName 文件格式名称
+     * @param localFile 下载到本地文件
+     * @return 下载是否成功
+     */
+    public static boolean downloadImage(String imageUrl, String formatName, File localFile) throws IOException {
+        URL url;
+        try {
+            url = new URL(imageUrl);
+            return ImageIO.write(ImageIO.read(url), formatName, localFile);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    /**
+     * 网络图片下载
+     * @param imageUrl 图片url
+     * @param formatName 文件格式名称
+     * @return 下载的字节
+     */
+    public static byte[] downloadImage(String imageUrl, String formatName) throws IOException {
+        URL url;
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            url = new URL(imageUrl);
+            ImageIO.write(ImageIO.read(url), formatName, byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }
