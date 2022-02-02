@@ -39,7 +39,7 @@
 		<!--日志文件滚动策略-->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- 按天回滚 daily -->
-			<fileNamePattern>${LOG_PATH}/debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/history/debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<!-- 日志最大的历史 30天 -->
 			<maxHistory>${maxHistory}</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -71,7 +71,7 @@
 	<appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_PATH}/info.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/history/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<!-- 日志最大的历史 30天 -->
 			<maxHistory>${maxHistory}</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -96,7 +96,7 @@
 	<appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_PATH}/warn.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/history/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<!-- 日志最大的历史 30天 -->
 			<maxHistory>${maxHistory}</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -119,7 +119,7 @@
 	<appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_PATH}/error.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOG_PATH}/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/history/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<maxHistory>${maxHistory}</maxHistory>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>${maxFileSize}</maxFileSize>
@@ -137,6 +137,25 @@
 			<onMismatch>DENY</onMismatch>
 		</filter>
 	</appender>
+
+	<!-- rocketmq日志 -->
+	<appender name="RocketmqClientAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/rocketmq_client.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/history/rocketmq_client.%d{yyyyMMdd}.%i.log</fileNamePattern>
+			<maxHistory>${maxHistory}</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>${maxFileSize}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%d{yy-MM-dd.HH:mm:ss.SSS} [%-16t] %-5p %-22c{0} %X{ServiceId} - %m%n</pattern>
+		</encoder>
+	</appender>
+	<logger name="RocketmqClient" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="RocketmqClientAppender"/>
+	</logger>
 
 	<!-- 控制台打印 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
