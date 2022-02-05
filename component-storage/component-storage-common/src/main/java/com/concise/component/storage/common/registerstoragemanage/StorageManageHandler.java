@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.registerbucketmanage;
+package com.concise.component.storage.common.registerstoragemanage;
 
 import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.StringUtils;
@@ -16,30 +16,30 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2021-12-25 21:17
  */
 @Component
-public class StorageBucketManageHandler {
+public class StorageManageHandler {
     private static StorageProperties storageProperties;
 
-    public StorageBucketManageHandler(StorageProperties storageProperties) {
-        StorageBucketManageHandler.storageProperties = storageProperties;
+    public StorageManageHandler(StorageProperties storageProperties) {
+        StorageManageHandler.storageProperties = storageProperties;
     }
 
     /**
      * key 子类全路径, value 桶的类
      */
-    private static final Map<String, StorageBucketManage> storageBucketNameSub = new ConcurrentHashMap<>();
+    private static final Map<String, StorageManage> storageBucketNameSub = new ConcurrentHashMap<>();
 
-    public static <T extends StorageBucketManage> String getObjectNamePre(Class<T> storageBucketClass) {
+    public static <T extends StorageManage> String getObjectNamePre(Class<T> storageBucketClass) {
         if (storageBucketClass == null) {
             throw new BizException("storageBucketClass == null");
         }
-        StorageBucketManage storageBucketManage = storageBucketNameSub.get(storageBucketClass.getName());
-        if (storageBucketManage == null) {
+        StorageManage storageManage = storageBucketNameSub.get(storageBucketClass.getName());
+        if (storageManage == null) {
             throw new BizException("桶名不存在, storageBucketClass: " + storageBucketClass.getName());
         }
-        return storageBucketManage.getObjectNamePre();
+        return storageManage.getObjectNamePre();
     }
 
-    public static <T extends StorageBucketManage> String getBucketName(Class<T> storageBucketClass) {
+    public static <T extends StorageManage> String getBucketName(Class<T> storageBucketClass) {
         if (storageBucketClass == null) {
             throw new BizException("storageBucketClass == null");
         }
@@ -62,14 +62,14 @@ public class StorageBucketManageHandler {
         return bucketNames;
     }
 
-    public static void addStorageBucketSub(StorageBucketManage storageBucketManage) {
-        String objectNamePre = storageBucketManage.getObjectNamePre();
+    public static void addStorageBucketSub(StorageManage storageManage) {
+        String objectNamePre = storageManage.getObjectNamePre();
         if (objectNamePre == null) {
-            throw new BizException(storageBucketManage.getClass().getName() + "#getObjectNamePre() 不能为 null");
+            throw new BizException(storageManage.getClass().getName() + "#getObjectNamePre() 不能为 null");
         }
         if (StringUtils.isNotEmpty(objectNamePre) && !objectNamePre.endsWith("/")) {
-            throw new BizException(storageBucketManage.getClass().getName() + "#getObjectNamePre() 必须以 / 结尾");
+            throw new BizException(storageManage.getClass().getName() + "#getObjectNamePre() 必须以 / 结尾");
         }
-        storageBucketNameSub.put(storageBucketManage.getClass().getName(), storageBucketManage);
+        storageBucketNameSub.put(storageManage.getClass().getName(), storageManage);
     }
 }

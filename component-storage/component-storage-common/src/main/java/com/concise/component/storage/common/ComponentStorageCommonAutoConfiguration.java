@@ -1,6 +1,6 @@
 package com.concise.component.storage.common;
 
-import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageSubScan;
+import com.concise.component.storage.common.registerstoragemanage.StorageManageSubScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
  */
 @Configuration
 @EnableConfigurationProperties(StorageProperties.class)
-@StorageBucketManageSubScan
+@StorageManageSubScan
 @ComponentScan(basePackages = "com.concise.component.storage.common")
 public class ComponentStorageCommonAutoConfiguration {
     private static final Logger log = LoggerFactory.getLogger(ComponentStorageCommonAutoConfiguration.class);

@@ -190,7 +190,17 @@ public class OssUtils {
         return deleteObjectsResult.getDeletedObjects().size();
     }
 
-    public static void deleteObject(String bucketName, String objectNames) {
-        ossClient.deleteObject(bucketName, objectNames);
+    public static void deleteObject(String bucketName, String objectName) {
+        ossClient.deleteObject(bucketName, objectName);
+    }
+
+    /**
+     * 判断对象是否存在
+     * @param bucketName 桶名
+     * @param objectName 对象名
+     * @return
+     */
+    public static boolean objectExist(String bucketName, String objectName) {
+        return ossClient.doesObjectExist(bucketName, objectName);
     }
 }

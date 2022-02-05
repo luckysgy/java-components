@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.registerbucketmanage;
+package com.concise.component.storage.common.registerstoragemanage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,8 @@ import java.util.Set;
  * @author shenguangyang
  * @date 2021-12-25 20:50
  */
-public class StorageBucketManageSubScanRegister implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, BeanClassLoaderAware, EnvironmentAware {
-    private static final Logger log = LoggerFactory.getLogger(StorageBucketManageSubScanRegister.class);
+public class StorageManageSubScanRegister implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, BeanClassLoaderAware, EnvironmentAware {
+    private static final Logger log = LoggerFactory.getLogger(StorageManageSubScanRegister.class);
 
     private ResourceLoader resourceLoader;
 
@@ -58,10 +58,10 @@ public class StorageBucketManageSubScanRegister implements ImportBeanDefinitionR
             }
             isExecuted = true;
             // 获取全部子类
-            Set<StorageBucketManage> storageBucketManageAllSub = getStorageBucketNameSub(registry);
-            for (StorageBucketManage storageBucketManage : storageBucketManageAllSub) {
-                StorageBucketManageHandler.addStorageBucketSub(storageBucketManage);
-                log.info("register storageBucketName: {}", storageBucketManage.getClass().getName());
+            Set<StorageManage> storageManageAllSub = getStorageBucketNameSub(registry);
+            for (StorageManage storageManage : storageManageAllSub) {
+                StorageManageHandler.addStorageBucketSub(storageManage);
+                log.info("register storageBucketName: {}", storageManage.getClass().getName());
             }
 
         } catch (Exception e) {
@@ -70,14 +70,14 @@ public class StorageBucketManageSubScanRegister implements ImportBeanDefinitionR
     }
 
     /**
-     * 获取 {@link StorageBucketManage} 全部子类
+     * 获取 {@link StorageManage} 全部子类
      * @param registry
      * @return
      * @throws ClassNotFoundException
      */
-    private Set<StorageBucketManage> getStorageBucketNameSub(BeanDefinitionRegistry registry) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private Set<StorageManage> getStorageBucketNameSub(BeanDefinitionRegistry registry) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         // 获取全部子类
-        Set<StorageBucketManage> storageBucketManageAllSub = new HashSet<>();
+        Set<StorageManage> storageManageAllSub = new HashSet<>();
 
         String[] beanDefinitionNames = registry.getBeanDefinitionNames();
         for (String beanDefinitionName : beanDefinitionNames) {
@@ -86,13 +86,13 @@ public class StorageBucketManageSubScanRegister implements ImportBeanDefinitionR
                 ScannedGenericBeanDefinition scannedGenericBeanDefinition = (ScannedGenericBeanDefinition) beanDefinition;
                 String[] interfaceNames = scannedGenericBeanDefinition.getMetadata().getInterfaceNames();
                 for (String interfaceName : interfaceNames) {
-                    if (interfaceName.equals(StorageBucketManage.class.getName())) {
-                        storageBucketManageAllSub.add((StorageBucketManage) Class.forName(beanDefinition.getBeanClassName()).newInstance());
+                    if (interfaceName.equals(StorageManage.class.getName())) {
+                        storageManageAllSub.add((StorageManage) Class.forName(beanDefinition.getBeanClassName()).newInstance());
                     }
                 }
             }
         }
-        return storageBucketManageAllSub;
+        return storageManageAllSub;
     }
 
     protected ClassPathScanningCandidateComponentProvider getScanner() {
@@ -105,7 +105,7 @@ public class StorageBucketManageSubScanRegister implements ImportBeanDefinitionR
                             && Annotation.class.getName().equals(beanDefinition.getMetadata().getInterfaceNames()[0])) {
                         try {
                             Class<?> target = ClassUtils.forName(beanDefinition.getMetadata().getClassName(),
-                                    StorageBucketManageSubScanRegister.this.classLoader);
+                                    StorageManageSubScanRegister.this.classLoader);
                             return !target.isAnnotation();
                         } catch (Exception ex) {
                             this.logger.error(

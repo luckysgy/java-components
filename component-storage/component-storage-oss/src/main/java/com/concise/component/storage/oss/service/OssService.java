@@ -6,8 +6,8 @@ import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.MimetypesUtils;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
-import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
+import com.concise.component.storage.common.registerstoragemanage.StorageManage;
+import com.concise.component.storage.common.registerstoragemanage.StorageManageHandler;
 import com.concise.component.storage.common.service.StorageService;
 import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
@@ -46,22 +46,22 @@ public class OssService implements StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> void uploadText(Class<T> storageBucket, String text, String objectName) {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+    public <T extends StorageManage> void uploadText(Class<T> storageManage, String text, String objectName) {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         InputStream inputStream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
         OssUtils.upload(inputStream, bucketName, objectNamePre + objectName, "text/plain");
     }
 
     @Override
-    public <T extends StorageBucketManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+    public <T extends StorageManage> void uploadFile(Class<T> storageManage, InputStream inputStream, String contentType, String objectName) throws Exception {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         OssUtils.upload(inputStream, bucketName, objectNamePre + objectName, contentType);
     }
 
     @Override
-    public <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath) {
+    public <T extends StorageManage> void uploadDir(Class<T> storageManage, String dirPath) {
         List<String> allFileList = FileUtils.getAllFile(dirPath, false, null);
         dirPath = dirPath.replace("\\", "/");
 
@@ -79,7 +79,7 @@ public class OssService implements StorageService {
 
             String objectName = path;
             try (InputStream inputStream = new FileInputStream(filePath)) {
-                uploadFile(storageBucket, inputStream, MimetypesUtils.getInstance().getMimetype(FileUtils.getName(filePath)), objectName);
+                uploadFile(storageManage, inputStream, MimetypesUtils.getInstance().getMimetype(FileUtils.getName(filePath)), objectName);
             } catch (Exception e) {
                 log.error("error: ", e);
             }
@@ -87,9 +87,9 @@ public class OssService implements StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> String getPresignedObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+    public <T extends StorageManage> String getPresignedObjectUrl(Class<T> storageManage, String objectName, UrlTypesEnum urlTypes) {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         String url = OssUtils.getAccessURL(bucketName, objectNamePre + objectName);
         Assert.notEmpty(url, "获取url失败");
         if (storageProperties.getUrl().getProxy()) {
@@ -107,10 +107,10 @@ public class OssService implements StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> String getPermanentObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
+    public <T extends StorageManage> String getPermanentObjectUrl(Class<T> storageManage, String objectName, UrlTypesEnum urlTypes) {
         StorageProperties.Oss oss = storageProperties.getOss();
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         if (storageProperties.getUrl().getProxy()) {
             if (UrlTypesEnum.EXTERNAL.equals(urlTypes)) {
                 String external = storageProperties.getUrl().getExternal();
@@ -127,15 +127,15 @@ public class OssService implements StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> InputStream getFile(Class<T> storageBucket, String objectName) {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+    public <T extends StorageManage> InputStream getFile(Class<T> storageManage, String objectName) {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         return OssUtils.getFile(bucketName, objectNamePre + objectName);
     }
 
     @Override
-    public <T extends StorageBucketManage> Boolean createBucket(Class<T> storageBucket, Boolean randomSuffix) {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
+    public <T extends StorageManage> Boolean createBucket(Class<T> storageManage, Boolean randomSuffix) {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
         try {
             if (randomSuffix != null && randomSuffix) {
                 return OssUtils.createBucket(bucketName + "-" + RandomUtil.randomString(8));
@@ -149,15 +149,15 @@ public class OssService implements StorageService {
 
     /**
      * 一次最大删除900左右文件
-     * @param storageBucket 桶
+     * @param storageManage 桶
      * @param objectNameList 对象名集合
      * @param <T>
      * @throws Exception
      */
     @Override
-    public <T extends StorageBucketManage> void deleteObjects(Class<T> storageBucket, List<String> objectNameList) throws Exception {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+    public <T extends StorageManage> void deleteObjects(Class<T> storageManage, List<String> objectNameList) throws Exception {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         List<String> objectNames = new ArrayList<>(objectNameList.size());
         for (String objectName : objectNameList) {
             objectNames.add(objectNamePre + objectName);
@@ -171,9 +171,16 @@ public class OssService implements StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> void deleteObject(Class<T> storageBucket, String objectName) throws Exception {
-        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
-        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+    public <T extends StorageManage> void deleteObject(Class<T> storageManage, String objectName) throws Exception {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
         OssUtils.deleteObject(bucketName, objectNamePre + objectName);
+    }
+
+    @Override
+    public <T extends StorageManage> boolean objectExist(Class<T> storageManage, String objectName) {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
+        return OssUtils.objectExist(bucketName, objectNamePre + objectName);
     }
 }

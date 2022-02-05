@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.registerbucketmanage;
+package com.concise.component.storage.common.registerstoragemanage;
 
 import org.springframework.context.annotation.Import;
 
@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 @Documented
-@Import({StorageBucketManageSubScanRegister.class})
-public @interface StorageBucketManageSubScan {
+@Import({StorageManageSubScanRegister.class})
+public @interface StorageManageSubScan {
 
 }

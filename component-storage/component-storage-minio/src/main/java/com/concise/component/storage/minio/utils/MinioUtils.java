@@ -93,6 +93,24 @@ public class MinioUtils {
     }
 
     /**
+     * 判断对象是否存在
+     * @param bucketName 桶名
+     * @param objectName 对象名
+     * @return
+     */
+    public static boolean objectExist(String bucketName, String objectName) {
+        try {
+            StatObjectResponse statObjectResponse = minioClient.statObject(
+                    StatObjectArgs.builder().bucket(bucketName).object(objectName).build()
+            );
+            return !statObjectResponse.deleteMarker();
+        } catch (Exception e) {
+            logger.error("error: ", e);
+            return false;
+        }
+    }
+
+    /**
      * 分片上传
      * 需要重写minio客户端，{@link CustomMinioClient}
      * @apiNote 注意一个分片小于5M，会报错，提示

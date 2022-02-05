@@ -1,7 +1,7 @@
 package com.concise.component.storage.common.service;
 
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
+import com.concise.component.storage.common.registerstoragemanage.StorageManage;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 
 import java.io.InputStream;
@@ -18,21 +18,21 @@ public interface StorageService {
      * @param text 文本内容
      * @param objectName 对象名 xx/yy/zz/fileName.text
      */
-    default <T extends StorageBucketManage> void uploadText(Class<T> storageBucket, String text, String objectName) throws Exception {
+    default <T extends StorageManage> void uploadText(Class<T> storageBucket, String text, String objectName) throws Exception {
         throw new UnsupportedOperationException();
     }
 
     /**
      * 上传文件
      */
-    default <T extends StorageBucketManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception {
+    default <T extends StorageManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception {
         throw new UnsupportedOperationException();
     }
 
     /**
      * 上传文件夹
      */
-    default <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath) {
+    default <T extends StorageManage> void uploadDir(Class<T> storageBucket, String dirPath) {
         throw new UnsupportedOperationException();
     }
 
@@ -46,7 +46,7 @@ public interface StorageService {
      * @param urlTypesEnum url类型,内网访问还是外网访问
      * @return 持久的url, url= 内网或者外网地址 + 桶名 + 对象名
      */
-    default <T extends StorageBucketManage> String getPermanentObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
+    default <T extends StorageManage> String getPermanentObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
         throw new UnsupportedOperationException();
     }
 
@@ -57,7 +57,7 @@ public interface StorageService {
      * @param urlTypesEnum url类型,内网访问还是外网访问
      * @return 经过签名的url
      */
-    default <T extends StorageBucketManage> String getPresignedObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
+    default <T extends StorageManage> String getPresignedObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
         throw new UnsupportedOperationException();
     }
     /**
@@ -65,7 +65,7 @@ public interface StorageService {
      * @param objectName 对象名
      * @return
      */
-    default <T extends StorageBucketManage> InputStream getFile(Class<T> storageBucket, String objectName) {
+    default <T extends StorageManage> InputStream getFile(Class<T> storageBucket, String objectName) {
         throw new UnsupportedOperationException();
     }
 
@@ -74,7 +74,7 @@ public interface StorageService {
      * @param storageBucket 桶的名字
      * @param randomSuffix 是否使能随机后缀,防止桶名存在
      */
-    default <T extends StorageBucketManage> Boolean createBucket(Class<T> storageBucket, Boolean randomSuffix) {
+    default <T extends StorageManage> Boolean createBucket(Class<T> storageBucket, Boolean randomSuffix) {
         throw new UnsupportedOperationException();
     }
 
@@ -85,7 +85,7 @@ public interface StorageService {
      * @param <T>
      * @return
      */
-    default <T extends StorageBucketManage> void deleteObjects(Class<T> storageBucket, List<String> objectNameList) throws Exception {
+    default <T extends StorageManage> void deleteObjects(Class<T> storageBucket, List<String> objectNameList) throws Exception {
         throw new UnsupportedOperationException();
     }
 
@@ -96,7 +96,16 @@ public interface StorageService {
      * @param <T>
      * @return
      */
-    default <T extends StorageBucketManage> void deleteObject(Class<T> storageBucket, String objectName) throws Exception {
+    default <T extends StorageManage> void deleteObject(Class<T> storageBucket, String objectName) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * 判断对象是否存在
+     * @param objectName 对象名
+     * @param storageBucket 指定存储路径管理
+     */
+    default <T extends StorageManage> boolean objectExist(Class<T> storageBucket, String objectName) {
         throw new UnsupportedOperationException();
     }
 }

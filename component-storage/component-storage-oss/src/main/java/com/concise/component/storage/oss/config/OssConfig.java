@@ -3,7 +3,7 @@ package com.concise.component.storage.oss.config;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
+import com.concise.component.storage.common.registerstoragemanage.StorageManageHandler;
 import com.concise.component.storage.oss.utils.OssUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class OssConfig {
                 oss.getEndpoint(),oss.getAccessKeyId(),oss.getSecretAccessKey());
 
         if (storageProperties.getIsInitBucket()) {
-            List<String> allBucketName = StorageBucketManageHandler.getAllBucketName();
+            List<String> allBucketName = StorageManageHandler.getAllBucketName();
             for (String bucketName : allBucketName) {
                 boolean exists = ossClient.doesBucketExist(bucketName);
                 //判定是否存在此存储空间
