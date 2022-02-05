@@ -3,8 +3,6 @@ package com.concise.component.storage.common.service;
 import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
 import com.concise.component.storage.common.url.UrlTypesEnum;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.List;
@@ -14,69 +12,71 @@ import java.util.List;
  * @author shenguangyang
  * @date 2021/7/17 13:36
  */
-public abstract class StorageService {
-    private static final Logger log = LoggerFactory.getLogger(StorageService.class);
-    protected StorageProperties storageProperties;
-    public StorageService(StorageProperties storageProperties) {
-        this.storageProperties = storageProperties;
-    }
-
+public interface StorageService {
     /**
      * 上传文本
      * @param text 文本内容
      * @param objectName 对象名 xx/yy/zz/fileName.text
      */
-    public abstract <T extends StorageBucketManage> void uploadText(Class<T> storageBucket, String text, String objectName) throws Exception;
+    default <T extends StorageBucketManage> void uploadText(Class<T> storageBucket, String text, String objectName) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * 上传文件
      */
-    public abstract <T extends StorageBucketManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception;
+    default <T extends StorageBucketManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * 上传文件夹
      */
-    public abstract <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath);
+    default <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * 通过对象名获取永久url
      *
-     * 1. oss
-     * 如果配置使能nginx代理，则获取持久链接的前缀，就是url中的lan或者wan
+     * 如果配置使能nginx代理，则获取持久链接的前缀，就是{@link StorageProperties#getUrl()} 中的内网或者外网配置
      * eg：http://127.0.0.1:9090/files/bucketName/objctName
-     * nginx相关配置如下,这个配置相当访问minio文件格式的地址转为访问oss格式的地址
-     * <code>
-     *     # 配置中使用 .* 表示0个或多个任意字段，用 () 括起来，可以在location中用$1、$2等获取。
-     *     # 注意，使用这种方式，location内部不能包含if语句，否则proxy_pass不会生效
-     *     # 浏览器访问http://127.0.0.1:9090/files/ai-approve-bucket/2021/07/17/test.log
-     *     location ~ /files/(.*?)/(.*)$ {
-     *     	    proxy_pass https://$1.oss-cn-beijing.aliyuncs.com/$2;
-     *     }
-     * </code>
-     *
-     * 如果关掉了nginx代理, 则{@link UrlTypesEnum} 不生效,获取到的持久链接格式如下
-     * eg: https://bucketName.oss-cn-beijing.aliyuncs.com/objectName
-     *
      * @apiNote 生成的url是一个有时效性的
      * @param objectName 对象名
      * @param urlTypesEnum url类型,内网访问还是外网访问
-     * @return 对象的url
+     * @return 持久的url, url= 内网或者外网地址 + 桶名 + 对象名
      */
-    public abstract <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum);
+    default <T extends StorageBucketManage> String getPermanentObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
+        throw new UnsupportedOperationException();
+    }
 
+    /**
+     * 获取预先签名的对象url
+     * @apiNote 生成的url是通过桶名 + 对象名拼接而成, 因此需要将桶设置公共读才可以访问, 否则无权限访问
+     * @param objectName 对象名
+     * @param urlTypesEnum url类型,内网访问还是外网访问
+     * @return 经过签名的url
+     */
+    default <T extends StorageBucketManage> String getPresignedObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
+        throw new UnsupportedOperationException();
+    }
     /**
      * 获取文件
      * @param objectName 对象名
      * @return
      */
-    public abstract <T extends StorageBucketManage> InputStream getFile(Class<T> storageBucket, String objectName);
+    default <T extends StorageBucketManage> InputStream getFile(Class<T> storageBucket, String objectName) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * 创建桶
      * @param storageBucket 桶的名字
      * @param randomSuffix 是否使能随机后缀,防止桶名存在
      */
-    public abstract <T extends StorageBucketManage> Boolean createBucket(Class<T> storageBucket, Boolean randomSuffix);
+    default <T extends StorageBucketManage> Boolean createBucket(Class<T> storageBucket, Boolean randomSuffix) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * 批量删除文件
@@ -85,7 +85,9 @@ public abstract class StorageService {
      * @param <T>
      * @return
      */
-    public abstract <T extends StorageBucketManage> void deleteObjects(Class<T> storageBucket, List<String> objectNameList) throws Exception;
+    default <T extends StorageBucketManage> void deleteObjects(Class<T> storageBucket, List<String> objectNameList) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * 删除文件
@@ -94,5 +96,7 @@ public abstract class StorageService {
      * @param <T>
      * @return
      */
-    public abstract <T extends StorageBucketManage> void deleteObject(Class<T> storageBucket, String objectName) throws Exception;
+    default <T extends StorageBucketManage> void deleteObject(Class<T> storageBucket, String objectName) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 }

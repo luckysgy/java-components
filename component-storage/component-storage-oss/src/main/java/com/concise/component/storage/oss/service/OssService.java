@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.exception.Assert;
 import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.MimetypesUtils;
+import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
 import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
@@ -31,15 +32,17 @@ import java.util.List;
  */
 @Component
 @ConditionalOnStorageType(type = StorageTypesEnum.OSS)
-public class OssService extends StorageService {
+public class OssService implements StorageService {
     private static final Logger log = LoggerFactory.getLogger(OssService.class);
     /**
      * 批量删除组大小
      */
     private static final Integer DELETE_BATCH_GROUP_SIZE = 900;
 
+    private final StorageProperties storageProperties;
+
     public OssService(StorageProperties storageProperties) {
-        super(storageProperties);
+        this.storageProperties = storageProperties;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class OssService extends StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
+    public <T extends StorageBucketManage> String getPresignedObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
         String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
         String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
         String url = OssUtils.getAccessURL(bucketName, objectNamePre + objectName);
@@ -101,6 +104,26 @@ public class OssService extends StorageService {
             }
         }
         return url;
+    }
+
+    @Override
+    public <T extends StorageBucketManage> String getPermanentObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
+        StorageProperties.Oss oss = storageProperties.getOss();
+        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
+        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+        if (storageProperties.getUrl().getProxy()) {
+            if (UrlTypesEnum.EXTERNAL.equals(urlTypes)) {
+                String external = storageProperties.getUrl().getExternal();
+                return StringUtils.join(external, bucketName, "/" ,objectNamePre + objectName);
+            } else {
+                String internal = storageProperties.getUrl().getInternal();
+                return StringUtils.join(internal , bucketName, "/", objectNamePre + objectName);
+            }
+        }
+        String urlPre = oss.getEndpoint();
+        urlPre = urlPre.replace("https://", "")
+                .replace("http://", "");
+        return StringUtils.join("https://", bucketName, ".", urlPre , objectNamePre + objectName);
     }
 
     @Override

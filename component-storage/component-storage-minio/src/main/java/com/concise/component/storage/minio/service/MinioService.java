@@ -3,6 +3,7 @@ package com.concise.component.storage.minio.service;
 import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.exception.Assert;
 import com.concise.component.core.utils.MimetypesUtils;
+import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
 import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
@@ -31,11 +32,12 @@ import java.util.List;
  */
 @Component
 @ConditionalOnStorageType(type = StorageTypesEnum.MINIO)
-public class MinioService extends StorageService {
+public class MinioService implements StorageService {
     private static final Logger log = LoggerFactory.getLogger(MinioService.class);
+    private final StorageProperties storageProperties;
 
     public MinioService(StorageProperties storageProperties) {
-        super(storageProperties);
+        this.storageProperties = storageProperties;
     }
 
     @Override
@@ -80,7 +82,7 @@ public class MinioService extends StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
+    public <T extends StorageBucketManage> String getPresignedObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
         String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
         String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
         String url = MinioUtils.getFileUrl(bucketName, objectNamePre + objectName, Method.GET);
@@ -95,6 +97,25 @@ public class MinioService extends StorageService {
             }
         }
         return url;
+    }
+
+    @Override
+    public <T extends StorageBucketManage> String getPermanentObjectUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
+        String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
+        String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
+        if (storageProperties.getUrl().getProxy()) {
+            if (UrlTypesEnum.INTERNAL.equals(urlTypes)) {
+                String internal = storageProperties.getUrl().getInternal();
+                return StringUtils.join(internal, bucketName, "/", objectNamePre + objectName);
+            } else {
+                String external = storageProperties.getUrl().getExternal();
+                return StringUtils.join(external, bucketName, "/", objectNamePre + objectName);
+            }
+        }
+        String urlPre = storageProperties.getMinio().getEndpoint();
+        urlPre = urlPre.replace("https://", "")
+                .replace("http://", "");
+        return StringUtils.join("http://", urlPre , bucketName, "/" + objectNamePre + objectName);
     }
 
     @Override
