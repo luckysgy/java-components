@@ -1,15 +1,13 @@
 package com.concise.component.storage.common.storagetype;
 
-import lombok.Getter;
-
 /**
  * @author shenguangyang
  * @date 2021-12-25 21:37
  */
-public class StorageType {
+public class StorageEnableType {
     private static String userType;
 
-    private StorageType() {
+    private StorageEnableType() {
 
     }
 
@@ -22,7 +20,7 @@ public class StorageType {
         if (!isInclude) {
             throw new RuntimeException("user storageType [ " + userType + "] not supported, support " + StorageTypesEnum.getSupportType());
         }
-        StorageType.userType = userType;
+        StorageEnableType.userType = userType;
     }
 
     public static String getUserType() {

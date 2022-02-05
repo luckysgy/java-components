@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.registerbucket;
+package com.concise.component.storage.common.registerbucketmanage;
 
 import com.concise.component.core.exception.BizException;
 import com.concise.component.core.utils.StringUtils;
@@ -43,17 +43,10 @@ public class StorageBucketManageHandler {
         if (storageBucketClass == null) {
             throw new BizException("storageBucketClass == null");
         }
-        if (storageProperties.getIsOneBucket()) {
-            return getOneBucketName();
-        }
-        StorageBucketManage storageBucketManage = storageBucketNameSub.get(storageBucketClass.getName());
-        if (storageBucketManage == null) {
-            throw new BizException("桶名不存在, storageBucketClass: " + storageBucketClass.getName());
-        }
-        return storageBucketManage.getBucketName();
+        return getBucketName();
     }
 
-    private static String getOneBucketName() {
+    private static String getBucketName() {
         String type = storageProperties.getType();
         if (StorageTypesEnum.MINIO.getType().equals(type)) {
             return storageProperties.getMinio().getBucketName();
@@ -65,13 +58,7 @@ public class StorageBucketManageHandler {
     }
     public static List<String> getAllBucketName() {
         List<String> bucketNames = new ArrayList<>();
-        if (storageProperties.getIsOneBucket()) {
-            bucketNames.add(getOneBucketName());
-        } else {
-            for (Map.Entry<String, StorageBucketManage> entry : storageBucketNameSub.entrySet()) {
-                bucketNames.add(entry.getValue().getBucketName());
-            }
-        }
+        bucketNames.add(getBucketName());
         return bucketNames;
     }
 

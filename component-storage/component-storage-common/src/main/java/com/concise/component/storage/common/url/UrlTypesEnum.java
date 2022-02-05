@@ -7,7 +7,7 @@ package com.concise.component.storage.common.url;
  */
 public enum UrlTypesEnum {
     /** 内网url */
-    LAN,
+    INTERNAL,
     /** 外网url */
-    WAN
+    EXTERNAL
 }

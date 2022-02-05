@@ -7,6 +7,6 @@ package com.concise.component.storage.common;
  */
 public class StorageConstants {
     public static int URL_EXPIRY_TIME;
-    public static String URL_LAN = "";
-    public static String URL_WAN = "";
+    public static String URL_INTERNAL = "";
+    public static String URL_EXTERNAL = "";
 }

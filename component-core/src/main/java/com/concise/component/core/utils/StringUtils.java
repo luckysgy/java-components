@@ -1,14 +1,13 @@
 package com.concise.component.core.utils;
 
 import cn.hutool.core.text.StrFormatter;
+import com.concise.component.core.exception.UtilException;
 import org.springframework.util.AntPathMatcher;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 字符串工具类
@@ -476,5 +475,56 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     @SuppressWarnings("unchecked")
     public static <T> T cast(Object obj) {
         return (T) obj;
+    }
+
+    /**
+     * 字符串转为list
+     * @param sourceStr 源字符串
+     * @param separate 字符串中的分隔符
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> toList(String sourceStr, String separate, Class<T> targetType) {
+        List<T> result = new ArrayList<>();
+        if (isNotEmpty(sourceStr)) {
+            String[] split = sourceStr.split(separate);
+            for (String str : split) {
+                if (targetType.isAssignableFrom(String.class)) {
+                    result.add((T) str);
+                } else if (targetType.isAssignableFrom(Long.class)) {
+                    result.add((T) Long.valueOf(str));
+                } else if (targetType.isAssignableFrom(Integer.class)) {
+                    result.add((T) Integer.valueOf(str));
+                } else if (targetType.isAssignableFrom(Double.class)) {
+                    result.add((T) Double.valueOf(str));
+                } else if (targetType.isAssignableFrom(Short.class)) {
+                    result.add((T) Short.valueOf(str));
+                } else if (targetType.isAssignableFrom(Float.class)) {
+                    result.add((T) Float.valueOf(str));
+                } else {
+                    throw new UtilException(targetType.getName() + " not supported");
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * list 转字符串
+     * @param sourceList list数据
+     * @param separate 分隔符号
+     * @param <T>
+     * @return
+     */
+    public static <T> String toStr(List<T> sourceList, String separate) {
+        if (CollectionUtils.isEmpty(sourceList)) {
+            return "";
+        }
+        return sourceList.stream().map(String::valueOf).collect(Collectors.joining(separate));
+    }
+
+    public static void main(String[] args) {
+        List<Long> list = toList("1,2,3", ",", Long.class);
+        System.out.println(list);
     }
 }

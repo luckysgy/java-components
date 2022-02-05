@@ -71,7 +71,7 @@ public class OssUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /**
+        /*
          * 下面两行代码是重点坑：
          * 现在阿里云OSS 默认图片上传ContentType是image/jpeg
          * 也就是说，获取图片链接后，图片是下载链接，而并非在线浏览链接，

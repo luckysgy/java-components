@@ -27,12 +27,12 @@ public class StorageTypeCondition implements Condition {
         }
         //从配置文件中获取属性
         String storageType = conditionContext.getEnvironment().getProperty("storageServer.type");
-        StorageType.create(storageType);
+        StorageEnableType.create(storageType);
 
         StorageTypesEnum storageTypesEnum = (StorageTypesEnum) attributes.get("type");
         String storageEnable = conditionContext.getEnvironment().getProperty("storageServer.enable");
         if (StringUtils.isNotNull(storageEnable) && "true".equals(storageEnable)) {
-            if (StorageType.isUsed(storageTypesEnum) && !isRegistStorageService) {
+            if (StorageEnableType.isUsed(storageTypesEnum) && !isRegistStorageService) {
                 log.info("成功注入 {} 服务" , storageTypesEnum.getType());
                 isRegistStorageService = true;
                 return true;

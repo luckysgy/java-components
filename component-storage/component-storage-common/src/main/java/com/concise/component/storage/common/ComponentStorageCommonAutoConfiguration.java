@@ -1,6 +1,6 @@
 package com.concise.component.storage.common;
 
-import com.concise.component.storage.common.registerbucket.StorageBucketManageSubScan;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageSubScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

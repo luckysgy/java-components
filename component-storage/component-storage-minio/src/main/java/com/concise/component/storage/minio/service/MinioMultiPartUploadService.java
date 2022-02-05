@@ -2,8 +2,8 @@ package com.concise.component.storage.minio.service;
 
 import cn.hutool.http.HttpRequest;
 import com.concise.component.storage.common.partupload.MultiPartUploadInit;
-import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
-import com.concise.component.storage.common.registerbucket.StorageBucketManage;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
 import com.concise.component.storage.common.partupload.MultiPartUploadService;
 import com.concise.component.storage.minio.utils.MinioUtils;
 import org.springframework.stereotype.Component;

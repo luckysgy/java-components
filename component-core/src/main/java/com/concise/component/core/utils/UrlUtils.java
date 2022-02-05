@@ -28,4 +28,23 @@ public class UrlUtils {
         }
         return url;
     }
+
+    /**
+     * 添加url最后的斜杠
+     * 比如
+     *    输入 http://127.0.0.1:9000
+     *    输出 http://127.0.0.1:9000/
+     * @param url url
+     */
+    public static String addLastSlash(String url) {
+        if (StringUtils.isNull(url)) {
+            log.warn("removeLastSlash::url = [{}]",url);
+            return "";
+        }
+        boolean isExistLastSlash = url.endsWith("/");
+        if (!isExistLastSlash) {
+            return url + "/";
+        }
+        return url;
+    }
 }

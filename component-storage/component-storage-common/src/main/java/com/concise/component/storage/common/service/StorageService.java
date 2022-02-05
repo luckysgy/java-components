@@ -1,7 +1,7 @@
 package com.concise.component.storage.common.service;
 
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketManage;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +34,11 @@ public abstract class StorageService {
     public abstract <T extends StorageBucketManage> void uploadFile(Class<T> storageBucket, InputStream inputStream, String contentType, String objectName) throws Exception;
 
     /**
+     * 上传文件夹
+     */
+    public abstract <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath);
+
+    /**
      * 通过对象名获取永久url
      *
      * 1. oss
@@ -52,10 +57,7 @@ public abstract class StorageService {
      * 如果关掉了nginx代理, 则{@link UrlTypesEnum} 不生效,获取到的持久链接格式如下
      * eg: https://bucketName.oss-cn-beijing.aliyuncs.com/objectName
      *
-     * 2. minio
-     * 获取持久链接的前缀，就是url中的lan或者wan
-     *
-     * @apiNote 需要设置对象存储服务器上的桶为公共读，否则生成的链接是不可读额
+     * @apiNote 生成的url是一个有时效性的
      * @param objectName 对象名
      * @param urlTypesEnum url类型,内网访问还是外网访问
      * @return 对象的url

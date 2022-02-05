@@ -1,20 +1,24 @@
 package com.concise.component.storage.minio.service;
 
 import cn.hutool.core.util.RandomUtil;
-import com.concise.component.core.utils.StringUtils;
-import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
+import com.concise.component.core.exception.Assert;
+import com.concise.component.core.utils.MimetypesUtils;
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
+import com.concise.component.storage.common.service.StorageService;
+import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;
-import com.concise.component.storage.common.registerbucket.StorageBucketManage;
-import com.concise.component.storage.common.service.StorageService;
 import com.concise.component.storage.minio.utils.MinioUtils;
+import com.concise.component.util.file.FileUtils;
+import io.minio.http.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -50,16 +54,47 @@ public class MinioService extends StorageService {
     }
 
     @Override
+    public <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath) {
+        List<String> allFileList = FileUtils.getAllFile(dirPath, false, null);
+        dirPath = dirPath.replace("\\", "/");
+
+        if (!dirPath.endsWith("/")) {
+            dirPath = dirPath + "/";
+        }
+
+        for (String filePath : allFileList) {
+            String path = filePath.replace("\\", "/").replace(dirPath, "");
+
+            // 针对win路径进行处理
+            if (path.contains(":")) {
+                path = path.substring(path.lastIndexOf(":") + 1);
+            }
+
+            String objectName = path;
+            try (InputStream inputStream = new FileInputStream(filePath)) {
+                uploadFile(storageBucket, inputStream, MimetypesUtils.getInstance().getMimetype(FileUtils.getName(filePath)), objectName);
+            } catch (Exception e) {
+                log.error("error: ", e);
+            }
+        }
+    }
+
+    @Override
     public <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
         String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
         String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
-        if (UrlTypesEnum.LAN.equals(urlTypes)) {
-            String lan = storageProperties.getUrl().getLan();
-            return StringUtils.join(lan, "/", bucketName, "/", objectNamePre + objectName);
-        } else {
-            String wan = storageProperties.getUrl().getWan();
-            return StringUtils.join(wan, "/", bucketName, "/", objectNamePre + objectName);
+        String url = MinioUtils.getFileUrl(bucketName, objectNamePre + objectName, Method.GET);
+        Assert.notEmpty(url, "获取url失败");
+        if (storageProperties.getUrl().getProxy()) {
+            if (UrlTypesEnum.INTERNAL.equals(urlTypes)) {
+                String internal = storageProperties.getUrl().getInternal();
+                return internal + url.replace(storageProperties.getMinio().getEndpoint(), "");
+            } else {
+                String external = storageProperties.getUrl().getExternal();
+                return external + url.replace(storageProperties.getMinio().getEndpoint(), "");
+            }
         }
+        return url;
     }
 
     @Override

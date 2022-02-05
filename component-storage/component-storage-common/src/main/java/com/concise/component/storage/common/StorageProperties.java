@@ -1,9 +1,7 @@
 package com.concise.component.storage.common;
 
 import com.concise.component.core.utils.UrlUtils;
-import com.concise.component.storage.common.registerbucket.StorageBucketManage;
-import com.concise.component.storage.common.service.StorageService;
-import com.concise.component.storage.common.storagetype.StorageType;
+import com.concise.component.storage.common.storagetype.StorageEnableType;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,19 +29,11 @@ public class StorageProperties {
     @Autowired
     private ApplicationContext applicationContext;
 
-    /** 是否被初始化标志位 */
-    private static Boolean isInit = false;
-
     /**
      * 是否启用文件存储,默认不启动
      */
     private Boolean enable = false;
-    /**
-     * 是否使用一个桶
-     * 如果为true, 则使用minio / oss下面的bucketName
-     * 如果为false, 则使用实现 {@link StorageBucketManage#getBucketName()}  中的桶名
-     */
-    private Boolean isOneBucket = true;
+
     /**
      * 是否初始化桶
      */
@@ -70,8 +60,13 @@ public class StorageProperties {
 
     @PostConstruct
     public void init() {
-        url.setLan(UrlUtils.removeLastSlash(url.getLan()));
-        url.setWan(UrlUtils.removeLastSlash(url.getWan()));
+        url.setInternal(UrlUtils.addLastSlash(url.getInternal()));
+        url.setExternal(UrlUtils.addLastSlash(url.getExternal()));
+        if (StorageEnableType.isUsed(minio.getStorageType())) {
+            minio.setEndpoint(UrlUtils.addLastSlash(minio.getEndpoint()));
+        } else if (StorageEnableType.isUsed(oss.getStorageType())) {
+            oss.setEndpoint(UrlUtils.addLastSlash(oss.getEndpoint()));
+        }
     }
 
     /**
@@ -85,12 +80,31 @@ public class StorageProperties {
         /**
          * 内网url(局域网  Local Area Network) http://127.0.0.1
          */
-        protected String lan;
+        protected String internal;
 
         /**
          * 外网(广域网 Wide Area Network) url http://47.78.12.56
          */
-        protected String wan;
+        protected String external;
+
+        /**
+         * 是否通过nginx等第三方软件代理文件访问的url
+         * 代理的url, 格式为 internal(或者external) + 桶名称 + 文件路径前缀 + 文件路径 + (签名)
+         * eg: file1在demo桶下且路径为test/index.html, 则生成的代理url路径为
+         *      http://127.0.0.1:9000/demo/test/index.html
+         *
+         * 需要nginx的请求路径添加桶名
+         * @apiNote 路径前缀在这里配置{@link StorageBucketManage}
+         */
+        protected Boolean proxy = false;
+
+        public Boolean getProxy() {
+            return proxy;
+        }
+
+        public void setProxy(Boolean proxy) {
+            this.proxy = proxy;
+        }
 
         public int getExpiryTime() {
             return expiryTime;
@@ -101,22 +115,22 @@ public class StorageProperties {
             this.expiryTime = expiryTime;
         }
 
-        public String getLan() {
-            return lan;
+        public String getInternal() {
+            return internal;
         }
 
-        public void setLan(String lan) {
-            StorageConstants.URL_LAN = lan;
-            this.lan = lan;
+        public void setInternal(String internal) {
+            StorageConstants.URL_INTERNAL = internal;
+            this.internal = internal;
         }
 
-        public String getWan() {
-            return wan;
+        public String getExternal() {
+            return external;
         }
 
-        public void setWan(String wan) {
-            StorageConstants.URL_WAN = wan;
-            this.wan = wan;
+        public void setExternal(String external) {
+            StorageConstants.URL_EXTERNAL = external;
+            this.external = external;
         }
     }
 
@@ -128,13 +142,9 @@ public class StorageProperties {
         /**
          * 存储服务器的地址
          */
-        private String endpoint;
+        protected String endpoint;
 
-        private String bucketName;
-
-        public void setEndpoint(String endpoint) {
-            this.endpoint = endpoint;
-        }
+        protected String bucketName;
 
         /**
          * 获取存储类型
@@ -147,7 +157,7 @@ public class StorageProperties {
          * @return
          */
         public Boolean getEnable() {
-            return StorageType.isUsed(getStorageType());
+            return StorageEnableType.isUsed(getStorageType());
         }
     }
 
@@ -176,19 +186,6 @@ public class StorageProperties {
     public static class Oss extends ComponentConfig {
         private String accessKeyId;
         private String secretAccessKey;
-        /**
-         * 是否使能代理，如果使能nginx代理，则获取持久链接的前缀
-         * 就是url中的lan或者wan
-         *
-         * {@link StorageService#getFilePermanentUrl(Class, String, UrlTypes)}
-         */
-        private Proxy proxy = new Proxy();
-
-        @Data
-        public static class Proxy {
-            /** 是否使能代理 */
-            private Boolean enable = false;
-        }
 
         @Override
         public StorageTypesEnum getStorageType() {

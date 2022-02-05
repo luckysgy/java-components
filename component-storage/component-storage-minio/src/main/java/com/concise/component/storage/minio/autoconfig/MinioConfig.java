@@ -1,7 +1,7 @@
 package com.concise.component.storage.minio.autoconfig;
 
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
 import com.concise.component.storage.minio.client.CustomMinioClient;
 import com.concise.component.storage.minio.utils.MinioUtils;
 import io.minio.BucketExistsArgs;

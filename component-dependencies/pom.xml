@@ -96,6 +96,9 @@
         <!-- 常用的时间处理类库 -->
         <joda.time.version>2.9.9</joda.time.version>
         <commons-codec.version>1.15</commons-codec.version>
+
+        <!-- ini配置文件的读取 -->
+        <ini4j.version>0.5.4</ini4j.version>
     </properties>
 
     <description>
@@ -260,6 +263,14 @@
                 <version>${jmh-generator-annprocess.version}</version>
                 <!--<scope>provided</scope>-->
             </dependency>
+
+            <!-- ini配置文件的读取 -->
+            <dependency>
+                <groupId>org.ini4j</groupId>
+                <artifactId>ini4j</artifactId>
+                <version>${ini4j.version}</version>
+            </dependency>
+
 
             <!-- 配置文件敏感信息加密依赖 -->
             <dependency>

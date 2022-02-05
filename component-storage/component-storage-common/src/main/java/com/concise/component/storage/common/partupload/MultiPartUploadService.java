@@ -1,6 +1,6 @@
 package com.concise.component.storage.common.partupload;
 
-import com.concise.component.storage.common.registerbucket.StorageBucketManage;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
 
 import java.io.File;
 

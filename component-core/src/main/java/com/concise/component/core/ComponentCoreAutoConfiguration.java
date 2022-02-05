@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 
 import javax.annotation.PostConstruct;
 
@@ -12,6 +13,7 @@ import javax.annotation.PostConstruct;
  * @author shenguangyang
  * @date 2021-12-23 6:17
  */
+@Import(IniEnvRegistrar.class)
 @ComponentScan(basePackages = "com.concise.component.core",excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = DataSourceAutoConfiguration.class)
 })

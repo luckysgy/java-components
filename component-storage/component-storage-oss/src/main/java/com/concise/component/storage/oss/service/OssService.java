@@ -1,22 +1,25 @@
 package com.concise.component.storage.oss.service;
 
 import cn.hutool.core.util.RandomUtil;
+import com.concise.component.core.exception.Assert;
 import com.concise.component.core.exception.BizException;
-import com.concise.component.core.utils.StringUtils;
+import com.concise.component.core.utils.MimetypesUtils;
 import com.concise.component.storage.common.StorageProperties;
-import com.concise.component.storage.common.registerbucket.StorageBucketManage;
-import com.concise.component.storage.common.registerbucket.StorageBucketManageHandler;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManage;
+import com.concise.component.storage.common.registerbucketmanage.StorageBucketManageHandler;
 import com.concise.component.storage.common.service.StorageService;
 import com.concise.component.storage.common.storagetype.ConditionalOnStorageType;
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import com.concise.component.storage.oss.utils.OssUtils;
+import com.concise.component.util.file.FileUtils;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -55,26 +58,49 @@ public class OssService extends StorageService {
     }
 
     @Override
-    public <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypesEnum) {
+    public <T extends StorageBucketManage> void uploadDir(Class<T> storageBucket, String dirPath) {
+        List<String> allFileList = FileUtils.getAllFile(dirPath, false, null);
+        dirPath = dirPath.replace("\\", "/");
+
+        if (!dirPath.endsWith("/")) {
+            dirPath = dirPath + "/";
+        }
+
+        for (String filePath : allFileList) {
+            String path = filePath.replace("\\", "/").replace(dirPath, "");
+
+            // 针对win路径进行处理
+            if (path.contains(":")) {
+                path = path.substring(path.lastIndexOf(":") + 1);
+            }
+
+            String objectName = path;
+            try (InputStream inputStream = new FileInputStream(filePath)) {
+                uploadFile(storageBucket, inputStream, MimetypesUtils.getInstance().getMimetype(FileUtils.getName(filePath)), objectName);
+            } catch (Exception e) {
+                log.error("error: ", e);
+            }
+        }
+    }
+
+    @Override
+    public <T extends StorageBucketManage> String getFilePermanentUrl(Class<T> storageBucket, String objectName, UrlTypesEnum urlTypes) {
         String bucketName = StorageBucketManageHandler.getBucketName(storageBucket);
         String objectNamePre = StorageBucketManageHandler.getObjectNamePre(storageBucket);
-        StorageProperties.Oss oss = storageProperties.getOss();
-        Boolean enableProxy = oss.getProxy().getEnable();
-        // 使能oss代理
-        if (enableProxy) {
-            if (UrlTypesEnum.WAN.equals(urlTypesEnum)) {
-                String wan = storageProperties.getUrl().getWan();
-                return StringUtils.join(wan, "/", bucketName,"/",objectNamePre + objectName);
+        String url = OssUtils.getAccessURL(bucketName, objectNamePre + objectName);
+        Assert.notEmpty(url, "获取url失败");
+        if (storageProperties.getUrl().getProxy()) {
+            // 去掉桶名
+            url = url.replace(storageProperties.getOss().getBucketName() + ".", "");
+            if (UrlTypesEnum.INTERNAL.equals(urlTypes)) {
+                String internal = storageProperties.getUrl().getInternal();
+                return internal + storageProperties.getOss().getBucketName() + "/" + url.replace(storageProperties.getOss().getEndpoint(), "");
             } else {
-                String lan = storageProperties.getUrl().getLan();
-                return StringUtils.join(lan, "/", bucketName, "/", objectNamePre + objectName);
+                String external = storageProperties.getUrl().getExternal();
+                return external + storageProperties.getOss().getBucketName() + "/" + url.replace(storageProperties.getOss().getEndpoint(), "");
             }
-        } else {
-            String endpoint = oss.getEndpoint();
-            endpoint = endpoint.replace("https://", "")
-                    .replace("http://", "");
-            return StringUtils.join("https://", bucketName, ".", endpoint, "/", objectNamePre + objectName);
         }
+        return url;
     }
 
     @Override

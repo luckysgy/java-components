@@ -25,6 +25,11 @@
 
         <dependency>
             <groupId>com.concise</groupId>
+            <artifactId>component-util-file</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.concise</groupId>
             <artifactId>component-core</artifactId>
             <version>${project.version}</version>
         </dependency>

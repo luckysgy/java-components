@@ -1,4 +1,4 @@
-package com.concise.component.storage.common.registerbucket;
+package com.concise.component.storage.common.registerbucketmanage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
