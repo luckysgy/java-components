@@ -1,5 +1,6 @@
 package com.concise.component.core.exception;
 
+import cn.hutool.core.util.StrUtil;
 import com.concise.component.core.entity.response.ErrorResponseI;
 
 /**
@@ -16,6 +17,10 @@ public class BizException extends RuntimeException {
 
     public BizException(String message) {
         this.message = message;
+    }
+
+    public BizException(CharSequence template, Object... params) {
+        this.message = StrUtil.format(template, params);
     }
 
     public BizException(ErrorResponseI errorResponse) {
