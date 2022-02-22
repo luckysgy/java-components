@@ -109,16 +109,13 @@ public class LogAspect {
             saveLog(operLog);
 
             if (e != null) {
-                log.error("SysOperLog = {}", JSON.toJSONString(operLog));
+                log.error("{}", JSON.toJSONString(operLog));
                 return;
             }
-            log.info("SysOperLog = {}", JSON.toJSONString(operLog));
+            log.info("{}", JSON.toJSONString(operLog));
         }
         catch (Exception exp) {
-            // 记录本地异常日志
-            log.error("==前置通知异常==");
-            log.error("异常信息:{}", exp.getMessage());
-            exp.printStackTrace();
+            log.error("error: ", exp);
         }
     }
 
