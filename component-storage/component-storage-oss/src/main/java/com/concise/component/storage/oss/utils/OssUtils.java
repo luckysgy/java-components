@@ -3,7 +3,6 @@ package com.concise.component.storage.oss.utils;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.internal.OSSConstants;
 import com.aliyun.oss.model.*;
-
 import com.concise.component.core.exception.BizException;
 import com.concise.component.storage.common.StorageProperties;
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -181,6 +181,39 @@ public class OssUtils {
             throw new BizException("桶 " + bucketName + " 中不存在 " + objectName + "文件");
         }
         return object.getObjectContent();
+    }
+
+    /**
+     * 获取指定桶的执行路径下的所有文件
+     * @param bucketName
+     * @param pathPrefix
+     * @return
+     */
+    public static List<String> getFilePathList(String bucketName, String pathPrefix) {
+        List<String> filePathList = new ArrayList<>();
+        recursionGetFilePathList(bucketName, pathPrefix, filePathList);
+        return filePathList;
+    }
+
+    public static void recursionGetFilePathList(String bucketName, String pathPrefix, List<String> filePathList) {
+        // 构造ListObjectsRequest请求
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest(bucketName);
+        // Delimiter 设置为 “/” 时，罗列该文件夹下的文件
+        listObjectsRequest.setDelimiter("/");
+        // Prefix 设为某个文件夹名，罗列以此 Prefix 开头的文件
+        listObjectsRequest.setPrefix(pathPrefix);
+
+        ObjectListing listing = ossClient.listObjects(listObjectsRequest);
+        // 遍历所有Object:目录下的文件
+        for (OSSObjectSummary objectSummary : listing.getObjectSummaries()) {
+            if (objectSummary.getSize() > 0) {
+                String key = objectSummary.getKey();
+                filePathList.add(key);
+            }
+        }
+        for (String commonPrefix : listing.getCommonPrefixes()) {
+            recursionGetFilePathList(bucketName, commonPrefix, filePathList);
+        }
     }
 
     public static int deleteObjects(String bucketName, List<String> groupObjectNames) {

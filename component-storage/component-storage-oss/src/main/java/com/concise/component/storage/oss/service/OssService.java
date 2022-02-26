@@ -134,6 +134,17 @@ public class OssService implements StorageService {
     }
 
     @Override
+    public <T extends StorageManage> List<String> getFilePathList(Class<T> storageManage, String pathPrefix) {
+        String bucketName = StorageManageHandler.getBucketName(storageManage);
+        String objectNamePre = StorageManageHandler.getObjectNamePre(storageManage);
+
+        // 移除前后两个 /
+        pathPrefix = StringUtils.removeEnd(pathPrefix, "/");
+        pathPrefix = StringUtils.removeStart(pathPrefix, "/");
+        return OssUtils.getFilePathList(bucketName, objectNamePre + pathPrefix);
+    }
+
+    @Override
     public <T extends StorageManage> Boolean createBucket(Class<T> storageManage, Boolean randomSuffix) {
         String bucketName = StorageManageHandler.getBucketName(storageManage);
         try {
