@@ -2,7 +2,7 @@ package com.concise.component.core.domain;
 
 /**
  * 领域验证器
- * 当对领域实体赋值之后, 可以调用 validation 进行验证数据是否安全, 前提是实体类必须实现 {@link DomainValidation}
+ * 当对领域实体赋值之后, 可以调用 validation 进行验证数据是否安全, 前提是实体类必须实现 {@link Domain}
  * 类
  *
  * 实际业务经验:
@@ -18,10 +18,10 @@ package com.concise.component.core.domain;
  * @author shenguangyang
  * @date 2022-02-26 18:08
  */
-public interface DomainValidation {
-    static <T extends DomainValidation> T verify(T t) {
-        t.verify();
+public interface Domain {
+    static <T extends Domain> T validation(T t) {
+        t.validation();
         return t;
     }
-    void verify();
+    void validation();
 }
