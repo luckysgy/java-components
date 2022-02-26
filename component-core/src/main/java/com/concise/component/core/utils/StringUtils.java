@@ -439,6 +439,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 将字符串转为16禁制
+     * @param str 字符串
+     * @return 返回16进制字符串
+     */
+    public static String toHex(String str) {
+        StringBuilder stringBuilder = new StringBuilder();
+        char[] charArray = str.toCharArray();
+        for (char c : charArray) {
+            String charToHex = Integer.toHexString(c);
+            stringBuilder.append(charToHex).append(" ");
+        }
+        stringBuilder.delete(stringBuilder.lastIndexOf(" "), stringBuilder.length());
+        return stringBuilder.toString();
+    }
+
+    /**
      * 查找指定字符串是否匹配指定字符串列表中的任意一个字符串
      * 
      * @param str 指定字符串
