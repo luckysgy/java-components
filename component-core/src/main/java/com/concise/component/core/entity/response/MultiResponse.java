@@ -21,6 +21,9 @@ public class MultiResponse<T> extends BaseResponse {
 
     public static <T> MultiResponse<T> buildSuccess(Integer code, String message, Collection<T> data) {
         MultiResponse<T> response = new MultiResponse<>();
+        if (data == null) {
+            return buildSuccessResponse(response, code, EMPTY_COLLECTION_DATA, message);
+        }
         return buildSuccessResponse(response, code, data, message);
     }
 
@@ -33,13 +36,15 @@ public class MultiResponse<T> extends BaseResponse {
     }
 
     public static <T> MultiResponse<T> buildSuccess(Collection<T> data) {
-        return buildSuccess(null, null, data);
+        return buildSuccess(null, "success", data);
     }
 
 
     public static <T> MultiResponse<T> buildFailure(Integer errCode, String errMessage) {
         MultiResponse<T> response = new MultiResponse<>();
-        return buildFailureResponse(response, errCode, errMessage);
+        buildFailureResponse(response, errCode, errMessage);
+        response.put(getApiFormat().getDataAttributeName(), EMPTY_COLLECTION_DATA);
+        return response;
     }
 
     public static <T> MultiResponse<T> buildFailure(String errMessage) {

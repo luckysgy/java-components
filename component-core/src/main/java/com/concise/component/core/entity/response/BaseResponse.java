@@ -7,13 +7,18 @@ import com.concise.component.core.utils.StringUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.MDC;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author shenguangyang
  * @date 2021-09-08 19:25
  */
 public abstract class BaseResponse extends HashMap<String, Object> {
+    protected static final Map<String, Object> EMPTY_OBJECT_DATA = new HashMap<>();
+    protected static final List<Object> EMPTY_COLLECTION_DATA = new ArrayList<>();
     /**
      * 日志链路跟踪标识,表示当前请求
      */
@@ -61,9 +66,6 @@ public abstract class BaseResponse extends HashMap<String, Object> {
      */
     protected static <T extends BaseResponse> T buildSuccessResponse(T response, Integer code, Object data, String message) {
         ResponseFormatAbstract apiFormat = getApiFormat();
-        if (ObjectUtils.isNotEmpty(data)) {
-            response.put(apiFormat.getDataAttributeName(), data);
-        }
         setBuildSuccessCommonField(apiFormat, response, code, message);
         return response;
     }
