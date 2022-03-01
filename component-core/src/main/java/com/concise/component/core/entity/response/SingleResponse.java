@@ -39,10 +39,6 @@ public class SingleResponse<T> extends BaseResponse {
         return result ? buildSuccess(data) : buildFailure(errMessage);
     }
 
-    public static <T> SingleResponse<T> buildResult(boolean result, T data) {
-        return result ? buildSuccess(data) : buildFailure(BaseErrorResponse.FAILD);
-    }
-
     public static <T> SingleResponse<T> buildResult(boolean result, T data, ErrorResponseI errorResponseI) {
         return result ? buildSuccess(data) : buildFailure(errorResponseI);
     }
