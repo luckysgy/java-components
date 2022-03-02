@@ -13,6 +13,6 @@ import java.util.Collection;
 public class PageResponseData<T> implements Serializable {
     private Collection<T> list;
     private Long total;
-    private Long pageSize;
-    private Long pageNum;
+    private Integer pageSize;
+    private Integer pageNum;
 }

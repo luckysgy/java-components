@@ -49,7 +49,7 @@ public class PageResponse<T> extends BaseResponse {
         return buildFailure(errorResponseI.getCode(), errorResponseI.getMessage());
     }
 
-    public static <T> PageResponse<T> buildSuccess(Integer code, String message, Collection<T> data, long total, Long pageSize, Long pageNum) {
+    public static <T> PageResponse<T> buildSuccess(Integer code, String message, Collection<T> data, long total, Integer pageSize, Integer pageNum) {
         PageResponse<T> response = new PageResponse<>();
         PageResponseData<T> pageResponseData = new PageResponseData<>();
         pageResponseData.setPageNum(pageNum);
@@ -62,11 +62,11 @@ public class PageResponse<T> extends BaseResponse {
         return response;
     }
 
-    public static <T> PageResponse<T> buildSuccess(String message, Collection<T> data, long total, Long pageSize, Long pageNum) {
+    public static <T> PageResponse<T> buildSuccess(String message, Collection<T> data, long total, Integer pageSize, Integer pageNum) {
         return buildSuccess(null, message, data, total, pageSize, pageNum);
     }
 
-    public static <T> PageResponse<T> buildSuccess(Collection<T> data, long total, Long pageSize, Long pageNum) {
+    public static <T> PageResponse<T> buildSuccess(Collection<T> data, long total, Integer pageSize, Integer pageNum) {
         return buildSuccess(null, null, data, total, pageSize, pageNum);
     }
 }
