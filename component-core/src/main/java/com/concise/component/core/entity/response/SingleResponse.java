@@ -4,6 +4,8 @@ package com.concise.component.core.entity.response;
 import com.concise.component.core.entity.response.format.ResponseFormatAbstract;
 import com.concise.component.core.utils.StringUtils;
 
+import java.util.HashMap;
+
 /**
  * Response with single record to return
  * @author shenguangyang
@@ -23,6 +25,9 @@ public class SingleResponse<T> extends BaseResponse {
 
     public static <T> SingleResponse<T> buildSuccess(Integer code, String message, T data) {
         SingleResponse<T> response = new SingleResponse<>();
+        if (data == null) {
+            return buildSuccessResponse(response, code, EMPTY_OBJECT_DATA, message);
+        }
         return buildSuccessResponse(response, code, data, message);
     }
 
@@ -34,10 +39,6 @@ public class SingleResponse<T> extends BaseResponse {
         return result ? buildSuccess(data) : buildFailure(errMessage);
     }
 
-    public static <T> SingleResponse<T> buildResult(boolean result, T data) {
-        return result ? buildSuccess(data) : buildFailure(BaseErrorResponse.FAILD);
-    }
-
     public static <T> SingleResponse<T> buildResult(boolean result, T data, ErrorResponseI errorResponseI) {
         return result ? buildSuccess(data) : buildFailure(errorResponseI);
     }
@@ -47,13 +48,15 @@ public class SingleResponse<T> extends BaseResponse {
     }
 
     public static <T> SingleResponse<T> buildSuccess(T data) {
-        return buildSuccess(null, null, data);
+        return buildSuccess(null, "success", data);
     }
 
 
     public static <T> SingleResponse<T> buildFailure(Integer errCode, String errMessage) {
         SingleResponse<T> response = new SingleResponse<>();
-        return buildFailureResponse(response, errCode, errMessage);
+        buildFailureResponse(response, errCode, errMessage);
+        response.put(getApiFormat().getDataAttributeName(), EMPTY_OBJECT_DATA);
+        return response;
     }
 
     public static <T> SingleResponse<T> buildFailure(String errMessage) {

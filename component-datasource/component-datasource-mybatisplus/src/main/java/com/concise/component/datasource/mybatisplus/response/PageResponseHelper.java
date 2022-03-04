@@ -10,6 +10,7 @@ import com.concise.component.core.entity.response.PageResponse;
  */
 public class PageResponseHelper {
     public static <T> PageResponse<T> buildPage(IPage<T> page) {
-        return PageResponse.buildSuccess("操作成功", page.getRecords(), page.getTotal(), page.getSize(), page.getCurrent());
+        // return PageResponse.buildSuccess("操作成功", page.getRecords(), page.getTotal(), page.getSize(), page.getCurrent());
+        return null;
     }
 }
