@@ -1,10 +1,15 @@
 package com.concise.component.datasource.mybatisplus.utils;
 
+import com.concise.component.core.entity.response.PageResponse;
+import com.concise.component.core.utils.CollectionUtils;
 import com.concise.component.core.utils.SqlUtil;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.datasource.mybatisplus.entity.PageDomain;
 import com.concise.component.datasource.mybatisplus.entity.TableSupport;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 /**
  * 分页工具
@@ -24,19 +29,16 @@ public class PageUtil {
             PageHelper.startPage(pageNum, pageSize, orderBy);
         }
     }
-//
-//    /**
-//     * 响应请求分页数据
-//     */
-//    @SuppressWarnings({ "rawtypes", "unchecked" })
-//    public static <T> PageResponse<T> getDataTable(List<T> list) {
-//        PageResponse rspData = PageResponse.buildSuccess(list);
-//        rspData.setData(list);
-//        if (CollectionUtils.isEmpty(list)) {
-//            rspData.setTotal(0);
-//            return rspData;
-//        }
-//        rspData.setTotal(new PageInfo(list).getTotal());
-//        return rspData;
-//    }
+
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static <T> PageResponse<T> getDataTable(List<T> list) {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        long total = CollectionUtils.isEmpty(list) ? 0 : new PageInfo(list).getTotal();
+        return PageResponse.buildSuccess(list, total, pageNum, pageSize);
+    }
 }
