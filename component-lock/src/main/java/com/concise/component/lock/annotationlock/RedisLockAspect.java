@@ -71,7 +71,7 @@ public class RedisLockAspect {
                 if (ifLock) {
                     output = joinPoint.proceed();
                 } else {
-                    Response apiResult = Response.buildFailure(400L,"服务繁忙, 请稍后再试!!!");
+                    Response apiResult = Response.buildFailure(400,"服务繁忙, 请稍后再试!!!");
                     log.debug("线程[{}]未获取到锁，目前锁详情信息为：{}", Thread.currentThread().getName(), lock);
                     return apiResult;
                 }
