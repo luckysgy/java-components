@@ -3,6 +3,9 @@ package com.concise.component.core.thread;
 import com.concise.component.core.constant.ComponentCoreConstants;
 import lombok.Data;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * 应用上下文
  * @author shenguangyang
@@ -15,4 +18,8 @@ public class AppContext {
      * @see ComponentCoreConstants#API_RESPONSE_FORMAT_HEADER
      */
     private String apiFormatTag = "";
+    /**
+     * 扩展数据
+     */
+    private Map<String, Object> extendData = new ConcurrentHashMap<>();
 }
