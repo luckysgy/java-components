@@ -1,9 +1,8 @@
 package com.concise.component.core.entity.response.format;
 
-import com.concise.component.core.thread.AppContext;
-import com.concise.component.core.thread.AppTtl;
+import com.concise.component.core.thread.RequestContext;
+import com.concise.component.core.thread.RequestTtl;
 import com.concise.component.core.utils.StringUtils;
-import lombok.val;
 import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +46,12 @@ public class ResponseFormatHandler {
      * @return
      */
     public static ResponseFormatAbstract getFormat() {
-        AppContext appContext = AppTtl.getAppContext();
-        if (ObjectUtils.anyNull(appContext)) {
-            appContext = new AppContext();
+        RequestContext requestContext = RequestTtl.get();
+        if (ObjectUtils.anyNull(requestContext)) {
+            requestContext = new RequestContext();
             log.warn("AppContext is null, Please create this context in the interceptor");
         }
-        String apiFormatTag = appContext.getApiFormatTag();
+        String apiFormatTag = requestContext.getApiFormatTag();
         // return getFormat(request.getHeader(RequestConstants.API_RESPONSE_FORMAT_HEADER));
         return getFormat(apiFormatTag);
     }
