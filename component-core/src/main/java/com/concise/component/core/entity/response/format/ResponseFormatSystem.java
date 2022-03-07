@@ -14,6 +14,11 @@ public class ResponseFormatSystem extends ResponseFormatAbstract {
     }
 
     @Override
+    String successAttributeName() {
+        return "success";
+    }
+
+    @Override
     String messageAttributeName() {
         return "message";
     }

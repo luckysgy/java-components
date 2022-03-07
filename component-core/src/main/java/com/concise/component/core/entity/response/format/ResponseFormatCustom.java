@@ -15,6 +15,11 @@ public class ResponseFormatCustom extends ResponseFormatAbstract {
     }
 
     @Override
+    String successAttributeName() {
+        return "success";
+    }
+
+    @Override
     String messageAttributeName() {
         return "errMsg";
     }

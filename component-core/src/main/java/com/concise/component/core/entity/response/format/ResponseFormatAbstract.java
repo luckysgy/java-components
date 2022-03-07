@@ -16,6 +16,8 @@ import com.concise.component.core.constant.ComponentCoreConstants;
 public abstract class ResponseFormatAbstract {
     /** 值为返回给前端的json对应的状态码属性名 */
     abstract String codeAttributeName();
+    /** 值为返回给前端的json对应的success属性名 */
+    abstract String successAttributeName();
     /** 值为返回给前端的json对应的消息属性名 */
     abstract String messageAttributeName();
     /** 值为返回给前端的json对应的数据属性名 */
@@ -32,6 +34,10 @@ public abstract class ResponseFormatAbstract {
 
     public String getCodeAttributeName() {
         return this.codeAttributeName();
+    }
+
+    public String getSuccessAttributeName() {
+        return this.successAttributeName();
     }
 
     public String getMessageAttributeName() {

@@ -32,6 +32,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
     protected static String spanIdKey = "default";
 
     protected String codeAttributeName;
+    protected String successAttributeName;
     protected String messageAttributeName;
     protected String dataAttributeName;
     protected String pageDataAttributeName;
@@ -42,7 +43,6 @@ public abstract class BaseResponse extends HashMap<String, Object> {
 
     /**
      * 获取api响应格式
-     * @return
      */
     public static ResponseFormatAbstract getApiFormat() {
         return ResponseFormatHandler.getFormat();
@@ -54,6 +54,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
      */
     protected static <T extends BaseResponse> void initResponseTag(ResponseFormatAbstract apiFormat, T response) {
         response.setCodeAttributeName(apiFormat.getCodeAttributeName());
+        response.setSuccessAttributeName(apiFormat.getSuccessAttributeName());
         response.setDataAttributeName(apiFormat.getDataAttributeName());
         response.setMessageAttributeName(apiFormat.getMessageAttributeName());
         response.setDefaultErrorCodeAttributeValue(apiFormat.getDefaultErrorCodeAttributeValue());
@@ -67,6 +68,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
     protected static <T extends BaseResponse> T buildSuccessResponse(T response, Integer code, Object data, String message) {
         ResponseFormatAbstract apiFormat = getApiFormat();
         setBuildSuccessCommonField(apiFormat, response, code, message);
+        response.put(apiFormat.getDataAttributeName(), data);
         return response;
     }
 
@@ -78,6 +80,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
         initResponseTag(apiFormat, response);
         response.put(TRACE_ID, MDC.get(traceIdKey));
         response.put(SPAN_ID, MDC.get(spanIdKey));
+        response.put(apiFormat.getSuccessAttributeName(), true);
     }
 
     /**
@@ -87,6 +90,7 @@ public abstract class BaseResponse extends HashMap<String, Object> {
         ResponseFormatAbstract apiFormat = getApiFormat();
         response.put(apiFormat.getCodeAttributeName(), errCode == null ? apiFormat.getDefaultErrorCodeAttributeValue() : errCode);
         response.put(apiFormat.getMessageAttributeName(), errMessage);
+        response.put(apiFormat.getSuccessAttributeName(), false);
         initResponseTag(apiFormat, response);
         response.put(TRACE_ID, MDC.get(traceIdKey));
         response.put(SPAN_ID, MDC.get(spanIdKey));
@@ -123,6 +127,14 @@ public abstract class BaseResponse extends HashMap<String, Object> {
         }
         ResponseFormatAbstract apiFormat = getApiFormat();
         return get(apiFormat.getCodeAttributeName()).equals(apiFormat.getDefaultSuccessCodeAttributeValue());
+    }
+
+    public String getSuccessAttributeName() {
+        return successAttributeName;
+    }
+
+    public void setSuccessAttributeName(String successAttributeName) {
+        this.successAttributeName = successAttributeName;
     }
 
     public String getCodeAttributeName() {

@@ -32,21 +32,8 @@ public class Response extends BaseResponse {
      */
     public Response(ResponseFormatAbstract format, Integer code, String msg) {
         super.put(format.getCodeAttributeName(), code);
-        super.put(format.getMessageAttributeName(), msg);
-        super.put(TRACE_ID, MDC.get(traceIdKey));
-        super.put(SPAN_ID, MDC.get(spanIdKey));
-    }
-
-    /**
-     * 初始化一个新创建的 AjaxResult 对象
-     *
-     * @param code 状态码
-     * @param msg 返回内容
-     */
-    public Response(ResponseFormatAbstract format, Number code, String msg) {
-        super.put(format.getCodeAttributeName(), code);
-        if (StringUtils.isNotNull(msg)) {
-            super.put(format.getMessageAttributeName(), msg);
+        if (StringUtils.isEmpty(msg)) {
+            super.put(format.getMessageAttributeName(), "success");
         }
         super.put(TRACE_ID, MDC.get(traceIdKey));
         super.put(SPAN_ID, MDC.get(spanIdKey));
@@ -120,10 +107,10 @@ public class Response extends BaseResponse {
      * @param msg 返回内容
      * @return 警告消息
      */
-    public static Response buildFailure(Number code, String msg) {
+    public static Response buildFailure(Integer code, String msg) {
         ResponseFormatAbstract apiFormat = getApiFormat();
         Response response = new Response(apiFormat, code == null ? apiFormat.getDefaultErrorCodeAttributeValue() : code, msg);
-        initResponseTag(apiFormat, response);
+        buildFailureResponse(response, code, msg);
         return response;
     }
 }

@@ -221,6 +221,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(PreAuthorizeException.class)
     public Response preAuthorizeException(PreAuthorizeException e) {
-        return Response.buildFailure(403L,"没有权限，请联系管理员授权");
+        return Response.buildFailure(403,"没有权限，请联系管理员授权");
     }
 }
