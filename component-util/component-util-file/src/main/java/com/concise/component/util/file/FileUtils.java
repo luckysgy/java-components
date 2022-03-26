@@ -7,24 +7,18 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import sun.net.www.protocol.file.FileURLConnection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
 /**
@@ -64,6 +58,20 @@ public class FileUtils {
     }
 
     /**
+     * 将win路径转成linux路径格式
+     * eg: E:\mnt\test ===> /mnt/test
+     * @param winPath win路径
+     * @return linux路径格式
+     */
+    public static String winToLinuxForPath(String winPath) {
+        if (winPath.contains(":")) {
+            return winPath.substring(2).replace("\\", "/");
+        } else {
+            return winPath.replace("\\", "/");
+        }
+    }
+
+    /**
      * 创建文件
      * @param path  全路径 指向文件
      */
@@ -93,19 +101,38 @@ public class FileUtils {
      *
      * @param is
      *            输入流
-     * @param filePath
-     *            文件保存目录路径
-     * @throws IOException
+     * @param file
+     *            文件
      */
-    public static void writeToFile(InputStream is, String filePath) throws IOException {
-        OutputStream os = new FileOutputStream(filePath);
-        int len = 8192;
-        byte[] buffer = new byte[len];
-        while ((len = is.read(buffer, 0, len)) != -1) {
-            os.write(buffer, 0, len);
+    public static void writeFile(InputStream is, File file) throws Exception{
+        OutputStream os = null;
+        FileOutputStream fos = null;
+        try {
+            if (file == null) {
+                return;
+            }
+            fos = new FileOutputStream(file);
+            //推荐使用字节流读取，因为虽然读取的是文件，如果是 .exe, .c 这种文件，用字符流读取会有乱码
+            os = new BufferedOutputStream(fos);
+            //这里用小数组读取，使用file.length()来一次性读取可能会出错（亲身试验）
+            byte[] bytes = new byte[2048 * 1024];
+            int len;
+            while((len = is.read(bytes)) != -1) {
+                os.write(bytes, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (os != null) {
+                os.close();
+            }
+            if (is != null) {
+                is.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
         }
-        os.close();
-        is.close();
     }
 
     /**
@@ -308,14 +335,16 @@ public class FileUtils {
      * @param filePath 文件
      */
     public static boolean deleteFile(String filePath) {
-        boolean flag = false;
         File file = new File(filePath);
         // 路径为文件且不为空则进行删除
         if (file.isFile() && file.exists()) {
-            file.delete();
-            flag = true;
+            if (!file.delete()) {
+                log.warn("delete file [{}] fail", filePath);
+                return false;
+            }
+            return true;
         }
-        return flag;
+        return true;
     }
 
     /**

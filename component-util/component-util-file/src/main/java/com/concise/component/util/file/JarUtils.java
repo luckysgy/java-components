@@ -4,11 +4,14 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.concise.component.core.PackageMark;
 import com.concise.component.core.utils.OSInfo;
+import com.concise.component.core.utils.StringUtils;
+import com.concise.component.core.utils.UrlUtils;
 import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
@@ -67,34 +70,67 @@ public class JarUtils {
     }
 
     /**
+     * 从jar包中的classes拷贝数据
+     * @param targetDirPathFromLocal 来自于本地的目标目录路径
+     * @param packageMarkClass 包标记类, PackageMark子类所在的包中数据将被拷贝到指定目录, 不拷贝class文件
+     */
+    public static void copyDataFromClasses(String targetDirPathFromLocal, Class<? extends PackageMark> packageMarkClass) {
+        copyDir(true, "", targetDirPathFromLocal, packageMarkClass);
+    }
+
+    /**
+     * 从jar包中的lib中拷贝数据
+     * @param libName jar包中的lib名称, eg： component-util-file-1.0.0.jar
+     * @param targetDirPathFromLocal 来自于本地的目标目录路径
+     * @param packageMarkClass 包标记类, PackageMark子类所在的包中数据将被拷贝到指定目录, 不拷贝class文件
+     */
+    public static void copyDataFromLib(String libName, String targetDirPathFromLocal, Class<? extends PackageMark> packageMarkClass) {
+        copyDir(false, libName, targetDirPathFromLocal, packageMarkClass);
+    }
+
+
+    /**
      * 拷贝目录
+     *
+     * maven需要配置资源, 具体配置方式请看 pom.xml
+     * @param isCurrentApp 是否拷贝调用方所在模块中的数据文件夹
+     * @param libName 当isCurrentApp为false时候, 需要传入依赖的lib名称 eg： component-util-file-1.0.0.jar
      * @param targetDirPathFromLocal 来自于本地的目标目录路径
      */
-    public static void copyDir(String targetDirPathFromLocal, Class<? extends PackageMark> packageMarkClass) {
+    private static void copyDir(boolean isCurrentApp, String libName, String targetDirPathFromLocal, Class<? extends PackageMark> packageMarkClass) {
         try {
+            String currentJarPath = JarUtils.getCurrentJarPath();
+            targetDirPathFromLocal = FileUtils.winToLinuxForPath(targetDirPathFromLocal);
+            targetDirPathFromLocal = UrlUtils.addLastSlash(targetDirPathFromLocal);
+
+            String packagePath = packageMarkClass.getName().replace(".", "/")
+                    .replace(packageMarkClass.getSimpleName(), "");
             if (!JarUtils.isRunningInJar()) {
                 URL url = packageMarkClass.getResource("");
                 if (url == null) {
                     throw new RuntimeException("aClass.getResource(\"\") == null");
                 }
                 String path = url.getPath();
-                path = path.replace("/", File.separator);
                 if (OSInfo.isWindows()) {
                     path = path.substring(1);
                 }
+                path = FileUtils.winToLinuxForPath(path);
                 List<File> allFile = FileUtil.loopFiles(path);
-
-                String packagePath = packageMarkClass.getName().replace(".", File.separator);
 
                 for (File srcFile : allFile) {
                     String filePath = srcFile.getPath();
+                    filePath = FileUtils.winToLinuxForPath(filePath);
+                    // 排除class文件
+                    if (filePath.endsWith(".class")) {
+                        continue;
+                    }
                     // fileRelativelyPath 是相对路径
-                    String fileRelativelyPath = filePath.replace(path, "").replace(packagePath, "");
-                    String fileAbsolutePath = targetDirPathFromLocal + File.separator + fileRelativelyPath;
-                    String prePath = fileAbsolutePath.substring(0, fileAbsolutePath.lastIndexOf(File.separator));
+                    String targetFileRelativelyPath = filePath.replace(path, "").replace(packagePath, "");
+                    String targetFileAbsolutePath = targetDirPathFromLocal + targetFileRelativelyPath;
+                    String targetDirPath = targetFileAbsolutePath.substring(0, targetFileAbsolutePath.lastIndexOf("/"));
 
-                    if (StrUtil.isNotEmpty(prePath)) {
-                        File preDir = new File(prePath);
+                    if (StrUtil.isNotEmpty(targetDirPath)) {
+                        File preDir = new File(targetDirPath);
                         if (!preDir.exists()) {
                             if (!preDir.mkdirs()) {
                                 throw new RuntimeException("create dir fail: dirPath: " + preDir.getPath());
@@ -102,47 +138,90 @@ public class JarUtils {
 
                         }
                     }
-                    File targetFile = new File(fileAbsolutePath);
+                    File targetFile = new File(targetFileAbsolutePath);
                     Files.copy(srcFile, targetFile);
                 }
             } else {
-                System.out.println("运行在非jar中");
-                String currentJarPath = JarUtils.getCurrentJarPath();
-                JarFile jarFile = new JarFile(currentJarPath);
-                Enumeration<JarEntry> entries = jarFile.entries();
-                String currentJarPath1 = getCurrentJarPath();
-                while (entries.hasMoreElements()) {
-                    JarEntry entry = entries.nextElement();
-                    String entryName = entry.getName();
-//                    if (entryName.contains("BOOT-INF/lib/" + jarName)) {
-//                        InputStream inputStream = jarFile.getInputStream(entry);
-//                        File file = new File(tmpLibJarPath);
-//                        writeFile(inputStream, file);
-//                        break;
-//                    }
-                    System.out.println(entryName);
+                if (isCurrentApp) {
+                    copyClassesToLocal(currentJarPath, packagePath, targetDirPathFromLocal);
+                } else {
+                    String libPath = copyLibToLocal(currentJarPath, libName, targetDirPathFromLocal);
+                    if (StringUtils.isEmpty(libPath)) {
+                        log.warn("copyLibInJarToLocal return path is empty");
+                        return;
+                    }
+                    copyClassesToLocal(libPath, packagePath, targetDirPathFromLocal);
+                    FileUtils.deleteFile(libPath);
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
-    private static void writeFile(InputStream is, File file) throws Exception{
-        if(file != null){
-            //推荐使用字节流读取，因为虽然读取的是文件，如果是 .exe, .c 这种文件，用字符流读取会有乱码
-            OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-            //这里用小数组读取，使用file.length()来一次性读取可能会出错（亲身试验）
-            byte[] bytes = new byte[2048 * 1024];
-            int len;
-            while((len = is.read(bytes)) != -1) {
-                os.write(bytes, 0, len);
+    /**
+     * 拷贝jar包中某个lib
+     * @param jarPath jar包路径
+     * @param libName jar包中的lib名称, eg: component-util-file-1.0.0.jar
+     * @param targetDirPathFromLocal 拷贝到的本地目录
+     * @return 路径
+     */
+    private static String copyLibToLocal(String jarPath, String libName, String targetDirPathFromLocal) throws Exception {
+        targetDirPathFromLocal = UrlUtils.addLastSlash(targetDirPathFromLocal);
+        String targetLibPath = targetDirPathFromLocal + System.currentTimeMillis() + "-" + libName;
+        try (JarFile jarFile = new JarFile(jarPath)) {
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String entryName = entry.getName();
+                // 拷贝其他模块中的数据文件
+                if (entryName.contains("BOOT-INF/lib/" + libName)) {
+                    InputStream inputStream = jarFile.getInputStream(entry);
+                    File targetLibFile = new File(targetLibPath);
+                    FileUtils.writeFile(inputStream, targetLibFile);
+                    return targetLibPath;
+                }
             }
-            os.close();
         }
 
+        return "";
+    }
+    /**
+     * 拷贝jar包中某个目录到本地, Classes表示的是jar包中 src/java下的所有文件
+     * @param jarPath jar包路径
+     * @param packagePath 拷贝的目录所在包路径
+     * @param targetDirPathFromLocal 拷贝到本地的目标路径
+     */
+    private static void copyClassesToLocal(String jarPath, String packagePath, String targetDirPathFromLocal) throws Exception {
+        try (JarFile jarFile = new JarFile(jarPath)) {
+            Enumeration<JarEntry> entries = jarFile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                String entryName = entry.getName();
+
+                String targetFileRelativelyPath = entryName.replace("BOOT-INF/classes/", "")
+                        .replace(packagePath, "");
+                String targetFileAbsolutePath = targetDirPathFromLocal + targetFileRelativelyPath;
+                String targetDirPath = targetFileAbsolutePath.substring(0, targetFileAbsolutePath.lastIndexOf("/"));
+                // entryName.contains("BOOT-INF/classes/" + packagePath
+                if (entryName.contains(packagePath) && entry.getSize() > 0) {
+                    if (entryName.endsWith(".class")) {
+                        continue;
+                    }
+                    File preDirFile = new File(targetDirPath);
+                    if (!preDirFile.exists()) {
+                        FileUtils.mkdirs(preDirFile);
+                        log.debug("create dir: {}", targetDirPath);
+                    }
+
+                    File file = new File(targetFileAbsolutePath);
+                    InputStream inputStream = jarFile.getInputStream(entry);
+                    log.debug("targetFileAbsolutePath: {}, entrySize: {}", targetFileAbsolutePath, entry.getSize());
+                    FileUtils.writeFile(inputStream, file);
+                }
+                //System.out.println(entryName);
+            }
+        }
     }
 
     public static void main(String[] args) {
