@@ -1,4 +1,4 @@
-package com.concise.component.lib.common;
+package com.concise.component.core;
 
 /**
  * 包标记, 什么也不做, 但需要有具体的实现类, 在具体平台库中实现

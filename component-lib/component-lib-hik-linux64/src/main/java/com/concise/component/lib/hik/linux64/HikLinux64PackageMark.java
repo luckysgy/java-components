@@ -1,7 +1,7 @@
 package com.concise.component.lib.hik.linux64;
 
 
-import com.concise.component.lib.common.PackageMark;
+import com.concise.component.core.PackageMark;
 
 /**
  * CH-HCNetSDKV6.1.6.45_build20210302_linux64_20210428163105

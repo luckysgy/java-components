@@ -1,6 +1,6 @@
 package com.concise.component.lib.hik.win64;
 
-import com.concise.component.lib.common.PackageMark;
+import com.concise.component.core.PackageMark;
 
 /**
  * CH-HCNetSDKV6.1.6.45_build20210302_win64_20210508181836

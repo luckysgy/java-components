@@ -1,4 +1,4 @@
-package com.concise.component.lib.common;
+package com.concise.component.core.utils;
 
 /**
  * 操作系统类
