@@ -1,5 +1,6 @@
-package com.concise.component.util.file;
+package com.concise.component.core.utils;
 
+import com.concise.component.core.utils.file.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

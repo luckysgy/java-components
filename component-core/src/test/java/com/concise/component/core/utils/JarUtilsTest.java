@@ -1,6 +1,7 @@
-package com.concise.component.util.file;
+package com.concise.component.core.utils;
 
-import com.concise.component.util.test.data1.DataPackageMark;
+import com.concise.component.core.utils.file.JarUtils;
+import com.concise.component.core.test.data1.DataPackageMark;
 import org.junit.jupiter.api.Test;
 
 /**

@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.concise.component.core.exception.BizException;
 import com.concise.component.lib.common.LibConstant;
 import com.concise.component.core.utils.OSInfo;
-import com.concise.component.util.file.JarUtils;
+import com.concise.component.core.utils.file.JarUtils;
 import com.google.common.io.Files;
 
 import java.io.*;

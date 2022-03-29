@@ -1,4 +1,4 @@
-package com.concise.component.util.file;
+package com.concise.component.core.utils.file;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;

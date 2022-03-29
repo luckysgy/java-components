@@ -13,7 +13,7 @@ import com.concise.component.storage.common.storagetype.ConditionalOnStorageType
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import com.concise.component.storage.oss.utils.OssUtils;
-import com.concise.component.util.file.FileUtils;
+import com.concise.component.core.utils.file.FileUtils;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

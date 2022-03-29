@@ -12,7 +12,7 @@ import com.concise.component.storage.common.storagetype.ConditionalOnStorageType
 import com.concise.component.storage.common.storagetype.StorageTypesEnum;
 import com.concise.component.storage.common.url.UrlTypesEnum;
 import com.concise.component.storage.minio.utils.MinioUtils;
-import com.concise.component.util.file.FileUtils;
+import com.concise.component.core.utils.file.FileUtils;
 import io.minio.http.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

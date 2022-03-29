@@ -1,4 +1,4 @@
-package com.concise.component.util.test.data1;
+package com.concise.component.core.test.data1;
 
 import com.concise.component.core.PackageMark;
 

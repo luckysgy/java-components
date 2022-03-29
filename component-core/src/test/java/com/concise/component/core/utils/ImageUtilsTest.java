@@ -1,11 +1,10 @@
-package com.concise.component.util.file;
+package com.concise.component.core.utils;
 
+import com.concise.component.core.utils.file.ImageUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author shenguangyang
