@@ -1,8 +1,10 @@
 package com.concise.component.core;
 
+import com.concise.component.core.thread.ThreadPoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
@@ -14,6 +16,7 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-23 6:17
  */
 @Import(IniEnvRegistrar.class)
+@EnableConfigurationProperties({ThreadPoolProperties.class})
 @ComponentScan(basePackages = "com.concise.component.core",excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = DataSourceAutoConfiguration.class)
 })

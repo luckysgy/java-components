@@ -1,0 +1,11 @@
+# 线程池配置
+threadPool:
+  # 核心线程数, 默认2
+  corePoolSize: 2
+  # 最大线程数, 默认cpu核数 * 2
+  maxPoolSize: 20
+  # 队列数
+  queueCapacity: 100
+  # 当线程空闲时间达到keepAliveTime, 该线程会退出
+  keepAliveSeconds: 60
+
