@@ -3,6 +3,7 @@ package com.concise.component.datasource.mybatisplus.config;
 
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.github.yitter.idgen.YitIdHelper;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
  * @date 2021/6/19 20:49
  */
 @Component
+@ConditionalOnExpression("${mybatis-plus.customIdGenerator.enableYitId:false}")
 public class CustomIdGenerator implements IdentifierGenerator {
     @Override
     public Long nextId(Object entity) {
