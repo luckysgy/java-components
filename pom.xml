@@ -24,6 +24,7 @@
         <module>component-feign</module>
         <module>component-lib</module>
         <module>component-javacv</module>
+        <module>component-knife4j</module>
     </modules>
 
     <properties>

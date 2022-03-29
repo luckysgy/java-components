@@ -115,6 +115,11 @@
             </dependency>
             <dependency>
                 <groupId>com.concise</groupId>
+                <artifactId>component-knife4j</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.concise</groupId>
                 <artifactId>component-cache-redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
