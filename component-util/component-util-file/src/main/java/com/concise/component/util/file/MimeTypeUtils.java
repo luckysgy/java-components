@@ -3,7 +3,7 @@ package com.concise.component.util.file;
 /**
  * 媒体类型工具类
  * 
- * @author ruoyi
+ * @author shenguangyang
  */
 public class MimeTypeUtils {
     public static final String IMAGE_PNG = "image/png";

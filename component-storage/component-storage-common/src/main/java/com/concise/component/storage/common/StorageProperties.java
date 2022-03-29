@@ -60,12 +60,12 @@ public class StorageProperties {
 
     @PostConstruct
     public void init() {
-        url.setInternal(UrlUtils.addLastSlash(url.getInternal()));
-        url.setExternal(UrlUtils.addLastSlash(url.getExternal()));
+        url.setInternal(UrlUtils.addEndSlash(url.getInternal()));
+        url.setExternal(UrlUtils.addEndSlash(url.getExternal()));
         if (StorageEnableType.isUsed(minio.getStorageType())) {
-            minio.setEndpoint(UrlUtils.addLastSlash(minio.getEndpoint()));
+            minio.setEndpoint(UrlUtils.addEndSlash(minio.getEndpoint()));
         } else if (StorageEnableType.isUsed(oss.getStorageType())) {
-            oss.setEndpoint(UrlUtils.addLastSlash(oss.getEndpoint()));
+            oss.setEndpoint(UrlUtils.addEndSlash(oss.getEndpoint()));
         }
     }
 

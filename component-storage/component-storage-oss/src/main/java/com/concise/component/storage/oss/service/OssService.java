@@ -3,7 +3,7 @@ package com.concise.component.storage.oss.service;
 import cn.hutool.core.util.RandomUtil;
 import com.concise.component.core.exception.Assert;
 import com.concise.component.core.exception.BizException;
-import com.concise.component.core.utils.MimetypesUtils;
+import com.concise.component.core.utils.file.MimetypesUtils;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.storage.common.StorageProperties;
 import com.concise.component.storage.common.registerstoragemanage.StorageManage;

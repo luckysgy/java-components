@@ -101,7 +101,7 @@ public class JarUtils {
         try {
             String currentJarPath = JarUtils.getCurrentJarPath();
             targetDirPathFromLocal = FileUtils.winToLinuxForPath(targetDirPathFromLocal);
-            targetDirPathFromLocal = UrlUtils.addLastSlash(targetDirPathFromLocal);
+            targetDirPathFromLocal = UrlUtils.addEndSlash(targetDirPathFromLocal);
 
             String packagePath = packageMarkClass.getName().replace(".", "/")
                     .replace(packageMarkClass.getSimpleName(), "");
@@ -167,7 +167,7 @@ public class JarUtils {
      * @return 路径
      */
     private static String copyLibToLocal(String jarPath, String libName, String targetDirPathFromLocal) throws Exception {
-        targetDirPathFromLocal = UrlUtils.addLastSlash(targetDirPathFromLocal);
+        targetDirPathFromLocal = UrlUtils.addEndSlash(targetDirPathFromLocal);
         String targetLibPath = targetDirPathFromLocal + System.currentTimeMillis() + "-" + libName;
         try (JarFile jarFile = new JarFile(jarPath)) {
             Enumeration<JarEntry> entries = jarFile.entries();

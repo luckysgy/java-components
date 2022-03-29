@@ -1,5 +1,6 @@
-package com.concise.component.core.utils;
+package com.concise.component.core.utils.file;
 
+import com.concise.component.core.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

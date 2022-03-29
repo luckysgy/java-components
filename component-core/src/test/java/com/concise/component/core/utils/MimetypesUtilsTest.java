@@ -1,5 +1,6 @@
 package com.concise.component.core.utils;
 
+import com.concise.component.core.utils.file.MimetypesUtils;
 import org.junit.jupiter.api.Test;
 
 /**
