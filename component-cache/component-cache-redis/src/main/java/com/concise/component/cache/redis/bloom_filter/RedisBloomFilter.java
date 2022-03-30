@@ -1,14 +1,13 @@
-package com.concise.component.cache.redis;
+package com.concise.component.cache.redis.bloom_filter;
 
 import com.google.common.hash.Funnels;
 import com.google.common.hash.Hashing;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -20,17 +19,9 @@ import java.util.List;
  * @author shenguangyang
  * @date 2021/8/1 10:07
  */
-@ConfigurationProperties("bloom.filter")
-@Component
+@Service
 public class RedisBloomFilter {
-    /**
-     * 预计数据总量
-     */
-    private long expectedInsertions;
-    /**
-     * 容错率
-     */
-    private double fpp;
+
     /**
      * 二进制向量大小
      */
@@ -39,13 +30,12 @@ public class RedisBloomFilter {
      * 哈希算法数量
      */
     private int numHashFunctions;
-    /**
-     * redis中的key
-     */
-    private final String key = "gy_bloom_filter";
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private RedisBloomFilterProperties redisBloomFilterProperties;
 
     /**
      * 初始化
@@ -57,7 +47,7 @@ public class RedisBloomFilter {
     }
 
     // 向布隆过滤器中put
-    public void put(String value){
+    public void put(String key, String value){
         long[] indexs = getIndexs(value);
         // 将对应下标改为1
         redisTemplate.executePipelined(new RedisCallback<Object>() {
@@ -79,7 +69,7 @@ public class RedisBloomFilter {
      * @param value
      * @return 是返回true , 否返回false
      */
-    public boolean isExist(String value){
+    public boolean isExist(String key, String value){
         long[] indexs = getIndexs(value);
         // 只要有一个bit位为0就表示不可能存在
         List list = redisTemplate.executePipelined(new RedisCallback<Object>() {
@@ -131,10 +121,10 @@ public class RedisBloomFilter {
      * @return
      */
     private long optimalNumOfBits(){
-        if (fpp == 0) {
-            fpp = Double.MIN_VALUE;
+        if (redisBloomFilterProperties.getFpp() == 0) {
+            redisBloomFilterProperties.setFpp(Double.MIN_VALUE);
         }
-        return (long) (-expectedInsertions * Math.log(fpp) / (Math.log(2) * Math.log(2)));
+        return (long) (-redisBloomFilterProperties.getExpectedInsertions() * Math.log(redisBloomFilterProperties.getFpp()) / (Math.log(2) * Math.log(2)));
     }
 
     /**
@@ -142,15 +132,7 @@ public class RedisBloomFilter {
      * @return
      */
     private int optimalNumOfHashFunctions() {
-        return Math.max(1, (int) Math.round((double) numBits / expectedInsertions * Math.log(2)));
-    }
-
-    public void setExpectedInsertions(long expectedInsertions) {
-        this.expectedInsertions = expectedInsertions;
-    }
-
-    public void setFpp(double fpp) {
-        this.fpp = fpp;
+        return Math.max(1, (int) Math.round((double) numBits / redisBloomFilterProperties.getExpectedInsertions() * Math.log(2)));
     }
 
 }
