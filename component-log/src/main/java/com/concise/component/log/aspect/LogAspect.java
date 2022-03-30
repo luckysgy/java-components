@@ -77,7 +77,6 @@ public class LogAspect {
                 return;
             }
 
-            // *========数据库日志=========*//
             OperLogDTO operLog = new OperLogDTO();
             operLog.setStatus(BusinessStatus.SUCCESS.ordinal());
             // 请求的地址
@@ -160,7 +159,7 @@ public class LogAspect {
     /**
      * 是否存在注解，如果存在就获取
      */
-    private Log getAnnotationLog(JoinPoint joinPoint) throws Exception {
+    private Log getAnnotationLog(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();

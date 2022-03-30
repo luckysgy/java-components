@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Description: 输出代码执行时间的工具类
+ * @description: 输出代码执行时间的工具类
  * @date 2020/11/20 13:45
  */
 public class CodeRunningTimeUtils {

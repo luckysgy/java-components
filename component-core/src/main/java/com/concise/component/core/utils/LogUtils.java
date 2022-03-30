@@ -18,6 +18,6 @@ public class LogUtils {
     public static String logExceptionStack(Throwable e) {
         StringWriter errorsWriter = new StringWriter();
         e.printStackTrace(new PrintWriter(errorsWriter));
-        return e.getMessage() + "\n" + errorsWriter.toString();
+        return e.getMessage() + "\n" + errorsWriter;
     }
 }

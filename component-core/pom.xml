@@ -180,13 +180,18 @@
                 <targetPath>${project.build.directory}/classes</targetPath>
                 <includes>
                     <include>**/*.*</include>
-                    <include>**/*.*</include>
-                    <include>**/*.*</include>
                 </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
                 <filtering>false</filtering>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
             </resource>
         </resources>
     </build>

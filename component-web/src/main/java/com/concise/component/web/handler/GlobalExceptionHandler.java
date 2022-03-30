@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @PostConstruct
     public void init() {
-        log.info("全局异常初始化完成");
+        log.info("init GlobalExceptionHandler");
     }
     /**
      * 请求资源不存在异常

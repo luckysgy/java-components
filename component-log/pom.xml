@@ -26,7 +26,6 @@
         <dependency>
             <groupId>com.concise</groupId>
             <artifactId>component-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- 切面 -->
