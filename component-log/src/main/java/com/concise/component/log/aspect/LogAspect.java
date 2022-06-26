@@ -1,6 +1,6 @@
 package com.concise.component.log.aspect;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.concise.component.core.utils.ServletUtils;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.core.utils.ip.IpUtils;

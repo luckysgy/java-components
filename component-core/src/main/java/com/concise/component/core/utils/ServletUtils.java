@@ -1,8 +1,8 @@
 package com.concise.component.core.utils;
 
 import cn.hutool.core.convert.Convert;
-import com.alibaba.fastjson.JSON;
 
+import com.alibaba.fastjson2.JSON;
 import com.concise.component.core.constant.ComponentCoreConstants;
 import com.concise.component.core.entity.response.Response;
 import org.springframework.web.context.request.RequestAttributes;

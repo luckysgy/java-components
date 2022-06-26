@@ -1,7 +1,7 @@
 package com.concise.component.mq.common.service;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import com.concise.component.core.utils.StringUtils;
 import com.concise.component.mq.common.BaseMqMessage;
 import com.concise.component.mq.common.properties.MqData;

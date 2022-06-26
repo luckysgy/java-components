@@ -1,8 +1,7 @@
 package com.concise.component.cache.redis.config;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONWriter;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -21,13 +20,12 @@ import java.nio.charset.StandardCharsets;
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
     @SuppressWarnings("unused")
     private ObjectMapper objectMapper = new ObjectMapper();
-
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     private final Class<T> clazz;
 
     static {
-        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+        // ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
     }
 
     public FastJson2JsonRedisSerializer(Class<T> clazz) {
@@ -40,7 +38,7 @@ public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
         if (t == null) {
             return new byte[0];
         }
-        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+        return JSON.toJSONString(t, JSONWriter.Feature.WriteClassName).getBytes(DEFAULT_CHARSET);
     }
 
     @Override
