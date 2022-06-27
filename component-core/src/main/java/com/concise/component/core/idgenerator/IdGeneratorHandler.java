@@ -1,4 +1,4 @@
-package com.concise.component.idgenerator;
+package com.concise.component.core.idgenerator;
 
 /**
  * Description: 回调处理

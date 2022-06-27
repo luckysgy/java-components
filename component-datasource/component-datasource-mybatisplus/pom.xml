@@ -23,12 +23,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.concise</groupId>
-            <artifactId>component-idgenerator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- 分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>

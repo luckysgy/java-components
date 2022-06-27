@@ -15,6 +15,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ import java.util.concurrent.locks.Lock;
 @Component
 public class RedisLockAspect {
     private static final Logger log = LoggerFactory.getLogger(RedisLockAspect.class);
-    @Autowired
+    @Resource
     private RedisLockRegistry redisLockRegistry;
 
     @Around(value = "@annotation(distributedLock)")

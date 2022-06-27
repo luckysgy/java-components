@@ -12,17 +12,12 @@
         <module>component-core</module>
         <module>component-web</module>
         <module>component-datasource</module>
-        <module>component-idgenerator</module>
-        <module>component-grpc</module>
         <module>component-storage</module>
         <module>component-mq</module>
         <module>component-cache</module>
         <module>component-log</module>
         <module>component-lock</module>
         <module>component-feign</module>
-        <module>component-lib</module>
-        <module>component-javacv</module>
-        <module>component-knife4j</module>
     </modules>
 
     <properties>

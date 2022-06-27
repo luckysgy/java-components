@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
@@ -20,7 +21,7 @@ public class DistributedLockServiceImpl extends DistributedLockService {
     private static final String LOCK_KEY_PRE = "distributed_lock";
     private static final Logger log = LoggerFactory.getLogger(DistributedLockServiceImpl.class);
 
-    @Autowired
+    @Resource
     private RedisLockRegistry redisLockRegistry;
 
     @Override

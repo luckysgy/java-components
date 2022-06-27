@@ -1,4 +1,4 @@
-package com.concise.component.idgenerator.config;
+package com.concise.component.core.idgenerator;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

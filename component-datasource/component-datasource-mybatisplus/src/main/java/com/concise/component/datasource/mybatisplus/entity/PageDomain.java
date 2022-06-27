@@ -5,7 +5,7 @@ import com.concise.component.core.utils.StringUtils;
 /**
  * 分页数据
  * 
- * @author ruoyi
+ * @author shenguangyang
  */
 public class PageDomain {
     /** 当前记录起始索引 */

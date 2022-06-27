@@ -1,5 +1,6 @@
 package com.concise.component.core;
 
+import com.concise.component.core.idgenerator.IdGeneratorProperties;
 import com.concise.component.core.thread.ThreadPoolProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,7 @@ import javax.annotation.PostConstruct;
  * @date 2021-12-23 6:17
  */
 @Import(IniEnvRegistrar.class)
-@EnableConfigurationProperties({ThreadPoolProperties.class})
+@EnableConfigurationProperties({ThreadPoolProperties.class, IdGeneratorProperties.class})
 @ComponentScan(basePackages = "com.concise.component.core",excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = DataSourceAutoConfiguration.class)
 })

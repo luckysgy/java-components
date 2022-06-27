@@ -1,6 +1,5 @@
-package com.concise.component.idgenerator.config;
+package com.concise.component.core.idgenerator;
 
-import com.concise.component.idgenerator.IdGeneratorHandler;
 import com.github.yitter.contract.IdGeneratorOptions;
 import com.github.yitter.idgen.YitIdHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 /**
  * Description: 漂移雪花算法 https://gitee.com/yitter/idgenerator/tree/master/Java
@@ -25,7 +25,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 @EnableConfigurationProperties(IdGeneratorProperties.class)
 public class IdGeneratorConfig {
-    @Autowired
+    @Resource
     IdGeneratorProperties idGeneratorProperties;
 
     @Autowired(required = false)

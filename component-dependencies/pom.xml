@@ -66,26 +66,9 @@
         <guava.version>28.0-jre</guava.version>
         <redisson.version>3.16.0</redisson.version>
 
-        <!-- 视频处理 -->
-        <javacv-platform.version>1.5.6</javacv-platform.version>
-        <javacv.version>1.5.6</javacv.version>
-        <ffmpeg.version>4.4-1.5.6</ffmpeg.version>
-        <openblas-platform.version>0.3.17-1.5.6</openblas-platform.version>
-        <opencv.version>4.5.3-1.5.6</opencv.version>
-
         <!-- 图片处理: 压缩 -->
         <thumbnailator.version>0.4.16</thumbnailator.version>
 
-        <!-- grpc 通信 -->
-        <grpc.version>1.6.1</grpc.version>
-        <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
-        <protobuf-java.version>3.17.3</protobuf-java.version>
-        <proto-google-common-protos.version>2.5.0</proto-google-common-protos.version>
-        <protobuf-java-format.version>1.4</protobuf-java-format.version>
-        <grpc-all.version>1.40.0</grpc-all.version>
-        <protobuf-java-util.version>3.17.3</protobuf-java-util.version>
-        <grpc-client-spring-boot-starter.version>2.11.0.RELEASE</grpc-client-spring-boot-starter.version>
-        <grpc-server-spring-boot-starter.version>2.11.0.RELEASE</grpc-server-spring-boot-starter.version>
         <!-- alibaba 线程间数据传递-->
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
         <!-- 配置文件敏感信息加密依赖 -->
@@ -329,55 +312,6 @@
                 <version>${thumbnailator.version}</version>
             </dependency>
 
-            <!-- ===================================== 视频处理 -->
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>javacv-platform</artifactId>
-                <version>${javacv-platform.version}</version>
-            </dependency>
-            <!-- 精简 javacv-platform -->
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>javacv</artifactId>
-                <version>${javacv.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>ffmpeg</artifactId>
-                <version>${ffmpeg.version}</version>
-                <classifier>windows-x86_64</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>ffmpeg</artifactId>
-                <version>${ffmpeg.version}</version>
-                <classifier>linux-x86_64</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>openblas-platform</artifactId>
-                <version>${openblas-platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>opencv</artifactId>
-                <version>${opencv.version}</version>
-                <classifier>windows-x86_64</classifier>
-            </dependency>
-
-            <dependency>
-                <groupId>org.bytedeco</groupId>
-                <artifactId>opencv</artifactId>
-                <version>${opencv.version}</version>
-                <classifier>linux-x86_64</classifier>
-            </dependency>
-
-            <!-- ======================================== 引入 lombok 依赖 -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
 
             <!-- ======================================== mapstruct -->
             <dependency>
